@@ -11,15 +11,16 @@ Have you ever wondered, for some common questions, what do people generally actu
 Key features include:
 - Accounts, to keep track of votes and previous votes
 - Global interaction through voting
-- 
+- History of past votes or how streak of days in a row you voted
 
 ### Design
 
 ### Technologies
-**HTML** - 
-**CSS** - 
-**JavaScript** - 
-**Web Service** -
-**Authentication** - 
-**Database** - 
-**WebSocket** - 
+**HTML** - Two or three HTML web pages, one for logging in, one for voting, and possibly one for settings or account information.
+**CSS** - Styling the website to make a clean user experience.
+**JavaScript** - Logic for voting, interactive elements such as buttons.
+**React** - The main voting page will have an application and any other applicable components.
+**Web Service** - Backend service that gets a new question every day, counts votes, and records past results.
+**Authentication** - Authentication will be required to vote so that it minimizes extra/frivolous voting.
+**Database** - Store users, possible questions, past results, and other user data such as past answers and streaks.
+**WebSocket** - Votes updated globally in real time.
