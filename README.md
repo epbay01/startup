@@ -14,6 +14,13 @@ Key features include:
 - History of past votes or how streak of days in a row you voted
 
 ### Design
+Here is a rough example of what the voting page might look like:
+![Voting page](Images/voting%20page.png)
+
+Here is another rough sketch of the profile page:
+![Profile page](Images/profile%20page.png)
+
+Obviously, these are rough sketches and the specific design of the website would look much better. However, they illustrate the point that on the voting page would be a simple UI for voting, and the profile page would include more information accessed from the database.
 
 ### Technologies
 **HTML** - Two or three HTML web pages, one for logging in, one for voting, and possibly one for settings or account information.
