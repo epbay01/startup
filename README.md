@@ -17,10 +17,17 @@ Key features include:
 
 ### Technologies
 **HTML** - Two or three HTML web pages, one for logging in, one for voting, and possibly one for settings or account information.
+
 **CSS** - Styling the website to make a clean user experience.
+
 **JavaScript** - Logic for voting, interactive elements such as buttons.
+
 **React** - The main voting page will have an application and any other applicable components.
+
 **Web Service** - Backend service that gets a new question every day, counts votes, and records past results.
+
 **Authentication** - Authentication will be required to vote so that it minimizes extra/frivolous voting.
+
 **Database** - Store users, possible questions, past results, and other user data such as past answers and streaks.
+
 **WebSocket** - Votes updated globally in real time.
