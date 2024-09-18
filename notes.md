@@ -9,3 +9,4 @@
 - AWS allows you to purchase a server space, a domain, and set up all the DNS stuff. For this project, we made DNS records taht will redirect from the domain name I purchased (vote-together.click) to the public IP address (18.206.129.131). Each time the server stops and starts, it has a new IP address, so through AWS I also was able to get the more permanent public one.
 - That means it goes http://*.vote-together.click -> http://18.206.129.131 -> instance IP (website run from server)
 - To access the server shell, you can use command line code. `ssh -i [key pair file path] ubuntu@[server ip]` should do it. The key pair file is safely saved on my computer, and the server IP can be obtained from AWS.
+- Caddy is an interface for securing the server (allowing https) by getting a certificate automatically.
