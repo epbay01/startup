@@ -17,12 +17,13 @@
   - `<div>` divisions
   - `<body>` main body
   - `<a>` anchor/hyperlink
-  - `<img>` image
+  - `<img>` image, `<audio>` audio, `<video>` videos
   - `<ol> and <ul>` ordered/unordered list with items `<li>`
   - `<header>` and `<footer>`
   - `<table>` with `<tr>` table rows, `<th>` table headers, and `<td>` table data
   - `<p>` paragraph
   - `<nav>` for navigation elements
+  - `<svg>` and `<canvas>` allow inline/programmatic displays, made via html/css/js
 - Some key attributes
   - `href="[url/path]"` hyperlink reference
   - `src="[url/path]"` source
