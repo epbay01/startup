@@ -10,3 +10,28 @@
 - That means it goes http://*.vote-together.click -> http://18.206.129.131 -> instance IP (website run from server)
 - To access the server shell, you can use command line code. `ssh -i [key pair file path] ubuntu@[server ip]` should do it. The key pair file is safely saved on my computer, and the server IP can be obtained from AWS.
 - Caddy is an interface for securing the server (allowing https) by getting a certificate automatically.
+
+### HTML
+- Some key elements in HTML:
+  - `<h#>` headings
+  - `<div>` divisions
+  - `<body>` main body
+  - `<a>` anchor/hyperlink
+  - `<img>` image
+  - `<ol> and <ul>` ordered/unordered list with items `<li>`
+  - `<header>` and `<footer>`
+  - `<table>` with `<tr>` table rows, `<th>` table headers, and `<td>` table data
+  - `<p>` paragraph
+  - `<nav>` for navigation elements
+- Some key attributes
+  - `href="[url/path]"` hyperlink reference
+  - `src="[url/path]"` source
+  - `id="[id]"` and `class="[class]"` for referencing specific elements and groups of elements
+- Input
+  - `<form>` is container element for input elements (usually JavaScript is used now for actual submission)
+  - `<input>` has a bunch of possibilities for its `type` attribute, and each type has its own specific attributes, although there are some shared ones as well:
+    - `name` name of input and form (if used)
+    - `disabled` disables interaction
+    - `value` initial value
+    - `required` required for submission
+    - `pattern` allows for any built-in data validation (for certain types of input element)
