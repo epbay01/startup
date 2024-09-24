@@ -36,3 +36,14 @@
     - `value` initial value
     - `required` required for submission
     - `pattern` allows for any built-in data validation (for certain types of input element)
+
+### CSS
+CSS uses selectors which are given rules that have a property and a value. Selectors include an HTML element but there are other selectors as well:
+    - `element1 element2` implies all `element2` that are descendents of `element1`
+    - `*` means everything/all elements
+    - `e1 > e2` all `e2` that are *direct children* of `e1` (not grandchildren, etc.)
+    - `e1 ~ e2` the `e2` that are siblings of `e1`, for adjacent siblings use `+`
+    - `e.class` is all elements `e` with the matching `class` attribute (element is optional)
+    - `#id` a reference to the element with that id (there should only be one)
+    - `e[attribute="value"]` is all elements with that attribute, optionally with the value for that attribute
+    - `:hover` (there are other similar ones) allows selecting an element (etc.) in this case when it is hovered over by the mouse
