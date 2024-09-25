@@ -8,8 +8,64 @@
             <!--<a href="vote.html">Vote</a>-->
         </nav>
     </header>
-    <main>
-        
+    <main> <!-- researched svg a bit for this, but in the future 
+        will be drawn with js so it varies based on number of possible answers -->
+        <h3>Question</h3>
+        <p>Your streak: 5 &#128293;</p>
+        <button>
+            <p>Option 1</p>
+            <svg height="200" width="200" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 200 A200 200 90 0 1 200 0 L200 80 A120 120 90 0 0 80 200 L0 200 Z" style="fill: green;"/>
+            </svg>
+        </button>
+        <button>
+            <p>Option 2</p>
+            <svg height="200" width="200" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 0 A200 200 90 0 1 200 200 L120 200 A120 120 90 0 0 0 80 L0 0 Z" style="fill: orange;"/>
+            </svg>
+        </button>
+        <br>
+        <button>
+            <svg height="200" width="200" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 0 A200 200 90 0 0 200 200 L200 120 A120 120 90 0 1 80 0 L0 0 Z" style="fill: blue;"/>
+            </svg>
+            <p>Option 3</p>
+        </button>
+        <button>
+            <svg height="200" width="200" xmlns="http://www.w3.org/2000/svg">
+                <path d="M200 0 A200 200 90 0 1 0 200 L0 120 A120 120 90 0 0 120 0 L0 0 Z" style="fill: red;"/>
+            </svg>
+            <p>Option 4</p>
+        </button>
+
+        <h3>Results (shows after submitted)</h3>
+        <table>
+            <tr>
+                <th>Response</th>
+                <th>%</th>
+                <th>Votes</th>
+            </tr>
+            <tr>
+                <td>Option 1</td>
+                <td>20</td>
+                <td>10</td>
+            </tr>
+            <tr>
+                <td>Option 2</td>
+                <td>40</td>
+                <td>20</td>
+            </tr>
+            <tr>
+                <td>Option 3</td>
+                <td>10</td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td>Option 4</td>
+                <td>30</td>
+                <td>15</td>
+            </tr>
+        </table>
     </main>
     <footer>
         <p>
