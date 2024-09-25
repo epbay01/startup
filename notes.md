@@ -56,3 +56,42 @@ Some important attributes:
   - `margin/padding: unit`
   - `width/height: unit`
   - `z-index: number` sets the z layer
+
+You can import fonts in two ways:
+```
+@font-face {
+  font-family: 'Quicksand'; // name
+  src: url('https://cs260.click/fonts/quicksand.ttf'); // font url
+}
+
+p { // example usage
+  font-family: Quicksand;
+}
+```
+Alternatively:
+```
+@import url('https://fonts.googleapis.com/css2?family=Rubik Microbe&display=swap'); // all one line
+
+p { // example usage
+  font-family: 'Rubik Microbe'; // font name in quotes
+}
+```
+
+For CSS animations:
+  - Use `animation-name: name;` to name it, and specify the `animation-duration` as well.
+  - Create keyframes for the animation using a code block to specify what will change, and the properties at the beginning, end, and partway through
+```
+@keyframes name {
+  from { // properties at the start of the animation
+    // properties, ex. font-size or color
+  }
+
+  some% { // happens whatever % through the animation
+    // different properties
+  }
+
+  to { // properties at the end
+    // different properties
+  }
+}
+```
