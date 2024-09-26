@@ -38,3 +38,23 @@ Obviously, these are rough sketches and the specific design of the website would
 **Database** - Store users, possible questions, past results, and other user data such as past answers and streaks.
 
 **WebSocket** - Votes updated globally in real time.
+
+## HTML
+
+HTML pages for each component of your application: Currently the website has three pages; index.html (the login and about page/home page), profile.html (where profile settings and information about past votes is displayed), and vote.html (where you will actually vote)
+
+Proper use of HTML tags including BODY, NAV, MAIN, HEADER, FOOTER: I used each of these elements appropriately, for example adding a header with the name of the website and a footer with information such as a link to the GitHub
+
+Links between pages as necessary: Within a `<nav>` element, I included links between the three pages
+
+Application textual content: I added whatever text I could, although most of it will be modified later to display appropriate data
+
+Placeholder for 3rd party service calls: In this case, I will be using a 3rd party API to help authenticate logins, and prevent someone from voting twice. If possible, I will also use the API to send notifications that a new question is up (if enabled)
+
+Application images: I tried to roughly represent my application with placeholder text and HTML buttons
+
+Login placeholder, including user name display: Added on index.html
+
+Database data placeholder showing content stored in the database: Used placeholder text on profile.html
+
+WebSocket data placeholder showing where realtime communication will go: The votes on vote.html will be updated in realtime
