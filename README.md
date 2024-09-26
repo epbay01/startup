@@ -45,7 +45,7 @@ HTML pages for each component of your application: Currently the website has thr
 
 Proper use of HTML tags including BODY, NAV, MAIN, HEADER, FOOTER: I used each of these elements appropriately, for example adding a header with the name of the website and a footer with information such as a link to the GitHub
 
-Links between pages as necessary: Within a <nav> element, I included links between the three pages
+Links between pages as necessary: Within a `<nav>` element, I included links between the three pages
 
 Application textual content: I added whatever text I could, although most of it will be modified later to display appropriate data
 
