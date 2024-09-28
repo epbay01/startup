@@ -95,3 +95,7 @@ For CSS animations:
   }
 }
 ```
+
+`@media (bool) {}` can do some stuff such as detecting the orientation (with `orientation: portrait`) and adjusting accordingly.
+
+`display: grid` is defined in conjuction with properties such as `grid-template-columns`, `grid-auto-rows`, and `grid-gap`.
