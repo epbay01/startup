@@ -1,8 +1,15 @@
 /* for all pages, ex header/nav bar */
 
+/*
+TODO:
+- fix nav links to center vertically
+- make body flex according to nav bar while keeping nav on top
+- footer
+*/
+
 body {
     font-family: sans-serif;
-    box-sizing: border-box;
+    /* box-sizing: border-box; */
     height: 100%;
     margin: 0;
     padding: 0;
@@ -11,15 +18,24 @@ body {
     flex-direction: column;
 }
 
+.link {
+    text-decoration: none;
+}
+
+
 header {
     position: fixed;
+    flex: 1 100px;
     margin: 0;
     width: 100%;
     height: 100px;
-    background-image: url(https://upload.wikimedia.org/wikipedia/commons/1/1f/As08-16-2593.jpg);
+    background-image: url(Images/earth.jpg);
     background-color: transparent;
     background-position: top 25%;
     color: cadetblue;
+
+    display: flex;
+    flex-direction: row;
 }
 
 #title {
@@ -28,10 +44,33 @@ header {
     margin: 0;
     float: left;
     display: inline;
+    flex: 3;
+}
+
+nav {
+    flex: 1;
+    float: right;
+    height: auto;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: right;
+    align-content: space-around;
 }
 
 nav .link {
-    float: right;
-    padding-right: 20px;
-    text-decoration: none;
+    padding: 10px;
+    height: auto;
+    width: auto;
+    text-align: end;
+}
+
+
+body {
+    flex: 4;
+}
+
+
+footer {
+    flex: 1 100px;
 }
