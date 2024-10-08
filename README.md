@@ -51,7 +51,7 @@ Application textual content: I added whatever text I could, although most of it 
 
 Placeholder for 3rd party service calls: In this case, I will be using a 3rd party API to help authenticate logins, and prevent someone from voting twice. If possible, I will also use the API to send notifications that a new question is up (if enabled)
 
-Application images: I tried to roughly represent my application with placeholder text and HTML buttons
+Application images: I included a couple images, like one in the header and a picture of me in the footer
 
 Login placeholder, including user name display: Added on index.html
 
