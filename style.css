@@ -25,20 +25,22 @@ body {
 
 header {
     position: fixed;
-    flex: 1 100px;
+    flex: 0 100px;
     margin: 0;
     width: 100%;
     height: 100px;
+
     background-image: url(Images/earth.jpg);
     background-color: transparent;
-    background-position: top 25%;
-    color: cadetblue;
+    background-position: top 30% right 0%;
+    color: rgb(193, 90, 90);
+    border-bottom: 5px rgb(193, 90, 90) solid;
 
     display: flex;
     flex-direction: row;
 }
 
-#title {
+header h1 {
     font-size: 45px;
     padding: 20px;
     margin: 0;
@@ -46,28 +48,51 @@ header {
     display: inline;
     flex: 3;
 }
+#logo-checkmark {
+    font-size: 50px;
+    color: rgb(193, 20, 20);
+}
 
 nav {
     flex: 1;
-    float: right;
     height: auto;
 
     display: flex;
     flex-direction: column;
-    justify-content: right;
-    align-content: space-around;
+    justify-content: space-evenly;
+    align-content: flex-end;
 }
 
 nav .link {
-    padding: 10px;
     height: auto;
     width: auto;
+    margin-right: 20px;
+
+    color: rgb(193, 106, 99);
     text-align: end;
+    font-size: 20px;
 }
 
 
-body {
-    flex: 4;
+main {
+    flex: 1;
+    margin-top: 105px;
+
+    display: flex;
+    flex-direction: column;
+
+    background-color: #DAE1E8;
+}
+
+div {
+    background-color: #EB9D99;
+    margin: 10px 20px;
+    border-radius: 5px;
+}
+
+#login {
+    width: 275px;
+    align-self: center;
 }
 
 
