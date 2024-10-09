@@ -5,35 +5,45 @@
 </head>
 <body>
     <header>
-        <h1><span id="logo-checkmark">&#10004;</span>ote Together! &#129309;</h1>
+        <!-- <h1><span id="logo-checkmark">&#10004;</span>ote Together! &#129309;</h1> -->
+        <img id="logo" src="Images/logo.png"/>
         <nav>
             <!--<a href="index.html">Login</a>-->
             <a class="link" href="profile.html">Profile</a>
-            <a class="link" href="vote.html">Vote</a>
+            <a class="link" href="vote.html">Vote!</a>
         </nav>
         <!--<img src="https://upload.wikimedia.org/wikipedia/commons/1/1f/As08-16-2593.jpg" style="object-fit: cover; height: 150px; width: 100%;" alt="Picture of earth"/>-->
     </header>
     <main>
         <div id="login">
             <h3>Login</h3>
-            <p>Email: </p><input type="text" value="youremail@website.com" />
-            <p>Password: </p><input type="text" value="password" /><br />
-            <input type="button" value="Submit">
+            <p class="login-element">Email: </p><input class="login-element" type="text" value="youremail@website.com" />
+            <p class="login-element">Password: </p><input class="login-element" type="text" value="password" /><br />
+            <input id="login-button" type="button" value="Submit">
         </div>
         <!-- <br> -->
 
-        <div>
+        <div id="about">
             <h3>About</h3>
             <p>
-                Have you ever wondered, for some common questions, what do people really think? Which did come first, the chicken, or the egg? In this web application, these questions will finally be answered. Based on an old Wii app, this website will have new questions daily, then keep track of the universal response to that question. Each user votes, and adds to a base tally, so that people from anywhere can vote and see others' opinions.
+                Have you ever wondered, for some common questions, what people really think? Which did come first, the chicken, or the egg? In this web application, these questions will finally be answered. Based on an old Wii app, this website will have new questions daily, then keep track of the universal response to that question. Each user votes, and adds to a base tally, so that people from anywhere can vote and see others' opinions.
+            </p>
+        </div>
+
+        <div>
+            <h3>Getting Started</h3>
+            <p>
+                To get started, first make an accout blah blah blah
             </p>
         </div>
     </main>
     <footer>
-        <p>
-            <a href="https://github.com/epbay01/startup">GitHub</a><br />
-            website by Elijah Bay
-        </p>
+        <div>
+            <p><a class="link" href="https://github.com/epbay01/startup">github repository</a></p>
+            <p>website by: elijah bay</p>
+            <p>contact me: epbay01@byu.edu</p>
+            <p>cs 260 project, byu computer science major</p>
+        </div>
         <img width="200px" src="Images/IMG_8451.png" alt="Picture of the creator, Elijah Bay"/>
     </footer>
 </body>

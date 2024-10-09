@@ -3,3 +3,16 @@ TO DO:
 - login form
 - text prettyness
 */
+
+#login {
+    width: 275px;
+    align-self: center;
+}
+.login-element {
+    display: inline;
+    margin: 5px auto;
+}
+#login-button {
+    margin: 10px 0 0;
+    text-align: center;
+}
