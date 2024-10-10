@@ -1,3 +1,7 @@
+main {
+    min-height: 810px;
+}
+
 #question-and-streak {
     display: flex;
     flex-direction: row;
@@ -24,9 +28,62 @@
     background-color: transparent;
     padding: 0;
 }
+
+#left-buttons p {
+    text-align: right;
+    padding: 5px 15px;
+    font-size: 24px;
+    margin: 0;
+}
 #left-buttons button svg {
     float: right;
 }
+
+#right-buttons p {
+    padding: 5px 15px;
+    font-size: 24px;
+    margin: 0;
+}
 #right-buttons button svg {
     float: left;
+}
+
+#results {
+    color: white;
+    width: 100%;
+    height: 200px;
+}
+#results th {
+    padding: 5px;
+    background-color: grey;
+}
+#results td {
+    padding: 5px;
+    text-align: center;
+}
+
+.results-1 {
+    background-color: green;
+}
+.results-2 {
+    background-color: orange;
+}
+.results-3 {
+    background-color: blue;
+}
+.results-4 {
+    background-color: red;
+}
+
+#results-responses {
+    filter: brightness(100%);
+}
+#results-percent {
+    filter: brightness(85%);
+}
+#results-total { 
+    filter: brightness(70%); 
+}
+#results-total p {
+    filter: brightness(100%);
 }
