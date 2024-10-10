@@ -84,6 +84,3 @@ main {
 #results-total { 
     filter: brightness(70%); 
 }
-#results-total p {
-    filter: brightness(100%);
-}
