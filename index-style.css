@@ -4,6 +4,10 @@ TO DO:
 - text prettyness
 */
 
+main {
+    min-height: 450px;
+}
+
 #login {
     width: 275px;
     align-self: center;
