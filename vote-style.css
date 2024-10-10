@@ -19,6 +19,14 @@
     display: flex;
     flex-direction: column;
 }
+#input-buttons button {
+    border: 0;
+    background-color: transparent;
+    padding: 0;
+}
 #left-buttons button svg {
     float: right;
+}
+#right-buttons button svg {
+    float: left;
 }
