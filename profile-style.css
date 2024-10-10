@@ -2,23 +2,12 @@ main {
     min-height: 650px;
 }
 
-h2 {
-   color: #a31420 
-}
-
-h4 {
-    color: #ed6e78;
-    margin: 10px 0;
-}
-
 div p {
     margin: 0;
     line-height: 1.4;
 }
 
 #settings {
-    margin: 0;
-    padding: 0;
     display: flex;
     flex-direction: column;
     gap: 5px;

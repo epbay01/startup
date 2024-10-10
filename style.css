@@ -122,9 +122,21 @@ div p {
     margin-bottom: 0;
 }
 
-/* h1, h2, h3, h4, h5, h6 {
-    color: #E63946;
-} */
+.no-format {
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    flex-grow: 1;
+}
+
+h2 {
+    color: #a31420 
+}
+
+h4 {
+    color: #ed6e78;
+    margin: 10px 0;
+}
 
 footer {
     flex: 0 100px;
