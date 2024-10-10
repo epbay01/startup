@@ -1,3 +1,43 @@
 main {
-    min-height: 610px;
+    min-height: 650px;
+}
+
+h2 {
+   color: #a31420 
+}
+
+h4 {
+    color: #ed6e78;
+    margin: 10px 0;
+}
+
+div p {
+    margin: 0;
+    line-height: 1.4;
+}
+
+#settings {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+#delete-button {
+    max-width: 150px;
+}
+
+#vrt {
+    border: solid 1px black;
+    border-collapse: collapse;
+    width: 100%;
+}
+#vrt-header-row th {
+    color: #e63946;
+    text-decoration: underline;
+    padding: 10px;
+}
+#vrt td {
+    border: dotted 1px black;
+    padding: 5px;
 }

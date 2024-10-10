@@ -26,40 +26,40 @@
                 Least popular vote: 32%
             </p>
             <h4>Settings</h4>
-            <label>Confirm votes?</label><input type="checkbox"><br/>
-            <label>Daily notifications?</label><input type="checkbox" checked><br/>
-            <input type="button" value="Delete account">
-            <br/><br/>
+            <div id="settings">
+                <span class="checkbox-setting"><label>Confirm votes?</label><input type="checkbox"></span>
+                <span class="checkbox-setting"><label>Daily notifications?</label><input type="checkbox" checked></span>
+                <input id="delete-button" type="button" value="Delete account">
+            </div>
         </div>
         <div>
             <h3>Voting record</h3>
-            <table>
-                <tr>
+            <table id="vrt">
+                <tr id="vrt-header-row">
                     <th>Date</th>
                     <th>Question</th>
                     <th>Your response</th>
                     <th>Total response</th>
                 </tr>
-                <tr>
+                <tr class="vrt-data-row">
                     <td>1/1/24</td>
                     <td>Which came first, the chicken or egg?</td>
                     <td>Chicken</td>
-                    <td>46% Chicken,  54% Egg [visual]</td>
+                    <td>46% Chicken<br>54% Egg [visual]</td>
                 </tr>
-                <tr>
+                <tr class="vrt-data-row">
                     <td>1/1/24</td>
                     <td>Which came first, the chicken or egg?</td>
                     <td>Chicken</td>
-                    <td>46% Chicken,  54% Egg [visual]</td>
+                    <td>46% Chicken<br>54% Egg [visual]</td>
                 </tr>
-                <tr>
+                <tr class="vrt-data-row">
                     <td>1/1/24</td>
                     <td>Which came first, the chicken or egg?</td>
                     <td>Chicken</td>
-                    <td>46% Chicken,  54% Egg [visual]</td>
+                    <td>46% Chicken<br>54% Egg [visual]</td>
                 </tr>
             </table>
-            <br/><br/>
         </div>
     </main>
     <footer>
