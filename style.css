@@ -15,7 +15,6 @@ body {
 
     display: flex;
     flex-direction: column;
-    
 }
 
 .link {
@@ -178,10 +177,9 @@ footer .link:visited {
     header {
         flex-direction: column;
         flex: 1;
-        /* height: 180px; */
+        height: calc(11vw + 122px);
         justify-content: stretch;
     }
-
     nav .link {
         text-align: center;
         width: 100%;
@@ -194,5 +192,9 @@ footer .link:visited {
     }
     #nav-2 {
         background-color: #566161;
+    }
+
+    main {
+        margin-top: calc(11vw + 122px);
     }
 }
