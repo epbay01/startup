@@ -1,6 +1,9 @@
+/* body {
+    overflow: hidden;
+}
 main {
     overflow: scroll;
-}
+} */
 
 #question-and-streak {
     display: flex;
@@ -87,6 +90,6 @@ main {
 }
 
 #results-div {
-    flex: 0 0 275px;
+    flex: 0 0 240px;
     margin: 10px 0;
 }
