@@ -1,5 +1,5 @@
 main {
-    min-height: 810px;
+    overflow: scroll;
 }
 
 #question-and-streak {
@@ -48,6 +48,7 @@ main {
     float: left;
 }
 
+
 #results {
     color: white;
     width: 100%;
@@ -83,4 +84,9 @@ main {
 }
 #results-total { 
     filter: brightness(70%); 
+}
+
+#results-div {
+    flex: 0 0 275px;
+    margin: 10px 0;
 }

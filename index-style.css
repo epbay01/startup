@@ -5,7 +5,7 @@ TO DO:
 */
 
 main {
-    min-height: 380px;
+    min-height: 350px;
     flex-direction: row;
     gap: 10px;
 }
@@ -15,7 +15,10 @@ main {
     flex-direction: column;
     flex: 1;
     gap:10px;
-    justify-content: center;
+    justify-content: start;
+    margin: 10px 0;
+    max-height: 100%;
+    overflow: scroll;
 }
 #info div {
     /* flex-grow: 0; */
@@ -29,10 +32,35 @@ ol {
     width: auto;
 }
 
+#login-and-pic {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    gap: 10px;
+    margin: 10px 0 10px 0;
+
+    flex: 0 0 300px;
+    height: auto;
+}
+#world-pic {
+    width: 300px;
+    height: 300px;
+    min-height: 100px;
+    overflow: hidden;
+    flex-grow: 1;
+    box-sizing: border-box;
+}
+#login-and-pic img {
+    object-fit: cover;
+    object-position: left center;
+    transform: translateX(-100px) translateY(-120px);
+    width: 600px;
+}
+
 #login {
     /* width: 275px; */
-    align-self: center;
-    flex: 0 0 270px;
+    flex: 0 0 145px;
+    align-self: flex-end;
 }
 .login-element {
     display: inline;

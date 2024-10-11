@@ -15,7 +15,7 @@ body {
 
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    
 }
 
 .link {
@@ -101,7 +101,7 @@ main {
 
 main div {
     background-color: #f0f0f0;
-    margin: 10px 0px;
+    margin: 0px 0px;
     border-radius: 5px;
     padding: 15px;
     
@@ -170,4 +170,9 @@ footer .link {
 }
 footer .link:visited {
     color: white;
+}
+
+
+@media (orientation: portrait) {
+    html { color: red;}
 }
