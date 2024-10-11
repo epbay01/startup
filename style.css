@@ -1,11 +1,10 @@
 /* for all pages, ex header/nav bar */
 
-/*
-TODO:
-- fix nav links to center vertically
-- make body flex according to nav bar while keeping nav on top
-- footer
-*/
+@font-face {
+    font-family: "Pink Chicken";
+    src: url(PinkChicken-Regular.ttf);
+}
+
 html { height: 100%; }
 body {
     font-family: sans-serif;
@@ -21,12 +20,6 @@ body {
 
 .link {
     text-decoration: none;
-}
-.link::before {
-    color: black;
-}
-.link::after {
-    color: #3c4444;
 }
 
 
@@ -118,6 +111,8 @@ main div {
 div h3 {
     margin: 0 0 15px;
     color: #E63946;
+    font-family: "Pink Chicken";
+    font-size: 24px;
 }
 div p {
     margin-bottom: 0;
@@ -131,12 +126,17 @@ div p {
 }
 
 h2 {
-    color: #a31420 
+    color: #a31420;
+    font-family: "Pink Chicken";
+    font-size: 30px;
+    margin: 0;
 }
 
 h4 {
     color: #ed6e78;
     margin: 10px 0;
+    font-family: "Pink Chicken";
+    font-size: 19px;
 }
 
 footer {
