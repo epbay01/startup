@@ -207,4 +207,11 @@ footer .link:visited {
     main {
         margin-top: calc(11vw + 132px);
     }
+
+    footer div {
+        justify-content: space-between;
+    }
+    footer div p {
+        padding: auto;
+    }
 }
