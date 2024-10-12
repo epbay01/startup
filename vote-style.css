@@ -1,9 +1,9 @@
 /* body {
     overflow: hidden;
-}
-main {
-    overflow: scroll;
 } */
+main {
+    justify-content: space-between;
+}
 
 #question-and-streak {
     display: flex;
@@ -16,7 +16,7 @@ main {
     margin: 20px 0 10px;
 }
 #streak {
-    text-wrap-mode: nowrap;
+    text-wrap: nowrap;
 }
 
 #input-buttons {

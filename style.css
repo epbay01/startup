@@ -2,12 +2,17 @@
 
 @font-face {
     font-family: "Pink Chicken";
-    src: url(PinkChicken-Regular.ttf);
+    src: url(Fonts/PinkChicken-Regular.ttf);
+}
+
+@font-face {
+    font-family: "Calibri";
+    src: url(Fonts/calibri-regular.ttf);
 }
 
 html { height: 100%; }
 body {
-    font-family: sans-serif;
+    font-family: "Calibri", sans-serif;
     /* box-sizing: border-box; */
     height: 100%;
     margin: 0;
@@ -143,30 +148,32 @@ h4 {
 }
 
 footer {
-    flex: 0 200px;
+    flex: 0 75px;
     /* bottom: 0; */
     background-color: black;
     color: white;
+    height: 75px;
+}
+footer div {
+    background-color: transparent;
 
     display: flex;
     flex-direction: row;
-}
-footer div {
-    flex: 7;
-    background-color: transparent;
-    padding-left: 10px;
+    justify-content: flex-end;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    width: 100%;
 }
 footer div p {
     padding: 10px;
+    padding-right: 40px;
     margin: 0;
+    height: 20px;
+    align-self: center;
 }
 footer img {
-    flex: 1;
+    flex: 0 75px;
     align-self: flex-end;
+    max-height: 75px;
 }
 footer .link {
     color: white;
