@@ -71,22 +71,26 @@ nav {
     height: auto;
 
     display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-content: flex-end;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-content: center;
+    gap: 40px;
+    padding-right: 40px;
 }
 
 nav .link {
     height: auto;
     width: auto;
-    margin-right: 20px;
+    /* margin-right: 20px; */
 
     color: #E63946;
     text-align: end;
     font-family: "Pink Chicken";
-    font-size: 22px;
+    font-size: 32px;
     font-weight: bold;
     letter-spacing: 1px;
+
+    align-self: center;
 }
 
 
@@ -187,8 +191,13 @@ footer .link:visited {
     header {
         flex-direction: column;
         flex: 1;
-        height: calc(11vw + 132px);
+        height: calc(11vw + 156px);
         justify-content: stretch;
+    }
+    nav {
+        flex-direction: column;
+        gap: 0;
+        padding: 0;
     }
     nav .link {
         text-align: center;
@@ -205,7 +214,7 @@ footer .link:visited {
     }
 
     main {
-        margin-top: calc(11vw + 132px);
+        margin-top: calc(11vw + 156px);
     }
 
     footer div {

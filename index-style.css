@@ -48,7 +48,7 @@ ol {
 #login-and-pic {
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    /* justify-content: space-evenly; */
     gap: 10px;
     margin: 10px 0 10px 0;
 
@@ -62,6 +62,7 @@ ol {
     overflow: hidden;
     flex-grow: 1;
     box-sizing: border-box;
+    justify-self: stretch;
 }
 #login-and-pic img {
     object-fit: cover;
@@ -75,6 +76,7 @@ ol {
     flex: 0 0 145px;
     align-self: flex-end;
     background-color: #adadad;
+    justify-self: flex-start;
 }
 .login-element {
     margin: 5px 0;
