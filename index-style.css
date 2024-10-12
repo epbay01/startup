@@ -44,7 +44,7 @@ ol {
 }
 #world-pic {
     width: 300px;
-    height: 300px;
+    max-height: 300px;
     min-height: 100px;
     overflow: hidden;
     flex-grow: 1;
@@ -69,4 +69,33 @@ ol {
 #login-button {
     margin: 10px 0 0;
     text-align: center;
+}
+
+@media (orientation: portrait) {
+    main {
+        flex-direction: column;
+        gap: 0px;
+        align-content: flex-start;
+    }
+
+    #login-and-pic {
+        width: 100%;
+        flex: 1;
+        min-height: 170px;
+        height: 170px;
+    }
+    #login {
+        width: 100%;
+        box-sizing: border-box;
+        height: 100%;
+    }
+    #world-pic {
+        display: none;
+    }
+
+    #info {
+        overflow: auto;
+        flex: 2;
+        order: 1;
+    }
 }

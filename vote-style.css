@@ -10,7 +10,7 @@ main {
     flex-direction: row;
     justify-content: space-between;
     align-content: end;
-    gap: 5px;
+    gap: 25px;
 }
 #question-and-streak * {
     margin: 20px 0 10px;

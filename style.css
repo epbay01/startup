@@ -78,8 +78,10 @@ nav .link {
 
     color: #E63946;
     text-align: end;
-    font-size: 20px;
+    font-family: "Pink Chicken";
+    font-size: 22px;
     font-weight: bold;
+    letter-spacing: 1px;
 }
 
 
@@ -178,7 +180,7 @@ footer .link:visited {
     header {
         flex-direction: column;
         flex: 1;
-        height: calc(11vw + 122px);
+        height: calc(11vw + 132px);
         justify-content: stretch;
     }
     nav .link {
@@ -196,6 +198,6 @@ footer .link:visited {
     }
 
     main {
-        margin-top: calc(11vw + 122px);
+        margin-top: calc(11vw + 132px);
     }
 }
