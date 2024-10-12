@@ -1,7 +1,6 @@
 main {
-    min-height: 650px;
+    min-height: 630px;
     gap: 10px;
-    max-height: 100%;
     justify-content: start;
 }
 
@@ -19,10 +18,17 @@ div p {
     max-width: 150px;
 }
 
+#vr-div {
+    max-height: 200px;
+    overflow: scroll;
+    /* margin-bottom: 10px; */
+}
+
 #vrt {
     border: solid 1px black;
     border-collapse: collapse;
     width: 100%;
+    overflow: scroll;
 }
 #vrt-header-row th {
     color: #e63946;

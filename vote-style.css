@@ -10,9 +10,13 @@ main {
     flex-direction: row;
     justify-content: space-between;
     align-content: end;
+    gap: 5px;
 }
 #question-and-streak * {
     margin: 20px 0 10px;
+}
+#streak {
+    text-wrap-mode: nowrap;
 }
 
 #input-buttons {
