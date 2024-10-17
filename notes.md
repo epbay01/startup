@@ -99,3 +99,10 @@ For CSS animations:
 `@media (bool) {}` can do some stuff such as detecting the orientation (with `orientation: portrait`) and adjusting accordingly.
 
 `display: grid` is defined in conjuction with properties such as `grid-template-columns`, `grid-auto-rows`, and `grid-gap`.
+
+## Javascript
+
+In HTML, use `<script>` elements and attributes such as `onclick="function()/code"` to integrate javascript into the website.
+In js, use `let` and  `const` to declare variables, they are weakly typed (the type can change or be automatically converted). Use the strict equality `===` and `!==` to compare as exact matches, the regular equality can have unexpected results because it automatically will convert types.
+Arrow functions are declared in the syntax `(parameters) => {code}` with {} being optional. Functions in general are also considered objects.
+JSON is a sepecial object format where the keys are strings, and it can easily be
