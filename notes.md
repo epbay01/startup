@@ -114,7 +114,22 @@ JSON is a sepecial object format where the keys are strings, and it can easily b
 
 In functions, you can have an indefinite number of parameters by prefixing the last parameter with `...rest`. Then all the extra parameters would, in this case, be contained within `rest`. The opposite is also possible, to take an iterable object (for example a list or js object) and expand it into the parameters. This is done with `...object` in the function call.
 
+### Array functions
+
 Arrays and objects can be destructured, or pull certain items out and assign them to variables. The syntax for destructuring is like so: `let [b,c,...rest] = a` would assign b and c to be the first two items and rest to be everything else (optional). For an object, you use the key value: `let { a: var1, b: var2 } = obj`.
+
+Some functions you can do on arrays (use dot):
+- `push(item)` and `pop()` add/remove from end
+- `slice(start,end)` returns sub-array (start inclusvie, end exclusive)
+- `sort(function)`
+- `for (i of array.values) {}` creates iterator for loop
+- `find(function)` returns first satisfying value
+- `forEach(function)` runs function on each item
+- `reduce(function)` runs function to reduce array to a single value, ex `a.reduce((a,b) => a + b)`
+- `map(function)` runs a function that maps an array to a new one
+- `filter(function)` runs a function to remove items
+- `every(function)` tests if all items match
+- `some(function)` tests if any items match
 
 ### More For Websites
 
