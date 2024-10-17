@@ -105,15 +105,23 @@ For CSS animations:
 ### General
 
 In js, use `let` and  `const` to declare variables, they are weakly typed (the type can change or be automatically converted). Use the strict equality `===` and `!==` to compare as exact matches, the regular equality can have unexpected results because it automatically will convert types.
+
 Arrow functions are declared in the syntax `(parameters) => {code}` with {} being optional. Functions in general are also considered objects.
+
 JSON is a sepecial object format where the keys are strings, and it can easily be converted to and from a string format.
+
 In functions, you can have an indefinite number of parameters by prefixing the last parameter with `...rest`. Then all the extra parameters would, in this case, be contained within `rest`. The opposite is also possible, to take an iterable object (for example a list or js object) and expand it into the parameters. This is done with `...object` in the function call.
+
 Arrays and objects can be destructured, or pull certain items out and assign them to variables. The syntax for destructuring is like so: `let [b,c,...rest] = a` would assign b and c to be the first two items and rest to be everything else (optional). For an object, you use the key value: `let { a: var1, b: var2 } = obj`.
 
 ### More For Websites
 
 In HTML, use `<script>` elements and attributes such as `onclick="function()/code"` to integrate javascript into the website.
+
 `localStorage` allows you to store numbers, bools, and strings locally instead of sending it back and forth to the server. (Becasue JSON can easily be converted to and from a string, JSON also can be stored.)
+
 *Promise definition:* A `Promise` is an object that runs a function asyncronously. To make a promise you use the syntax `new Promise(function)` where the function is most often an arrow function and must have parameters `resolve, reject`. Code called inside the promise and code after runs at the same time.
+
 *Promise use:* The `resolve, reject` parameters of the promise function are also functions, which set the promise to an accept state or reject state. To detect and execute code according to these states once the code finishes, we use `.then((return/output) => {code}), .catch((err => {code})), and .finally(() => {code})` where `then` runs on the accept state, `catch` catches the reject state, and `finally` runs regardless afterwards.
+
 *Async and await:* `await` is a keyword that can be called in a `try/catch/finally` block and waits to execute code until a promise is resolved. `await` can only be called in either the global scope or in a function declared as `async`. `async` functions are functions that return a `Promise`.
