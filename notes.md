@@ -100,6 +100,8 @@ For CSS animations:
 
 `display: grid` is defined in conjuction with properties such as `grid-template-columns`, `grid-auto-rows`, and `grid-gap`.
 
+`display: flex` creates a resizable flex container. The main attribute of the parent is `flex-direction:<column|row|reverse-column|reverse-row>`. The children can have `flex: #` where the number is the ratio of how much of the container they will get. It also can have numbers related to growing/shrinking etc. Other attributes can line things up like `justify-content` and `align-content` line things up on the main and cross axis respectively. `gap` can be used to create a fixed gap between elements (in addition to any other gaps from justify).
+
 ## Javascript
 
 ### General
