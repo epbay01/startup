@@ -1,17 +1,17 @@
 # Class notes
 
-### Github assignment
+## Github assignment
 - In Github, commits push the (staged with `git add`) changes you have made to a remote cloud repository. Pulling (i.e. with `git pull`) updates the local repository to match.
 - In VSCode, there are various tools to make this process easier, such as a place to put the commit messages, extensions that help to visualize, and various other tools.
 - Markdown format is detailed [here](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#quoting-code) and is definitely something to be acquainted with.
 
-### AWS
+## AWS
 - AWS allows you to purchase a server space, a domain, and set up all the DNS stuff. For this project, we made DNS records taht will redirect from the domain name I purchased (vote-together.click) to the public IP address (18.206.129.131). Each time the server stops and starts, it has a new IP address, so through AWS I also was able to get the more permanent public one.
 - That means it goes http://*.vote-together.click -> http://18.206.129.131 -> instance IP (website run from server)
 - To access the server shell, you can use command line code. `ssh -i [key pair file path] ubuntu@[server ip]` should do it. The key pair file is safely saved on my computer, and the server IP can be obtained from AWS.
 - Caddy is an interface for securing the server (allowing https) by getting a certificate automatically.
 
-### HTML
+## HTML
 - Some key elements in HTML:
   - `<h#>` headings
   - `<div>` divisions
@@ -37,7 +37,7 @@
     - `required` required for submission
     - `pattern` allows for any built-in data validation (for certain types of input element)
 
-### CSS
+## CSS
 CSS uses selectors which are given rules that have a property and a value. Selectors include an HTML element but there are other selectors as well:
   - `element1 element2` implies all `element2` that are descendents of `element1`
   - `*` means everything/all elements
@@ -142,3 +142,23 @@ In HTML, use `<script>` elements and attributes such as `onclick="function()/cod
 *Promise use:* The `resolve, reject` parameters of the promise function are also functions, which set the promise to an accept state or reject state. To detect and execute code according to these states once the code finishes, we use `.then((return/output) => {code}), .catch((err => {code})), and .finally(() => {code})` where `then` runs on the accept state, `catch` catches the reject state, and `finally` runs regardless afterwards.
 
 *Async and await:* `await` is a keyword that can be called in a `try/catch/finally` block and waits to execute code until a promise is resolved. `await` can only be called in either the global scope or in a function declared as `async`. `async` functions are functions that return a `Promise`.
+
+## React
+
+### JSX
+React uses a format called JSX to create and manipulate DOM/HTML components. JSX looks a lot like HTML at first, but has key differences. First off, the attributes use lower camel case and sometimes have different names. JSX elements can have children, and javascript can be embedded into it using `{expression}`.
+
+React allows you to make custom components and insert them into JSX. This is done using `Component: <CustomTag prop="some property" />` inside another element. For example:
+
+```
+<div>
+  Component: <CustomTag foo="property value" />
+</div>
+
+function CustomTag(props) {
+  // some code here
+  return <p>{props.foo}</p>
+}
+```
+
+In this example, the component is named `CustomTag` and it has a custom property `foo`. `foo` is passed into the functionality via the `props` parameter where we could do something with it. In this case, we use the property as the content of a `<p>` JSX tag. As you can see, the component returns JSX which is then inserted into the JSX where it is called (the `<div>` at the top).
