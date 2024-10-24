@@ -151,14 +151,17 @@ React uses a format called JSX to create and manipulate DOM/HTML components. JSX
 React allows you to make custom components and insert them into JSX. This is done using `Component: <CustomTag prop="some property" />` inside another element. For example:
 
 ```
-<div>
-  Component: <CustomTag foo="property value" />
-</div>
-
 function CustomTag(props) {
   // some code here
   return <p>{props.foo}</p>
 }
+
+const root = ReactDOM.createRoot(document.getElementById('root')); // get the root element of the DOM
+root.render(
+<div>
+  Component: <CustomTag foo="property value" />
+</div>
+);
 ```
 
-In this example, the component is named `CustomTag` and it has a custom property `foo`. `foo` is passed into the functionality via the `props` parameter where we could do something with it. In this case, we use the property as the content of a `<p>` JSX tag. As you can see, the component returns JSX which is then inserted into the JSX where it is called (the `<div>` at the top).
+In this example, the component is named `CustomTag` and it has a custom property `foo`. `foo` is passed into the functionality via the `props` parameter where we could do something with it. In this case, we use the property as the content of a `<p>` JSX tag. As you can see, the component returns JSX which is then inserted into the JSX where it is called (the `<div>` at the bottom). The `root.render(<JSX>)` function then actually renders the JSX into the document.
