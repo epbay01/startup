@@ -144,7 +144,7 @@ In HTML, use `<script>` elements and attributes such as `onclick="function()/cod
 *Async and await:* `await` is a keyword that can be called in a `try/catch/finally` block and waits to execute code until a promise is resolved. `await` can only be called in either the global scope or in a function declared as `async`. `async` functions are functions that return a `Promise`.
 
 ## React
-
+**!NOTE!** rewrite to be more clear about props, state, and render
 ### JSX
 React uses a format called JSX to create and manipulate DOM/HTML components. JSX looks a lot like HTML at first, but has key differences. First off, the attributes use lower camel case and sometimes have different names. JSX elements can have children, and javascript can be embedded into it using `{expression}`.
 
@@ -165,3 +165,13 @@ root.render(
 ```
 
 In this example, the component is named `CustomTag` and it has a custom property `foo`. `foo` is passed into the functionality via the `props` parameter where we could do something with it. In this case, we use the property as the content of a `<p>` JSX tag. As you can see, the component returns JSX which is then inserted into the JSX where it is called (the `<div>` at the bottom). The `root.render(<JSX>)` function then actually renders the JSX into the document.
+
+### Hooks
+
+Hooks are React functions that add functionality to your elements. One example is the `useState` hook, which allows you to define changeable states that you can then use for various things such as styling, content, etc. For example, you might have `onclick={stateChangeFunction()}` and define the state with `[state, updateState] = React.useState("state1");` and then change the state with `updateState("state2")`. This would mean that on clicking the element the state would change from "state1" to "state2."
+
+Another hook is `useEffect(function)`. This is called when an element is rendered, or optionally when there is cleanup. This happens for example when a state changes, the element is rerendered and so `useEffect` is called. Cleanup happens after there could be a rerendering, whether it happens or not. You also can specify dependencies that call the function when the variable is updated.
+
+### Router
+
+In react, you can have the entire application be on one page using the react-router-dom package. This means instead of loading a new page every time the site simply uses javascript to change the elements of the DOM.
