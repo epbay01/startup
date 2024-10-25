@@ -164,6 +164,8 @@ root.render(
 );
 ```
 
+**Components:** To be clear, each component has three pieces `props`, `state`, and `render`. Props are the properties, which as you can see can be used to pass things between and into components. States are used for an internal component state, for example what text it displays. Render renders the component when either a property or state changes.
+
 In this example, the component is named `CustomTag` and it has a custom property `foo`. `foo` is passed into the functionality via the `props` parameter where we could do something with it. In this case, we use the property as the content of a `<p>` JSX tag. As you can see, the component returns JSX which is then inserted into the JSX where it is called (the `<div>` at the bottom). The `root.render(<JSX>)` function then actually renders the JSX into the document.
 
 ### Hooks
@@ -172,6 +174,6 @@ Hooks are React functions that add functionality to your elements. One example i
 
 Another hook is `useEffect(function)`. This is called when an element is rendered, or optionally when there is cleanup. This happens for example when a state changes, the element is rerendered and so `useEffect` is called. Cleanup happens after there could be a rerendering, whether it happens or not. You also can specify dependencies that call the function when the variable is updated.
 
-### Router
+### Other
 
-In react, you can have the entire application be on one page using the react-router-dom package. This means instead of loading a new page every time the site simply uses javascript to change the elements of the DOM.
+In React, you can have the entire application be on one page using the react-router-dom package. This means instead of loading a new page every time the site simply uses javascript to change the elements of the DOM.
