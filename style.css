@@ -2,12 +2,12 @@
 
 @font-face {
     font-family: "Pink Chicken";
-    src: url(Fonts/PinkChicken-Regular.ttf);
+    src: url(public/Fonts/PinkChicken-Regular.ttf);
 }
 
 @font-face {
     font-family: "Calibri";
-    src: url(Fonts/calibri-regular.ttf);
+    src: url(public/Fonts/calibri-regular.ttf);
 }
 
 html { height: 100%; }
