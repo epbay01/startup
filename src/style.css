@@ -2,15 +2,16 @@
 
 @font-face {
     font-family: "Pink Chicken";
-    src: url(public/Fonts/PinkChicken-Regular.ttf);
+    src: url(/Fonts/PinkChicken-Regular.ttf);
 }
 
 @font-face {
     font-family: "Calibri";
-    src: url(public/Fonts/calibri-regular.ttf);
+    src: url(/Fonts/calibri-regular.ttf);
 }
 
 html { height: 100%; }
+body { margin: 0; }
 .body {
     font-family: "Calibri", sans-serif;
     /* box-sizing: border-box; */
