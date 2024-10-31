@@ -2,59 +2,11 @@
 <head>
     <link href="style.css" rel="stylesheet">
     <link href="index-style.css" rel="stylesheet">
+
+    <title>Vote Together!</title>
 </head>
 <body>
-    <header>
-        <!-- <h1><span id="logo-checkmark">&#10004;</span>ote Together! &#129309;</h1> -->
-        <img id="logo" src="public/Images/vote together_white.png"/>
-        <nav>
-            <!--<a href="index.html">Login</a>-->
-            <a id="nav-1" class="link" href="profile.html">Profile</a>
-            <a id="nav-2" class="link" href="vote.html">VOTE!</a>
-        </nav>
-        <!--<img src="https://upload.wikimedia.org/wikipedia/commons/1/1f/As08-16-2593.jpg" style="object-fit: cover; height: 150px; width: 100%;" alt="Picture of earth"/>-->
-    </header>
-    <main>
-        <!-- <br> -->
-
-        <div class="no-format" id="info">
-            <div id="about">
-                <div class="no-format">
-                    <h3>About</h3>
-                    <p>
-                        Have you ever wondered, for some common questions, what people really think? Which did come first, the chicken, or the egg? In this web application, these questions will finally be answered. Based on an old Wii app, this website will have new questions daily, then keep track of the universal response to that question. Each user votes, and adds to a base tally, so that people from anywhere can vote and see others' opinions.
-                    </p>
-                </div>
-                <img src="public/Images/sample_question.png" alt="Example question: What color best matches your personality?"/>
-            </div>
-
-            <div>
-                <h3>Getting Started</h3>
-                <p>To get started:</p>
-                <ol>
-                    <li>Make an account by inputting your email and password here</li>
-                    <li>Click "Vote!" (if not redirected) to cast your first global vote on our poll</li>
-                    <li>You can only vote once a day, but make sure to go to the "Profile" page to see yesterday's results</li>
-                    <li>As you vote on consecutive days, your streak will grow! Try and get the highest streak you can!</li>
-                    <li>Adjust any other settings on the "Profile" page as well!</li>
-                    <li>Enjoy a global togetherness as we see what together, we vote for!</li>
-                </ol>
-            </div>
-        </div>
-        <div class="no-format" id="login-and-pic">
-            <div id="login">
-                <h3>Login</h3>
-                <span id="email" class="no-format"><p class="login-element">Email: </p><input class="login-element" type="text" value="youremail@website.com" /></span>
-                <span id="password" class="no-format"><p class="login-element">Password: </p><input class="login-element" type="text" value="password" /></span>
-                <input id="login-button" type="button" value="Submit">
-            </div>
-            <div id="world-pic"><img src="Images/the-new-york-public-library-yEauzeZU6xo-unsplash.jpg" alt="Picture of earth"/></div>
-        </div>
-    </main>
-    <footer>
-        <div>
-            <p><a class="link" href="https://github.com/epbay01/startup">github repository</a></p>
-            <p>website by: <a class="link" href="mailto:epbay01@byu.edu">elijah bay</a></p>
-        <img width="200px" src="public/Images/IMG_8451.png" alt="Picture of the creator, Elijah Bay"/>
-    </footer>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script type="module" src="/index.jsx"></script>
 </body>
