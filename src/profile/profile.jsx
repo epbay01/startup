@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-function Profile () {
+export default function Profile () {
     return <></>
 }
