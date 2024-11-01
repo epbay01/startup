@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 
 export default function Login() {
     return (<>
-        <main>
+        <div className="main" id="login-main">
             {/* <!-- <br> --> */}
 
             <div className="no-format" id="info">
@@ -39,6 +39,6 @@ export default function Login() {
                 </div>
                 <div id="world-pic"><img src="Images/the-new-york-public-library-yEauzeZU6xo-unsplash.jpg" alt="Picture of earth"/></div>
             </div>
-        </main>
+        </div>
     </>)
 }

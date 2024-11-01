@@ -1,7 +1,7 @@
 /* body {
     overflow: hidden;
 } */
-main {
+#vote-main {
     justify-content: space-between;
 }
 

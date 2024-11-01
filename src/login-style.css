@@ -4,7 +4,7 @@ TO DO:
 - text prettyness
 */
 
-main {
+#login-main {
     min-height: 350px;
     flex-direction: row;
     gap: 10px;

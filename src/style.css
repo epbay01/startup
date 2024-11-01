@@ -95,7 +95,7 @@ nav .link {
 }
 
 
-main {
+.main {
     flex: 2;
     flex-grow: 1;
     flex-shrink: 0;
@@ -112,7 +112,7 @@ main {
     background-color: #ccc;
 }
 
-main div {
+.main div {
     background-color: #f0f0f0;
     margin: 0px 0px;
     border-radius: 5px;
