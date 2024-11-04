@@ -8,17 +8,17 @@ export default function Vote () {
                 <h2 id="question">Question: What color best matches your personality?</h2>
                 <h3 id="streak">Your streak: 5 &#128293;</h3>
             </div>
-            {/* <div className="no-format" id="input-buttons">
+            <div className="no-format" id="input-buttons">
                 <div id="left-buttons" className="no-format">
                     <p>Green</p>
                     <button>
                         <svg height="200" width="200" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M0 200 A200 200 90 0 1 200 0 L200 80 A120 120 90 0 0 80 200 L0 200 Z" style="fill: green;"/>
+                            <path d="M0 200 A200 200 90 0 1 200 0 L200 80 A120 120 90 0 0 80 200 L0 200 Z" fill="green"/>
                         </svg>
                     </button>
                     <button>
                         <svg height="200" width="200" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M0 0 A200 200 90 0 0 200 200 L200 120 A120 120 90 0 1 80 0 L0 0 Z" style="fill: blue;"/>
+                            <path d="M0 0 A200 200 90 0 0 200 200 L200 120 A120 120 90 0 1 80 0 L0 0 Z" fill="blue"/>
                         </svg>
                     </button>
                     <p>Blue</p>
@@ -27,17 +27,17 @@ export default function Vote () {
                     <p>Yellow</p>
                     <button>
                         <svg height="200" width="200" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M0 0 A200 200 90 0 1 200 200 L120 200 A120 120 90 0 0 0 80 L0 0 Z" style="fill: orange;"/>
+                            <path d="M0 0 A200 200 90 0 1 200 200 L120 200 A120 120 90 0 0 0 80 L0 0 Z" fill="orange"/>
                         </svg>
                     </button>
                     <button>
                         <svg height="200" width="200" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M200 0 A200 200 90 0 1 0 200 L0 120 A120 120 90 0 0 120 0 L0 0 Z" style="fill: red;"/>
+                            <path d="M200 0 A200 200 90 0 1 0 200 L0 120 A120 120 90 0 0 120 0 L0 0 Z" fill="red"/>
                         </svg>
                     </button>
                     <p>Red</p>
                 </div>
-            </div> */}
+            </div>
 
             <div id="results-div">
                 <h3>Results (shows after submitted)</h3>
