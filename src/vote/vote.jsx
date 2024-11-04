@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-export default function Vote () {
+export default function Vote (props) {
     return (
         <div className="main" id="vote-main"> 
             <div className="no-format" id="question-and-streak">

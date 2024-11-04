@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-export default function Profile () {
+export default function Profile (props) {
     return (
         <div className="main" id="profile-main">
             <h2>[username]</h2>

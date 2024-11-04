@@ -1,8 +1,27 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-export default function Login() {
-    return (<>
+export default function Login(props) {
+    let logout;
+
+    if (props.states[1]) {
+        logout = (
+            <input id="logout-button" type="button" value="Logout" onClick={logoutButton()} />
+        )
+    }
+    
+    function loginButton(username, password) {
+        props.onChange(0,username);
+        props.onChange(1,true);
+        // save to db, auth, etc.
+    }
+
+    function logoutButton() {
+        props.onChange(0,"");
+        props.onChange(1,false);
+    }
+
+    return (
         <div className="main" id="login-main">
             {/* <!-- <br> --> */}
 
@@ -35,10 +54,11 @@ export default function Login() {
                     <h3>Login</h3>
                     <span id="email" className="no-format"><p className="login-element">Email: </p><input className="login-element" type="text" value="youremail@website.com" /></span>
                     <span id="password" className="no-format"><p className="login-element">Password: </p><input className="login-element" type="text" value="password" /></span>
-                    <input id="login-button" type="button" value="Submit" />
+                    <input id="login-button" type="button" value="Submit" onClick={loginButton("user","pass")} />
+                    {logout}
                 </div>
                 <div id="world-pic"><img src="Images/the-new-york-public-library-yEauzeZU6xo-unsplash.jpg" alt="Picture of earth"/></div>
             </div>
         </div>
-    </>)
+    )
 }
