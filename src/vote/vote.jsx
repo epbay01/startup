@@ -8,7 +8,7 @@ export default function Vote () {
                 <h2 id="question">Question: What color best matches your personality?</h2>
                 <h3 id="streak">Your streak: 5 &#128293;</h3>
             </div>
-            <div className="no-format" id="input-buttons">
+            {/* <div className="no-format" id="input-buttons">
                 <div id="left-buttons" className="no-format">
                     <p>Green</p>
                     <button>
@@ -37,7 +37,7 @@ export default function Vote () {
                     </button>
                     <p>Red</p>
                 </div>
-            </div>
+            </div> */}
 
             <div id="results-div">
                 <h3>Results (shows after submitted)</h3>

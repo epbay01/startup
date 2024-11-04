@@ -103,7 +103,7 @@ input.login-element {
 }
 
 @media (orientation: portrait) {
-    main {
+    .main {
         flex-direction: column;
         gap: 0px;
         align-content: flex-start;

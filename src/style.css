@@ -12,6 +12,12 @@
 
 html { height: 100%; }
 body { margin: 0; }
+
+#root {
+    margin: 0;
+    padding: 0;
+}
+
 .body {
     font-family: "Calibri", sans-serif;
     /* box-sizing: border-box; */
@@ -110,9 +116,11 @@ nav .link {
     justify-content: space-evenly;
 
     background-color: #ccc;
+
+    min-height: calc(100vh - 170px);
 }
 
-.main div {
+div {
     background-color: #f0f0f0;
     margin: 0px 0px;
     border-radius: 5px;
@@ -214,7 +222,7 @@ footer .link:visited {
         background-color: #566161;
     }
 
-    main {
+    .main {
         margin-top: calc(11vw + 156px);
     }
 

@@ -9,6 +9,7 @@ import "./style.css";
 import "./login-style.css";
 import "./profile-style.css";
 import "./vote-style.css";
+import UnknownPath from "./unknown.jsx";
 
 export default function App() {
     return (
@@ -17,23 +18,25 @@ export default function App() {
             <header>
                 <img id="logo" src="/Images/vote together_white.png"/>
                 <nav>
-                    <NavLink id="nav-1" className="link" to="profile">Profile</NavLink>
-                    <NavLink id="nav-2" className="link" to="vote">VOTE!</NavLink>
-                    {/* <NavLink id="nav-3" className="link" to="login">Login</NavLink> */}
+                    <NavLink id="nav-1" className="link" to="login">Login</NavLink>
+                    <NavLink id="nav-2" className="link" to="profile">Profile</NavLink>
+                    <NavLink id="nav-3" className="link" to="vote">VOTE!</NavLink>
                 </nav>
             </header>
 
             <Routes>
                 <Route path="/" element={<Login />} />
+                <Route path="/login" element={<Login />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/vote" element={<Vote />} />
+                <Route path="*" element={<UnknownPath />} />
             </Routes>
             
             <footer>
-                <div>
+                <div className="no-format">
                     <p><a className="link" href="https://github.com/epbay01/startup">github repository</a></p>
                     <p>website by: <a className="link" href="mailto:epbay01@byu.edu">elijah bay</a></p>
-                    <img width="200px" src="public/Images/IMG_8451.png" alt="Picture of the creator, Elijah Bay"/>
+                    <img width="200px" src="/Images/IMG_8451.png" alt="Picture of the creator, Elijah Bay"/>
                 </div>
             </footer>
         </div>

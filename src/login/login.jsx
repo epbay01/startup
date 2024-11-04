@@ -14,7 +14,7 @@ export default function Login() {
                             Have you ever wondered, for some common questions, what people really think? Which did come first, the chicken, or the egg? In this web application, these questions will finally be answered. Based on an old Wii app, this website will have new questions daily, then keep track of the universal response to that question. Each user votes, and adds to a base tally, so that people from anywhere can vote and see others' opinions.
                         </p>
                     </div>
-                    <img src="public/Images/sample_question.png" alt="Example question: What color best matches your personality?"/>
+                    <img src="/Images/sample_question.png" alt="Example question: What color best matches your personality?"/>
                 </div>
 
                 <div>
