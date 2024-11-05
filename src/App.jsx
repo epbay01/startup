@@ -14,11 +14,12 @@ export default function App() {
     const [currentUser, setCurrentUser] = React.useState("");
     const [loggedIn, setLoggedIn] = React.useState(false);
 
-    const states = [currentUser, loggedIn];
     const setStates = [setCurrentUser, setLoggedIn];
 
-    function onChange(index, value) {
-        setStates[index](value);
+    function handleLogin(user, pass) {
+        setCurrentUser(user);
+        setLoggedIn(true);
+        // save pass etc.
     }
 
     return (
@@ -34,10 +35,10 @@ export default function App() {
                 </header>
 
                 <Routes>
-                    <Route path="/" element={<Login onChange={(i, v) => onChange(i,v)} states={states} />} />
-                    <Route path="/login" element={<Login onChange={(i, v) => onChange(i,v)} states={states} />} />
-                    <Route path="/profile" element={<Profile states={states} />} />
-                    <Route path="/vote" element={<Vote states={states} />} />
+                    <Route path="/" element={<Login handleLogin={(u, p) => handleLogin(u,p)} currentUser={currentUser} loggedIn={loggedIn} />} />
+                    <Route path="/login" element={<Login handleLogin={(u, p) => handleLogin(u,p)} currentUser={currentUser} loggedIn={loggedIn} />} />
+                    <Route path="/profile" element={<Profile currentUser={currentUser} loggedIn={loggedIn} />} />
+                    <Route path="/vote" element={<Vote currentUser={currentUser} loggedIn={loggedIn} />} />
                     <Route path="*" element={<UnknownPath />} />
                 </Routes>
                 
