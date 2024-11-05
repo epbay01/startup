@@ -1,18 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
-export default function Login({ handleLogin, currentUser = "", loggedIn = false }) {
-    let logout;
-    let username = currentUser;
-    let password = "";
+export default function Login({ handleLogin, currentUser = "youremail@website.com", loggedIn = false }) {
+    let [logout, setLogout] = React.useState(<></>)
+    let [username, setUsername] = React.useState(currentUser);
+    let [password, setPassword] = React.useState("");
 
     React.useEffect(() => {
-        if (loggedIn) {
-            logout = (
-                <input id="logout-button" type="button" value="Logout" onClick={handleLogin("", false)} />
+        if (loggedIn.valueOf()) {
+            setLogout(
+                <input id="logout-button" type="button" value="Logout" onClick={() => handleLogin("", "", false)} />
             );
         } else {
-            logout = <></>;
+            setLogout(<></>);
         }
     }, [loggedIn]);
 
@@ -47,9 +47,9 @@ export default function Login({ handleLogin, currentUser = "", loggedIn = false 
             <div className="no-format" id="login-and-pic">
                 <div id="login">
                     <h3>Login</h3>
-                    <span id="email" className="no-format"><p className="login-element">Email: </p><input className="login-element" type="text" value="youremail@website.com" onChange={(t) => username = t} /></span>
-                    <span id="password" className="no-format"><p className="login-element">Password: </p><input className="login-element" type="text" value="password" onChange={(t) => password = t} /></span>
-                    <input id="login-button" type="button" value="Submit" onClick={handleLogin(username, password)} />
+                    <span id="email" className="no-format"><p className="login-element">Email: </p><input className="login-element" type="text" value={username} onChange={(t) => setUsername(t.target.value)} /></span>
+                    <span id="password" className="no-format"><p className="login-element">Password: </p><input className="login-element" type="text" value={password} onChange={(t) => setPassword(t.target.value)} /></span>
+                    <input id="login-button" type="button" value="Submit" onClick={() => handleLogin(username, password, true)} />
                     {logout}
                 </div>
                 <div id="world-pic"><img src="Images/the-new-york-public-library-yEauzeZU6xo-unsplash.jpg" alt="Picture of earth"/></div>
