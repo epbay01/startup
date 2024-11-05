@@ -22,16 +22,56 @@ export default function App() {
         // save pass etc.
     }
 
+    function Nav({path}) {
+        switch (path) {
+            case "/":
+                return (
+                    <nav>
+                        {/* <NavLink id="nav-1" className="link" to="login">Login</NavLink> */}
+                        <NavLink id="nav-1" className="link" to="/profile">Profile</NavLink>
+                        <NavLink id="nav-2" className="link" to="/vote">VOTE!</NavLink>
+                    </nav>
+                )
+            case "/login":
+                return (
+                    <nav>
+                        {/* <NavLink id="nav-1" className="link" to="login">Login</NavLink> */}
+                        <NavLink id="nav-1" className="link" to="/profile">Profile</NavLink>
+                        <NavLink id="nav-2" className="link" to="/vote">VOTE!</NavLink>
+                    </nav>
+                )
+            case "/profile":
+                return (
+                    <nav>
+                        <NavLink id="nav-1" className="link" to="/login">Login</NavLink>
+                        {/* <NavLink id="nav-2" className="link" to="profile">Profile</NavLink> */}
+                        <NavLink id="nav-2" className="link" to="/vote">VOTE!</NavLink>
+                    </nav>
+                )
+            case "/vote":
+            return (
+                <nav>
+                    <NavLink id="nav-1" className="link" to="/login">Login</NavLink>
+                    <NavLink id="nav-2" className="link" to="/profile">Profile</NavLink>
+                    {/* <NavLink id="nav-3" className="link" to="vote">VOTE!</NavLink> */}
+                </nav>
+            )
+        }
+    }
+
     return (
         <BrowserRouter>
             <div className="body">
                 <header>
                     <img id="logo" src="/Images/vote together_white.png"/>
-                    <nav>
-                        <NavLink id="nav-1" className="link" to="login">Login</NavLink>
-                        <NavLink id="nav-2" className="link" to="profile">Profile</NavLink>
-                        <NavLink id="nav-3" className="link" to="vote">VOTE!</NavLink>
-                    </nav>
+                    
+                    <Routes>
+                        <Route path="/" element={<Nav path={"/"} />} />
+                        <Route path="/login" element={<Nav path={"/login"} />} />
+                        <Route path="/profile" element={<Nav path={"/profile"} />} />
+                        <Route path="/vote" element={<Nav path={"/vote"} />} />
+                    </Routes>
+                    
                 </header>
 
                 <Routes>
