@@ -6,6 +6,7 @@ TO DO:
 
 #login-main {
     min-height: 350px;
+    max-height: calc(100vh - 170px);
     flex-direction: row;
     gap: 10px;
 }
@@ -103,10 +104,11 @@ input.login-element {
 }
 
 @media (orientation: portrait) {
-    .main {
+    #login-main {
         flex-direction: column;
         gap: 0px;
         align-content: flex-start;
+        max-height: calc(100vh - 290px);
     }
 
     #login-and-pic {

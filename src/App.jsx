@@ -64,7 +64,7 @@ export default function App() {
             <div className="body">
                 <header>
                     <img id="logo" src="/Images/vote together_white.png"/>
-                    
+                    {/* <nav> router */}
                     <Routes>
                         <Route path="/" element={<Nav path={"/"} />} />
                         <Route path="/login" element={<Nav path={"/login"} />} />
@@ -73,7 +73,7 @@ export default function App() {
                     </Routes>
                     
                 </header>
-
+                {/* <main> router */}
                 <Routes>
                     <Route path="/" element={<Login handleLogin={(u, p) => handleLogin(u,p)} currentUser={currentUser} loggedIn={loggedIn} />} />
                     <Route path="/login" element={<Login handleLogin={(u, p) => handleLogin(u,p)} currentUser={currentUser} loggedIn={loggedIn} />} />
