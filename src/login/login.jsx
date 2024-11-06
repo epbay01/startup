@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
+import { NavLink } from "react-router-dom";
 
 export default function Login({ handleLogin, currentUser = "youremail@website.com", loggedIn = false }) {
     let [logout, setLogout] = React.useState(<></>)
@@ -49,7 +50,7 @@ export default function Login({ handleLogin, currentUser = "youremail@website.co
                     <h3>Login</h3>
                     <span id="email" className="no-format"><p className="login-element">Email: </p><input className="login-element" type="text" value={username} onChange={(t) => setUsername(t.target.value)} /></span>
                     <span id="password" className="no-format"><p className="login-element">Password: </p><input className="login-element" type="text" value={password} onChange={(t) => setPassword(t.target.value)} /></span>
-                    <input id="login-button" type="button" value="Submit" onClick={() => handleLogin(username, password, true)} />
+                    <NavLink to="/vote"><input id="login-button" type="button" value="Submit" onClick={() => handleLogin(username, password, true)} /></NavLink>
                     {logout}
                 </div>
                 <div id="world-pic"><img src="Images/the-new-york-public-library-yEauzeZU6xo-unsplash.jpg" alt="Picture of earth"/></div>

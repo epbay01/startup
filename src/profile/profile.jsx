@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-export default function Profile ({ currentUser, loggedIn }) {    
+export default function Profile ({ handleLogin, currentUser, loggedIn }) {    
     const [confirmVotesState, setConfirmVotesState] = React.useState(false);
     const [notificationsState, setNotificationsState] = React.useState(true);
     
@@ -34,6 +34,11 @@ export default function Profile ({ currentUser, loggedIn }) {
         localStorage.setItem(currentUser, JSON.stringify(userObj));
     };
 
+    function deleteUser() {
+        localStorage.removeItem(currentUser);
+        handleLogin("","",false);
+    }
+
     return (
         <div className="main" id="profile-main">
             <h2>{currentUser}</h2>
@@ -51,7 +56,7 @@ export default function Profile ({ currentUser, loggedIn }) {
                 <div className="no-format" id="settings">
                     <span className="checkbox-setting"><label>Confirm votes?</label><input type="checkbox" checked={confirmVotesState} onChange={() => updateUser(!confirmVotesState, notificationsState)} /></span>
                     <span className="checkbox-setting"><label>Daily notifications?</label><input type="checkbox" checked={notificationsState} onChange={() => updateUser(confirmVotesState, !notificationsState)} /></span>
-                    <input id="delete-button" type="button" value="Delete account" />
+                    <input id="delete-button" type="button" value="Delete account" onClick={() => deleteUser()} />
                 </div>
             </div>
             <div id="vr-div">

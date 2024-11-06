@@ -98,7 +98,7 @@ export default function App() {
                 <Routes>
                     <Route path="/" element={<Login handleLogin={(u, p, l) => handleLogin(u,p,l)} currentUser={currentUser} loggedIn={loggedIn} />} />
                     <Route path="/login" element={<Login handleLogin={(u, p, l) => handleLogin(u,p,l)} currentUser={currentUser} loggedIn={loggedIn} />} />
-                    <Route path="/profile" element={<Profile currentUser={currentUser} loggedIn={loggedIn} />} />
+                    <Route path="/profile" element={<Profile handleLogin={(u, p, l) => handleLogin(u,p,l)} currentUser={currentUser} loggedIn={loggedIn} />} />
                     <Route path="/vote" element={<Vote currentUser={currentUser} loggedIn={loggedIn} />} />
                     <Route path="*" element={<UnknownPath />} />
                 </Routes>
