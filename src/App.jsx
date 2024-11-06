@@ -15,19 +15,32 @@ export default function App() {
     const [loggedIn, setLoggedIn] = React.useState(false);
 
     function handleLogin(user, pass, logged) {
-        let temp = localStorage.getItem(user)
-        if (temp !== null) {
-            if (pass == temp) {
+        if ((localStorage.getItem(user) !== null) && user !== "") {
+            let temp = JSON.parse(localStorage.getItem(user));
+            if (pass == temp.password) {
                 setCurrentUser(user);
                 setLoggedIn(logged);
             } else {
                 console.log("invalid password");
             }
         } else {
-            localStorage.setItem(user, pass);
+            createUser(user, pass);
             setCurrentUser(user);
             setLoggedIn(logged);
         }
+    }
+
+    function createUser(user, pass) {
+        let userStats = {
+            password: pass,
+            currentStreak: 0,
+            highestStreak: 0,
+            popVote: 0,
+            unpopVote: 0,
+            confirmVotes: false,
+            notifications: true
+        }
+        localStorage.setItem(user, JSON.stringify(userStats));
     }
 
     function Nav({path}) {
