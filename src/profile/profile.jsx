@@ -1,10 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-export default function Profile (props) {
+export default function Profile ({ currentUser, loggedIn }) {
+    if (!loggedIn) {
+        return (
+            <div className="main" id="profile-main">
+                <h2>Please log in or make an account!</h2>
+            </div>
+        )
+    }
+
     return (
         <div className="main" id="profile-main">
-            <h2>[username]</h2>
+            <h2>{currentUser}</h2>
             <div>
                 <h3>Settings and account info</h3>
                 <h4>Account info</h4>
