@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { redirect } from "react-router-dom";
-import * as questionsJson from "./questions.json";
+import * as questionsJson from "./questions.json" assert { type: "json" };
 
 class Question {
     constructor(question = "", answers = []) {
@@ -11,17 +11,28 @@ class Question {
 }
 
 export default function Vote ({ currentUser, loggedIn }) {
-    let qArray;
+    const [question, setQuestion] = React.useState(new Question());
+    let qArray = [];
+    let currentQuestionStats = {
+        "question": question.question
+    }
+    question.answers.forEach(element => {
+        currentQuestionStats[element + "Votes"] = 0;
+        currentQuestionStats[element + "Percent"] = 0;
+    });
+
     function generateQuestions() { // generates array of questions from json file
-        let json = JSON.parse(questionsJson);
         let questionArray = []
-        for (let i = 0; i < json.questionArray.length; i++) {
-            questionArray.push(new Question(json.questionArray[i].question, json.questionArray[i].answers))
+        for (let i = 0; i < questionsJson.questionArray.length; i++) {
+            questionArray.push(new Question(questionsJson.questionArray[i].question, questionsJson.questionArray[i].answers))
         }
         return questionArray;
     }
 
-    React.useEffect(() => qArray = generateQuestions(), []); // should only trigger once
+    React.useEffect(() => {
+        qArray = generateQuestions();
+        return;
+    }, []); // should only trigger once
 
     function getNewQuestion() {
         return qArray[Math.floor(Math.random() * qArray.length)]; // get random question from array
@@ -34,11 +45,11 @@ export default function Vote ({ currentUser, loggedIn }) {
             </div>
         )
     } else {
-        const [question, setQuestion] = React.useState(new Question());
         let now = new Date();
-        if (now.getHours() === 12 && now.getMilliseconds() === 0) {
+        console.log(now);
+        if (now.getHours() === 15 && now.getMinutes() === 0 && now.getMilliseconds() === 0) {
             setQuestion(getNewQuestion());
-        }
+        } // at 15:00 for one milisecond (3:00pm every day)
 
         return (
             <div className="main" id="vote-main"> 
@@ -83,13 +94,22 @@ export default function Vote ({ currentUser, loggedIn }) {
 }
 
 function VoteButtons ({ answers }) {
-    if (length(answers) === 2) {
-
-    } else if (length(answers) === 4) {
+    if (answers.length === 2) {
+        return (
+            <div className="no-format" id="input-buttons">
+                <div className="no-format" id="left-buttons">
+                    <p>{answers[0]}</p>
+                </div>
+                <div className="no-format" id="right-buttons">
+                    <p>{answers[1]}</p>
+                </div>
+            </div>
+        )
+    } else if (answers.length === 4) {
         return (
             <div className="no-format" id="input-buttons">
                 <div id="left-buttons" className="no-format">
-                    <p>Green</p>
+                    <p>{answers[0]}</p>
                     <button>
                         <svg height="200" width="200" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0 200 A200 200 90 0 1 200 0 L200 80 A120 120 90 0 0 80 200 L0 200 Z" fill="green"/>
@@ -100,10 +120,10 @@ function VoteButtons ({ answers }) {
                             <path d="M0 0 A200 200 90 0 0 200 200 L200 120 A120 120 90 0 1 80 0 L0 0 Z" fill="blue"/>
                         </svg>
                     </button>
-                    <p>Blue</p>
+                    <p>{answers[1]}</p>
                 </div>
                 <div id="right-buttons" className="no-format">
-                    <p>Yellow</p>
+                    <p>{answers[2]}</p>
                     <button>
                         <svg height="200" width="200" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0 0 A200 200 90 0 1 200 200 L120 200 A120 120 90 0 0 0 80 L0 0 Z" fill="orange"/>
@@ -114,7 +134,7 @@ function VoteButtons ({ answers }) {
                             <path d="M200 0 A200 200 90 0 1 0 200 L0 120 A120 120 90 0 0 120 0 L0 0 Z" fill="red"/>
                         </svg>
                     </button>
-                    <p>Red</p>
+                    <p>{answers[3]}</p>
                 </div>
             </div>
         )
