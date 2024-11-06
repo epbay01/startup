@@ -1,13 +1,79 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { redirect } from "react-router-dom";
 
-export default function Vote (props) {
-    return (
-        <div className="main" id="vote-main"> 
-            <div className="no-format" id="question-and-streak">
-                <h2 id="question">Question: What color best matches your personality?</h2>
-                <h3 id="streak">Your streak: 5 &#128293;</h3>
+class Question {
+    constructor(question = "", answers = []) {
+        this.question = question;
+        this.answers = answers;
+    }
+}
+
+export default function Vote ({ currentUser, loggedIn }) {
+    function getNewQuestion() {
+        return new Question("Which came first, the chicken or the egg?", ["Chicken", "Egg"]);
+    }
+
+    if (!loggedIn) {
+        return (
+            <div className="main" id="vote-main">
+                <h2>Please log in or make an account!</h2>
             </div>
+        )
+    } else {
+        const [question, setQuestion] = React.useState(new Question());
+        let now = new Date();
+        if (now.getHours() === 12 && now.getMilliseconds() === 0) {
+            setQuestion(getNewQuestion());
+        }
+
+        return (
+            <div className="main" id="vote-main"> 
+                <div className="no-format" id="question-and-streak">
+                    <h2 id="question">Question: {question.question}</h2>
+                    <h3 id="streak">Your streak: 5 &#128293;</h3>
+                </div>
+                
+                <VoteButtons answers={question.answers} />
+
+                <div id="results-div">
+                    <h3>Results (shows after submitted)</h3>
+                    <table id="results">
+                        <tbody>
+                            <tr id="results-responses">
+                                <th>Response</th>
+                                <td className="results-1">Option 1</td>
+                                <td className="results-2">Option 2</td>
+                                <td className="results-3">Option 3</td>
+                                <td className="results-4">Option 4</td>
+                            </tr>
+                            <tr id="results-percent">
+                                <th>%</th>
+                                <td className="results-1">20</td>
+                                <td className="results-2">40</td>
+                                <td className="results-3">10</td>
+                                <td className="results-4">30</td>
+                            </tr>
+                            <tr id="results-total">
+                                <th>Votes</th>
+                                <td className="results-1"><p className="no-format">10</p></td>
+                                <td className="results-2">20</td>
+                                <td className="results-3">5</td>
+                                <td className="results-4">15</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        )
+    }
+}
+
+function VoteButtons ({ answers }) {
+    if (length(answers) === 2) {
+
+    } else if (length(answers) === 4) {
+        return (
             <div className="no-format" id="input-buttons">
                 <div id="left-buttons" className="no-format">
                     <p>Green</p>
@@ -38,33 +104,6 @@ export default function Vote (props) {
                     <p>Red</p>
                 </div>
             </div>
-
-            <div id="results-div">
-                <h3>Results (shows after submitted)</h3>
-                <table id="results">
-                    <tr id="results-responses">
-                        <th>Response</th>
-                        <td className="results-1">Option 1</td>
-                        <td className="results-2">Option 2</td>
-                        <td className="results-3">Option 3</td>
-                        <td className="results-4">Option 4</td>
-                    </tr>
-                    <tr id="results-percent">
-                        <th>%</th>
-                        <td className="results-1">20</td>
-                        <td className="results-2">40</td>
-                        <td className="results-3">10</td>
-                        <td className="results-4">30</td>
-                    </tr>
-                    <tr id="results-total">
-                        <th>Votes</th>
-                        <td className="results-1"><p class="no-format">10</p></td>
-                        <td className="results-2">20</td>
-                        <td className="results-3">5</td>
-                        <td className="results-4">15</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-    )
+        )
+    }
 }
