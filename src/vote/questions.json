@@ -1,0 +1,44 @@
+{
+    "questionArray": [
+        {
+            "question": "Which came first, the chicken or the egg?",
+            "answers": ["Chicken", "Egg"]
+        },
+        {
+            "question": "What color represents your personality best?",
+            "answers": ["Blue", "Red", "Orange", "Green"]
+        },
+        {
+            "question": "Do you sleeptalk?",
+            "answers": ["Never", "Sometimes", "A lot", "I don't know"]
+        },
+        {
+            "question": "How do you sleep?",
+            "answers": ["On my back", "On my side", "On my stomach", "All of these"]
+        },
+        {
+            "question": "If a tree falls in the forest, and no one hears it, does it make a sound?",
+            "answers": ["Yes", "No"]
+        },
+        {
+            "question": "Do you like social media?",
+            "answers": ["Yes", "No"]
+        },
+        {
+            "question": "What color is your toothbrush?",
+            "answers": ["White", "Blue", "Red", "Other"]
+        },
+        {
+            "question": "What do you use when showering?",
+            "answers": ["Stick soap", "Body wash"]
+        },
+        {
+            "question": "Are you a morning person?",
+            "answers": ["Early riser", "Night owl"]
+        },
+        {
+            "question": "What's your favorite season?",
+            "answers": ["Spring", "Summer", "Fall", "Winter"]
+        }
+    ]
+}

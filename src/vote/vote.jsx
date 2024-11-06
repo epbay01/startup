@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { redirect } from "react-router-dom";
+import * as questionsJson from "./questions.json";
 
 class Question {
     constructor(question = "", answers = []) {
@@ -10,8 +11,20 @@ class Question {
 }
 
 export default function Vote ({ currentUser, loggedIn }) {
+    let qArray;
+    function generateQuestions() { // generates array of questions from json file
+        let json = JSON.parse(questionsJson);
+        let questionArray = []
+        for (let i = 0; i < json.questionArray.length; i++) {
+            questionArray.push(new Question(json.questionArray[i].question, json.questionArray[i].answers))
+        }
+        return questionArray;
+    }
+
+    React.useEffect(() => qArray = generateQuestions(), []); // should only trigger once
+
     function getNewQuestion() {
-        return new Question("Which came first, the chicken or the egg?", ["Chicken", "Egg"]);
+        return qArray[Math.floor(Math.random() * qArray.length)]; // get random question from array
     }
 
     if (!loggedIn) {
@@ -33,7 +46,7 @@ export default function Vote ({ currentUser, loggedIn }) {
                     <h2 id="question">Question: {question.question}</h2>
                     <h3 id="streak">Your streak: 5 &#128293;</h3>
                 </div>
-                
+
                 <VoteButtons answers={question.answers} />
 
                 <div id="results-div">
