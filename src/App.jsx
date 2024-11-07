@@ -13,6 +13,7 @@ import UnknownPath from "./unknown.jsx";
 export default function App() {
     const [currentUser, setCurrentUser] = React.useState("");
     const [loggedIn, setLoggedIn] = React.useState(false);
+    const [voted, setVoted] = React.useState(false);
 
     function handleLogin(user, pass, logged) {
         if ((localStorage.getItem(user) !== null) && user !== "") {
@@ -28,6 +29,10 @@ export default function App() {
             setCurrentUser(user);
             setLoggedIn(logged);
         }
+    }
+
+    function handleVote() {
+        setVoted(true);
     }
 
     function createUser(user, pass) {
@@ -99,7 +104,7 @@ export default function App() {
                     <Route path="/" element={<Login handleLogin={(u, p, l) => handleLogin(u,p,l)} currentUser={currentUser} loggedIn={loggedIn} />} />
                     <Route path="/login" element={<Login handleLogin={(u, p, l) => handleLogin(u,p,l)} currentUser={currentUser} loggedIn={loggedIn} />} />
                     <Route path="/profile" element={<Profile handleLogin={(u, p, l) => handleLogin(u,p,l)} currentUser={currentUser} loggedIn={loggedIn} />} />
-                    <Route path="/vote" element={<Vote currentUser={currentUser} loggedIn={loggedIn} />} />
+                    <Route path="/vote" element={<Vote currentUser={currentUser} loggedIn={loggedIn} voted={voted} handleVote={() => handleVote()} />} />
                     <Route path="*" element={<UnknownPath />} />
                 </Routes>
                 

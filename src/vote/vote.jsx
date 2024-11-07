@@ -10,16 +10,12 @@ class Question {
     }
 }
 
-export default function Vote ({ currentUser, loggedIn }) {
+export default function Vote ({ currentUser, loggedIn, voted, handleVote }) {
     const [question, setQuestion] = React.useState(new Question());
+    const [currentQuestionVotes, setCurrentQuestionVotes] = React.useState(new Object());
+    let user;
+    loggedIn ? user = JSON.parse(localStorage.getItem(currentUser)) : user = { currentStreak: 0 };
     let qArray = [];
-    let currentQuestionStats = {
-        "question": question.question
-    }
-    question.answers.forEach(element => {
-        currentQuestionStats[element + "Votes"] = 0;
-        currentQuestionStats[element + "Percent"] = 0;
-    });
 
     function generateQuestions() { // generates array of questions from json file
         let questionArray = []
@@ -31,11 +27,25 @@ export default function Vote ({ currentUser, loggedIn }) {
 
     React.useEffect(() => {
         qArray = generateQuestions();
+        if (question.question === "") {
+            setQuestion(getNewQuestion());
+        }
         return;
     }, []); // should only trigger once
 
     function getNewQuestion() {
-        return qArray[Math.floor(Math.random() * qArray.length)]; // get random question from array
+        let qIndex = Math.floor(Math.random() * qArray.length);
+        console.log("new question at index " + qIndex + ": " + qArray[qIndex].question);
+
+        let cqvCopy = currentQuestionVotes;
+
+        qArray[qIndex].answers.forEach(element => {
+            cqvCopy[element] = 0;
+        });
+        console.log(JSON.stringify(cqvCopy));
+        setCurrentQuestionVotes(cqvCopy);
+
+        return qArray[qIndex]; // get random question from array
     }
 
     if (!loggedIn) {
@@ -55,39 +65,12 @@ export default function Vote ({ currentUser, loggedIn }) {
             <div className="main" id="vote-main"> 
                 <div className="no-format" id="question-and-streak">
                     <h2 id="question">Question: {question.question}</h2>
-                    <h3 id="streak">Your streak: 5 &#128293;</h3>
+                    <h3 id="streak">Your streak: {user.currentStreak} &#128293;</h3>
                 </div>
 
                 <VoteButtons answers={question.answers} />
 
-                <div id="results-div">
-                    <h3>Results (shows after submitted)</h3>
-                    <table id="results">
-                        <tbody>
-                            <tr id="results-responses">
-                                <th>Response</th>
-                                <td className="results-1">Option 1</td>
-                                <td className="results-2">Option 2</td>
-                                <td className="results-3">Option 3</td>
-                                <td className="results-4">Option 4</td>
-                            </tr>
-                            <tr id="results-percent">
-                                <th>%</th>
-                                <td className="results-1">20</td>
-                                <td className="results-2">40</td>
-                                <td className="results-3">10</td>
-                                <td className="results-4">30</td>
-                            </tr>
-                            <tr id="results-total">
-                                <th>Votes</th>
-                                <td className="results-1"><p className="no-format">10</p></td>
-                                <td className="results-2">20</td>
-                                <td className="results-3">5</td>
-                                <td className="results-4">15</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <ResultsTable currentQuestionVotes={currentQuestionVotes} voted={voted} />
             </div>
         )
     }
@@ -136,6 +119,59 @@ function VoteButtons ({ answers }) {
                     </button>
                     <p>{answers[3]}</p>
                 </div>
+            </div>
+        )
+    }
+}
+
+function ResultsTable ({ currentQuestionVotes, voted }) {
+    if (!voted) {
+        return;
+    } else {
+        const [row1, setRow1] = React.useState([]);
+        const [row2, setRow2] = React.useState([]);
+        const [row3, setRow3] = React.useState([]);
+
+        React.useEffect(() => {
+            let tempRow1 = [];
+            let tempRow2 = [];
+            let tempRow3 = [];
+            let sum = 0;
+            for (let i = 0; i < Object.keys(currentQuestionVotes).length; i++) {
+                tempRow1.push(<td className={"results-" + (i + 1)} key={"result-" + i}>{Object.keys(currentQuestionVotes)[i]}</td>);
+                tempRow3.push(<td className={"results-" + (i + 1)} key={"votes-" + i}>{Object.values(currentQuestionVotes)[i]}</td>);
+                sum += Object.values(currentQuestionVotes)[i];
+            }
+            for (let i = 0; i < Object.keys(currentQuestionVotes).length; i++) {
+                let sumOrOther = 0;
+                sum === 0 ? sumOrOther = 1 : sumOrOther = sum;
+                tempRow2.push(<td className={"results-" + (i + 1)} key={"percent-" + i}>{Math.round((Object.values(currentQuestionVotes)[i] / sumOrOther) * 100)}</td>);
+            }
+            setRow1(tempRow1);
+            setRow2(tempRow2);
+            setRow3(tempRow3);
+            return;
+        }, [voted])
+
+        return (
+            <div id="results-div">
+                <h3>Results</h3>
+                <table id="results">
+                    <tbody>
+                        <tr id="results-responses">
+                            <th>Response</th>
+                            {row1}
+                        </tr>
+                        <tr id="results-percent">
+                            <th>%</th>
+                            {row2}
+                        </tr>
+                        <tr id="results-total">
+                            <th>Votes</th>
+                            {row3}
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         )
     }
