@@ -27,7 +27,7 @@ export default function Vote ({ currentUser, loggedIn, voted, handleVote, questi
                     <h3 id="streak">Your streak: {user.currentStreak} &#128293;</h3>
                 </div>
 
-                <VoteButtons answers={question.answers} />
+                <VoteButtons answers={question.answers} handleVote={handleVote} />
 
                 <ResultsTable currentQuestionVotes={currentQuestionVotes} voted={voted} />
             </div>
@@ -35,15 +35,25 @@ export default function Vote ({ currentUser, loggedIn, voted, handleVote, questi
     }
 }
 
-function VoteButtons ({ answers }) {
+function VoteButtons ({ answers, handleVote }) {
     if (answers.length === 2) {
         return (
             <div className="no-format" id="input-buttons">
                 <div className="no-format" id="left-buttons">
-                    <p>{answers[0]}</p>
+                <p>{answers[0]}</p>
+                    <button onClick={() => handleVote(answers[0])}>
+                        <svg height="400" width="200" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M200 400 A200 200 0 0 1 200 0 L200 80 A120 120 90 0 0 200 320 Z" fill="green"/>
+                        </svg>
+                    </button>
                 </div>
                 <div className="no-format" id="right-buttons">
                     <p>{answers[1]}</p>
+                    <button onClick={() => handleVote(answers[1])}>
+                        <svg height="400" width="200" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 0 A200 200 90 0 1 0 400 L0 320 A120 120 90 0 0 0 80 L0 0 Z" fill="red"/>
+                        </svg>
+                    </button>
                 </div>
             </div>
         )
@@ -52,12 +62,12 @@ function VoteButtons ({ answers }) {
             <div className="no-format" id="input-buttons">
                 <div id="left-buttons" className="no-format">
                     <p>{answers[0]}</p>
-                    <button>
+                    <button onClick={() => handleVote(answers[0])}>
                         <svg height="200" width="200" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0 200 A200 200 90 0 1 200 0 L200 80 A120 120 90 0 0 80 200 L0 200 Z" fill="green"/>
                         </svg>
                     </button>
-                    <button>
+                    <button onClick={() => handleVote(answers[1])}>
                         <svg height="200" width="200" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0 0 A200 200 90 0 0 200 200 L200 120 A120 120 90 0 1 80 0 L0 0 Z" fill="blue"/>
                         </svg>
@@ -66,12 +76,12 @@ function VoteButtons ({ answers }) {
                 </div>
                 <div id="right-buttons" className="no-format">
                     <p>{answers[2]}</p>
-                    <button>
+                    <button onClick={() => handleVote(answers[2])}>
                         <svg height="200" width="200" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0 0 A200 200 90 0 1 200 200 L120 200 A120 120 90 0 0 0 80 L0 0 Z" fill="orange"/>
                         </svg>
                     </button>
-                    <button>
+                    <button onClick={() => handleVote(answers[3])}>
                         <svg height="200" width="200" xmlns="http://www.w3.org/2000/svg">
                             <path d="M200 0 A200 200 90 0 1 0 200 L0 120 A120 120 90 0 0 120 0 L0 0 Z" fill="red"/>
                         </svg>

@@ -84,8 +84,11 @@ export default function App() {
         return qArray[qIndex]; // get random question from array
     }
 
-    function handleVote() {
+    function handleVote(ans) {
         setVoted(true);
+        let temp = currentQuestionVotes;
+        temp[ans]++;
+        setCurrentQuestionVotes(temp);
     }
 
 
