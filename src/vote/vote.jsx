@@ -1,82 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { redirect } from "react-router-dom";
-import * as questionsJson from "./questions.json" assert { type: "json" };
-
-class Question {
-    constructor(question = "", answers = []) {
-        this.question = question;
-        this.answers = answers;
-    }
-}
 
 /*
 TODO:
-- lift up currentQuestionVotes state to app
 - make 2 response buttons
 - add button functionality (they call handleVote in app, app updates the voted state, adds vote to cqv data which is passed back down)
 */
 
-export default function Vote ({ currentUser, loggedIn, voted, handleVote }) {
-    const [question, setQuestion] = React.useState(new Question());
-    const [currentQuestionVotes, setCurrentQuestionVotes] = React.useState(new Object());
+export default function Vote ({ currentUser, loggedIn, voted, handleVote, question, currentQuestionVotes }) {
     let user;
-    let qArray;
     loggedIn ? user = JSON.parse(localStorage.getItem(currentUser)) : user = { currentStreak: 0 };
-
-    function generateQuestions() { // generates array of questions from json file
-        let questionArray = []
-        for (let i = 0; i < questionsJson.questionArray.length; i++) {
-            questionArray.push(new Question(questionsJson.questionArray[i].question, questionsJson.questionArray[i].answers))
-        }
-        return questionArray;
-    }
-
-    React.useEffect(() => {
-        if (question.question === "") {
-            setQuestion(getNewQuestion());
-        }
-        return;
-    }, []); // should only trigger once
-
-    React.useEffect(() => { // TEMPORARY!!!
-        voted ? setQuestion(getNewQuestion()) : 0;
-    }, [voted]);
-
-    function getNewQuestion() {
-        qArray = generateQuestions();
-        let qIndex = Math.floor(Math.random() * qArray.length);
-        let cqvCopy = currentQuestionVotes;
-
-        if (question.question !== "") {
-            let temp;
-            try {
-                temp = JSON.parse(localStorage.getItem("questionVotes"));
-            } catch {
-                localStorage.removeItem("questionVotes");
-                localStorage.setItem("questionVotes", JSON.stringify(new Object()));
-                temp = new Object();
-            } finally {
-                if (temp === null)  {
-                    localStorage.removeItem("questionVotes");
-                    localStorage.setItem("questionVotes", JSON.stringify(new Object()));
-                    temp = new Object();
-                }
-            }
-            temp[question.question] = cqvCopy;
-            localStorage.setItem("questionVotes", JSON.stringify(temp));
-        }
-
-        console.log("new question at index " + qIndex + ": " + qArray[qIndex].question);
-        cqvCopy = new Object();
-        qArray[qIndex].answers.forEach(element => {
-            cqvCopy[element] = 0;
-        });
-        console.log(JSON.stringify(cqvCopy));
-        setCurrentQuestionVotes(cqvCopy);
-
-        return qArray[qIndex]; // get random question from array
-    }
 
     if (!loggedIn) {
         return (
@@ -85,11 +19,6 @@ export default function Vote ({ currentUser, loggedIn, voted, handleVote }) {
             </div>
         )
     } else {
-        let now = new Date();
-        console.log(now);
-        if ((now.getHours() === 0 && now.getMinutes() === 0 && now.getMilliseconds() === 0)) {
-            setQuestion(getNewQuestion());
-        } // at 0:00 for one milisecond (12:00am every day)
 
         return (
             <div className="main" id="vote-main"> 

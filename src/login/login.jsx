@@ -20,7 +20,7 @@ export default function Login({ invalidPass, handleLogin, currentUser = "yourema
 
     React.useEffect(() => {
         invalidPass ? setInvalidText(<p className="no-format" id="invalid-pass">Invalid password. Please try again.</p>) : setInvalidText(<></>);
-        console.log("set html");
+        //console.log("set html");
     }, [invalidPass]);
 
     return (
@@ -56,7 +56,7 @@ export default function Login({ invalidPass, handleLogin, currentUser = "yourema
                     <h3>Login</h3>
                     <span id="email" className="no-format"><p className="login-element">Email: </p><input className="login-element" type="text" value={username} onChange={(t) => setUsername(t.target.value)} /></span>
                     <span id="password" className="no-format"><p className="login-element">Password: </p><input className="login-element" type="text" value={password} onChange={(t) => setPassword(t.target.value)} /></span>
-                    <NavLink to={invalidPass ? "/vote" : "/"}><input id="login-button" type="button" value="Submit" onClick={() => handleLogin(username, password, true)} /></NavLink>
+                    <NavLink to={invalidPass ? "/" : "/vote"}><input id="login-button" type="button" value="Submit" onClick={() => handleLogin(username, password, true)} /></NavLink> {/* the nav redirection doesn't totally work, it happens before handleLogin/state updates */}
                     {logout}
                     {invalidText}
                 </div>

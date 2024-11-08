@@ -7,7 +7,7 @@ TODO:
 - possibly make a visual/bar graph? can be achieved with a colored box and a variable length
 */
 
-export default function Profile ({ handleLogin, currentUser, loggedIn }) {    
+export default function Profile ({ handleLogin, currentUser, loggedIn, voteHistory }) {    
     const [confirmVotesState, setConfirmVotesState] = React.useState(false);
     const [notificationsState, setNotificationsState] = React.useState(true);
     
