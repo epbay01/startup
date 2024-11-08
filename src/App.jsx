@@ -56,6 +56,10 @@ export default function App() {
         localStorage.setItem(user, JSON.stringify(userStats));
     }
 
+    function getVoteCount(q) {
+
+    }
+
     function Nav({path}) {
         switch (path) {
             case "/":

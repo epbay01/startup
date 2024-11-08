@@ -22,8 +22,8 @@ export default function Vote ({ currentUser, loggedIn, voted, handleVote }) {
     const [question, setQuestion] = React.useState(new Question());
     const [currentQuestionVotes, setCurrentQuestionVotes] = React.useState(new Object());
     let user;
+    let qArray;
     loggedIn ? user = JSON.parse(localStorage.getItem(currentUser)) : user = { currentStreak: 0 };
-    let qArray = [];
 
     function generateQuestions() { // generates array of questions from json file
         let questionArray = []
@@ -34,19 +34,42 @@ export default function Vote ({ currentUser, loggedIn, voted, handleVote }) {
     }
 
     React.useEffect(() => {
-        qArray = generateQuestions();
         if (question.question === "") {
             setQuestion(getNewQuestion());
         }
         return;
     }, []); // should only trigger once
 
-    function getNewQuestion() {
-        let qIndex = Math.floor(Math.random() * qArray.length);
-        console.log("new question at index " + qIndex + ": " + qArray[qIndex].question);
+    React.useEffect(() => { // TEMPORARY
+        setQuestion(getNewQuestion());
+    }, [voted]);
 
+    function getNewQuestion() {
+        qArray = generateQuestions();
+        let qIndex = Math.floor(Math.random() * qArray.length);
         let cqvCopy = currentQuestionVotes;
 
+        if (question.question !== "") {
+            let temp;
+            try {
+                temp = JSON.parse(localStorage.getItem("questionVotes"));
+            } catch {
+                localStorage.removeItem("questionVotes");
+                localStorage.setItem("questionVotes", JSON.stringify(new Object()));
+                temp = new Object();
+            } finally {
+                if (temp === null)  {
+                    localStorage.removeItem("questionVotes");
+                    localStorage.setItem("questionVotes", JSON.stringify(new Object()));
+                    temp = new Object();
+                }
+            }
+            temp[question.question] = cqvCopy;
+            localStorage.setItem("questionVotes", JSON.stringify(temp));
+        }
+
+        console.log("new question at index " + qIndex + ": " + qArray[qIndex].question);
+        cqvCopy = new Object();
         qArray[qIndex].answers.forEach(element => {
             cqvCopy[element] = 0;
         });
@@ -65,9 +88,9 @@ export default function Vote ({ currentUser, loggedIn, voted, handleVote }) {
     } else {
         let now = new Date();
         console.log(now);
-        if (now.getHours() === 15 && now.getMinutes() === 0 && now.getMilliseconds() === 0) {
+        if ((now.getHours() === 0 && now.getMinutes() === 0 && now.getMilliseconds() === 0)) {
             setQuestion(getNewQuestion());
-        } // at 15:00 for one milisecond (3:00pm every day)
+        } // at 0:00 for one milisecond (12:00am every day)
 
         return (
             <div className="main" id="vote-main"> 
@@ -133,34 +156,34 @@ function VoteButtons ({ answers }) {
 }
 
 function ResultsTable ({ currentQuestionVotes, voted }) {
+    const [row1, setRow1] = React.useState([]);
+    const [row2, setRow2] = React.useState([]);
+    const [row3, setRow3] = React.useState([]);
+
+    React.useEffect(() => {
+        let tempRow1 = [];
+        let tempRow2 = [];
+        let tempRow3 = [];
+        let sum = 0;
+        for (let i = 0; i < Object.keys(currentQuestionVotes).length; i++) {
+            tempRow1.push(<td className={"results-" + (i + 1)} key={"result-" + i}>{Object.keys(currentQuestionVotes)[i]}</td>);
+            tempRow3.push(<td className={"results-" + (i + 1)} key={"votes-" + i}>{Object.values(currentQuestionVotes)[i]}</td>);
+            sum += Object.values(currentQuestionVotes)[i];
+        }
+        for (let i = 0; i < Object.keys(currentQuestionVotes).length; i++) {
+            let sumOrOther = 0;
+            sum === 0 ? sumOrOther = 1 : sumOrOther = sum;
+            tempRow2.push(<td className={"results-" + (i + 1)} key={"percent-" + i}>{Math.round((Object.values(currentQuestionVotes)[i] / sumOrOther) * 100)}</td>);
+        }
+        setRow1(tempRow1);
+        setRow2(tempRow2);
+        setRow3(tempRow3);
+        return;
+    }, [voted])
+
     if (!voted) {
         return;
     } else {
-        const [row1, setRow1] = React.useState([]);
-        const [row2, setRow2] = React.useState([]);
-        const [row3, setRow3] = React.useState([]);
-
-        React.useEffect(() => {
-            let tempRow1 = [];
-            let tempRow2 = [];
-            let tempRow3 = [];
-            let sum = 0;
-            for (let i = 0; i < Object.keys(currentQuestionVotes).length; i++) {
-                tempRow1.push(<td className={"results-" + (i + 1)} key={"result-" + i}>{Object.keys(currentQuestionVotes)[i]}</td>);
-                tempRow3.push(<td className={"results-" + (i + 1)} key={"votes-" + i}>{Object.values(currentQuestionVotes)[i]}</td>);
-                sum += Object.values(currentQuestionVotes)[i];
-            }
-            for (let i = 0; i < Object.keys(currentQuestionVotes).length; i++) {
-                let sumOrOther = 0;
-                sum === 0 ? sumOrOther = 1 : sumOrOther = sum;
-                tempRow2.push(<td className={"results-" + (i + 1)} key={"percent-" + i}>{Math.round((Object.values(currentQuestionVotes)[i] / sumOrOther) * 100)}</td>);
-            }
-            setRow1(tempRow1);
-            setRow2(tempRow2);
-            setRow3(tempRow3);
-            return;
-        }, [voted])
-
         return (
             <div id="results-div">
                 <h3>Results</h3>
