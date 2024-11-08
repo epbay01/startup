@@ -13,7 +13,6 @@ class Question {
 /*
 TODO:
 - lift up currentQuestionVotes state to app
-- add saving system of some kind for cqv state (json file probably)
 - make 2 response buttons
 - add button functionality (they call handleVote in app, app updates the voted state, adds vote to cqv data which is passed back down)
 */
@@ -40,8 +39,8 @@ export default function Vote ({ currentUser, loggedIn, voted, handleVote }) {
         return;
     }, []); // should only trigger once
 
-    React.useEffect(() => { // TEMPORARY
-        setQuestion(getNewQuestion());
+    React.useEffect(() => { // TEMPORARY!!!
+        voted ? setQuestion(getNewQuestion()) : 0;
     }, [voted]);
 
     function getNewQuestion() {

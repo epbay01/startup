@@ -133,4 +133,9 @@ input.login-element {
         flex: 2;
         order: 1;
     }
+
+    #invalid-pass {
+        font-size: 6px;
+        color: red;
+    }
 }

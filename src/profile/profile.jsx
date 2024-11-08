@@ -65,37 +65,47 @@ export default function Profile ({ handleLogin, currentUser, loggedIn }) {
                     <input id="delete-button" type="button" value="Delete account" onClick={() => deleteUser()} />
                 </div>
             </div>
-            <div id="vr-div">
-                <h3>Voting record</h3>
-                <table id="vrt">
-                    <tbody>
-                        <tr id="vrt-header-row">
-                            <th>Date</th>
-                            <th>Question</th>
-                            <th>Your response</th>
-                            <th>Total response</th>
-                        </tr>
-                        <tr className="vrt-data-row">
-                            <td>1/1/24</td>
-                            <td>Which came first, the chicken or egg?</td>
-                            <td>Chicken</td>
-                            <td>46% Chicken<br />54% Egg [visual]</td>
-                        </tr>
-                        <tr className="vrt-data-row">
-                            <td>1/1/24</td>
-                            <td>Which came first, the chicken or egg?</td>
-                            <td>Chicken</td>
-                            <td>46% Chicken<br />54% Egg [visual]</td>
-                        </tr>
-                        <tr className="vrt-data-row">
-                            <td>1/1/24</td>
-                            <td>Which came first, the chicken or egg?</td>
-                            <td>Chicken</td>
-                            <td>46% Chicken<br />54% Egg [visual]</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <VoteTable user={userObj} />
+        </div>
+    )
+}
+
+function VoteTable ({ user }) {
+    function getVoteCount(q) {
+        return JSON.parse(localStorage.getItem("questionVotes")[q]);
+    }
+
+    return (
+        <div id="vr-div">
+            <h3>Voting record</h3>
+            <table id="vrt">
+                <tbody>
+                    <tr id="vrt-header-row">
+                        <th>Date</th>
+                        <th>Question</th>
+                        <th>Your response</th>
+                        <th>Total response</th>
+                    </tr>
+                    <tr className="vrt-data-row">
+                        <td>1/1/24</td>
+                        <td>Which came first, the chicken or egg?</td>
+                        <td>Chicken</td>
+                        <td>46% Chicken<br />54% Egg [visual]</td>
+                    </tr>
+                    <tr className="vrt-data-row">
+                        <td>1/1/24</td>
+                        <td>Which came first, the chicken or egg?</td>
+                        <td>Chicken</td>
+                        <td>46% Chicken<br />54% Egg [visual]</td>
+                    </tr>
+                    <tr className="vrt-data-row">
+                        <td>1/1/24</td>
+                        <td>Which came first, the chicken or egg?</td>
+                        <td>Chicken</td>
+                        <td>46% Chicken<br />54% Egg [visual]</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     )
 }

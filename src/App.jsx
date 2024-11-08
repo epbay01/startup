@@ -23,16 +23,21 @@ export default function App() {
     const [loggedIn, setLoggedIn] = React.useState(false);
     const [voted, setVoted] = React.useState(false);
 
+    const [invalidPass, setInvalidPass] = React.useState(false);
+
     function handleLogin(user, pass, logged) {
         if ((localStorage.getItem(user) !== null) && user !== "") {
             let temp = JSON.parse(localStorage.getItem(user));
             if (pass == temp.password) {
+                setInvalidPass(false);
                 setCurrentUser(user);
                 setLoggedIn(logged);
             } else {
                 console.log("invalid password");
+                setInvalidPass(true);
             }
         } else {
+            setInvalidPass(false);
             createUser(user, pass);
             setCurrentUser(user);
             setLoggedIn(logged);
@@ -54,10 +59,6 @@ export default function App() {
             notifications: true
         }
         localStorage.setItem(user, JSON.stringify(userStats));
-    }
-
-    function getVoteCount(q) {
-
     }
 
     function Nav({path}) {
@@ -113,7 +114,7 @@ export default function App() {
                 </header>
                 {/* <main> router */}
                 <Routes>
-                    <Route path="/" element={<Login handleLogin={(u, p, l) => handleLogin(u,p,l)} currentUser={currentUser} loggedIn={loggedIn} />} />
+                    <Route path="/" element={<Login handleLogin={(u, p, l) => handleLogin(u,p,l)} currentUser={currentUser} loggedIn={loggedIn} invalidPass={invalidPass} />} />
                     <Route path="/login" element={<Login handleLogin={(u, p, l) => handleLogin(u,p,l)} currentUser={currentUser} loggedIn={loggedIn} />} />
                     <Route path="/profile" element={<Profile handleLogin={(u, p, l) => handleLogin(u,p,l)} currentUser={currentUser} loggedIn={loggedIn} />} />
                     <Route path="/vote" element={<Vote currentUser={currentUser} loggedIn={loggedIn} voted={voted} handleVote={() => handleVote()} />} />

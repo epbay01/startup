@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { NavLink } from "react-router-dom";
 
-export default function Login({ handleLogin, currentUser = "youremail@website.com", loggedIn = false }) {
+export default function Login({ handleLogin, currentUser = "youremail@website.com", loggedIn = false, invalidPass = {invalidPass} }) {
     let [logout, setLogout] = React.useState(<></>)
     let [username, setUsername] = React.useState(currentUser);
     let [password, setPassword] = React.useState("");
+    let [invalidText, setInvalidText] = React.useState(<></>);
 
     React.useEffect(() => {
         if (loggedIn.valueOf()) {
@@ -16,6 +17,10 @@ export default function Login({ handleLogin, currentUser = "youremail@website.co
             setLogout(<></>);
         }
     }, [loggedIn]);
+
+    // React.useEffect(() => {
+    //     invalidPass ? setInvalidText(<p className="no-format" id="invalid-pass">Invalid password. Please try again.</p>) : setInvalidText(<></>);
+    // }, [invalidPass])
 
     return (
         <div className="main" id="login-main">
@@ -52,6 +57,7 @@ export default function Login({ handleLogin, currentUser = "youremail@website.co
                     <span id="password" className="no-format"><p className="login-element">Password: </p><input className="login-element" type="text" value={password} onChange={(t) => setPassword(t.target.value)} /></span>
                     <NavLink to="/vote"><input id="login-button" type="button" value="Submit" onClick={() => handleLogin(username, password, true)} /></NavLink>
                     {logout}
+                    {invalidText}
                 </div>
                 <div id="world-pic"><img src="Images/the-new-york-public-library-yEauzeZU6xo-unsplash.jpg" alt="Picture of earth"/></div>
             </div>
