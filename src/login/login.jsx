@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { NavLink } from "react-router-dom";
 
-export default function Login({ handleLogin, currentUser = "youremail@website.com", loggedIn = false, invalidPass = {invalidPass} }) {
+export default function Login({ invalidPass, handleLogin, currentUser = "youremail@website.com", loggedIn = false }) {
     let [logout, setLogout] = React.useState(<></>)
     let [username, setUsername] = React.useState(currentUser);
     let [password, setPassword] = React.useState("");
@@ -18,9 +18,10 @@ export default function Login({ handleLogin, currentUser = "youremail@website.co
         }
     }, [loggedIn]);
 
-    // React.useEffect(() => {
-    //     invalidPass ? setInvalidText(<p className="no-format" id="invalid-pass">Invalid password. Please try again.</p>) : setInvalidText(<></>);
-    // }, [invalidPass])
+    React.useEffect(() => {
+        invalidPass ? setInvalidText(<p className="no-format" id="invalid-pass">Invalid password. Please try again.</p>) : setInvalidText(<></>);
+        console.log("set html");
+    }, [invalidPass]);
 
     return (
         <div className="main" id="login-main">
@@ -55,7 +56,7 @@ export default function Login({ handleLogin, currentUser = "youremail@website.co
                     <h3>Login</h3>
                     <span id="email" className="no-format"><p className="login-element">Email: </p><input className="login-element" type="text" value={username} onChange={(t) => setUsername(t.target.value)} /></span>
                     <span id="password" className="no-format"><p className="login-element">Password: </p><input className="login-element" type="text" value={password} onChange={(t) => setPassword(t.target.value)} /></span>
-                    <NavLink to="/vote"><input id="login-button" type="button" value="Submit" onClick={() => handleLogin(username, password, true)} /></NavLink>
+                    <NavLink to={invalidPass ? "/vote" : "/"}><input id="login-button" type="button" value="Submit" onClick={() => handleLogin(username, password, true)} /></NavLink>
                     {logout}
                     {invalidText}
                 </div>

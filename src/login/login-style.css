@@ -103,6 +103,12 @@ input.login-element {
     text-align: center;
 }
 
+#invalid-pass {
+    color: red;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
 @media (orientation: portrait) {
     #login-main {
         flex-direction: column;
@@ -132,10 +138,5 @@ input.login-element {
         overflow: auto;
         flex: 2;
         order: 1;
-    }
-
-    #invalid-pass {
-        font-size: 6px;
-        color: red;
     }
 }
