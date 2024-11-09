@@ -67,9 +67,11 @@ export default function App() {
                 }
             }
             temp[question.question] = cqvCopy;
-            localStorage.setItem("questionVotes", JSON.stringify(temp));
             let temp2 = voteHistory;
-            temp2.push(cqvCopy);
+            let temp3 = question.question;
+            temp2.push({
+                temp3: cqvCopy
+            });
             setVoteHistory(temp2);
         }
 
@@ -80,6 +82,7 @@ export default function App() {
         });
         console.log(JSON.stringify(cqvCopy));
         setCurrentQuestionVotes(cqvCopy);
+        localStorage.setItem("questionVotes", JSON.stringify(cqvCopy));
 
         return qArray[qIndex]; // get random question from array
     }
@@ -92,6 +95,9 @@ export default function App() {
             let temp = currentQuestionVotes;
             temp[ans]++;
             setCurrentQuestionVotes(temp);
+            let now = new Date();
+            let strDate = `${now.getMonth()}/${now.getDay()}/${now.getFullYear()}`;
+            tempUser.userHistory[strDate] = [question.question, ans];
 
             tempUser.votedToday = true;
             localStorage.setItem(currentUser, JSON.stringify(tempUser));
@@ -145,7 +151,8 @@ export default function App() {
             unpopVote: 0,
             confirmVotes: false,
             notifications: true,
-            votedToday: false
+            votedToday: false,
+            userHistory: {}
         }
         localStorage.setItem(user, JSON.stringify(userStats));
         parsed["key"].push(user);

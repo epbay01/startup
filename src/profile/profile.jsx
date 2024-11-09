@@ -17,8 +17,12 @@ export default function Profile ({ handleLogin, currentUser, loggedIn, voteHisto
         popVote : 0,
         unpopVote : 0,
         confirmVotes: false,
-        notifications: true
+        notifications: true,
+        votedToday: false,
+        userHistory: {}
     }
+
+    if (currentUser !== "") userObj = JSON.parse(localStorage.getItem(currentUser));
     
     if (!loggedIn) {
         return (
@@ -65,14 +69,40 @@ export default function Profile ({ handleLogin, currentUser, loggedIn, voteHisto
                     <input id="delete-button" type="button" value="Delete account" onClick={() => deleteUser()} />
                 </div>
             </div>
-            <VoteTable user={userObj} />
+            <VoteTable userObj={userObj} voteHistory={voteHistory} />
         </div>
     )
 }
 
-function VoteTable ({ user }) {
+function VoteTable ({ userObj, voteHistory }) {
+    let tableElements = [];
+
     function getVoteCount(q) {
-        return JSON.parse(localStorage.getItem("questionVotes")[q]);
+        if (voteHistory[q] === undefined) return { "": 0 }
+        return voteHistory[q]; // returns subobject with answers and votes
+    }
+
+    let userHistory = new Object();
+    userHistory = userObj.userHistory;
+    for (let i = 0; i < Object.keys(userHistory).length; i++) {
+        let q = userHistory[Object.keys(userHistory)[i]];
+
+        let answerStr = "";
+        for (let j = 0; j < Object.keys(getVoteCount(q)).length; j++) {
+            answerStr.concat(Object.keys(getVoteCount(q))[j]);
+            answerStr.concat(" ");
+            answerStr.concat(Object.values(getVoteCount(q))[j].toString());
+            answerStr.concat("\n");
+        }
+
+        tableElements.push(
+            <tr key={"vrt-row-" + i} className="vrt-data-row">
+                <td key={"vrt-date-" + i}>{Object.keys(userHistory)[i]}</td>
+                <td key={"vrt-q-" + i}>{q[0]}</td>
+                <td key={"vrt-res-" + i}>{q[1]}</td>
+                <td key={"vrt-global-" + i}>{answerStr}</td>
+            </tr>
+        )
     }
 
     return (
@@ -86,24 +116,7 @@ function VoteTable ({ user }) {
                         <th>Your response</th>
                         <th>Total response</th>
                     </tr>
-                    <tr className="vrt-data-row">
-                        <td>1/1/24</td>
-                        <td>Which came first, the chicken or egg?</td>
-                        <td>Chicken</td>
-                        <td>46% Chicken<br />54% Egg [visual]</td>
-                    </tr>
-                    <tr className="vrt-data-row">
-                        <td>1/1/24</td>
-                        <td>Which came first, the chicken or egg?</td>
-                        <td>Chicken</td>
-                        <td>46% Chicken<br />54% Egg [visual]</td>
-                    </tr>
-                    <tr className="vrt-data-row">
-                        <td>1/1/24</td>
-                        <td>Which came first, the chicken or egg?</td>
-                        <td>Chicken</td>
-                        <td>46% Chicken<br />54% Egg [visual]</td>
-                    </tr>
+                    {tableElements}
                 </tbody>
             </table>
         </div>
