@@ -72,3 +72,13 @@ Obviously, these are rough sketches and the specific design of the website would
 **Application text content:** The text utilizes fonts to look more thematic, and has padding etc. to make it readable
 
 **Application images:** I included a few images, such as one in the footer, one in the header as the logo, and a couple on the about/login page
+
+## React
+
+**Bundled with Vite:** I did this using node.js
+
+**Components:** I used multiple components with a number of states to keep track of votes, voter history, and users. The main components are the three pages of the site, but I also used additional components to build two tables, and adapt the nav bar. Currently, you can vote and it tracks the votes using localStorage. This will change later to a database.
+
+**Router:** I used the router for the various pages. I also used it to redirect when you login.
+
+**Hooks:** I used the `useEffect` hook in several places to adapt the site to respond to what's happening. For example, when you log in, put in a wrong password, or vote.
