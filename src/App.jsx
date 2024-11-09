@@ -100,6 +100,7 @@ export default function App() {
             tempUser.userHistory[strDate] = [question.question, ans];
 
             tempUser.votedToday = true;
+            tempUser.currentStreak++;
             localStorage.setItem(currentUser, JSON.stringify(tempUser));
         } else {
             console.log("already voted today");
@@ -164,22 +165,26 @@ export default function App() {
         if (question.question === "") {
             setQuestion(getNewQuestion());
         }
+    }, [])
 
+    React.useEffect(() => {
         let now = new Date();
         if (now.getHours() === 0 && now.getMinutes() === 0 && now.getMilliseconds() === 0) {
             setVoted(false);
             setQuestion(getNewQuestion());
 
-            let userDatabase = JSON.parse(localStorage.getItem("userDatabase"));
-            userDatabase["key"].forEach((item) => {
-                let tempUser = localStorage.getItem(item);
-                if (tempUser !== null) {
-                    tempUser.votedToday = false;
-                }
-                localStorage.setItem(item, JSON.stringify(tempUser));
-            })
+            if (localStorage.getItem("userDatabase") !== null) {
+                let userDatabase = JSON.parse(localStorage.getItem("userDatabase"));
+                userDatabase["key"].forEach((item) => {
+                    let tempUser = localStorage.getItem(item);
+                    if (tempUser !== null) {
+                        tempUser.votedToday = false;
+                    }
+                    localStorage.setItem(item, JSON.stringify(tempUser));
+                })
+            }
         } // at 0:00 for one milisecond (12:00am every day)
-    }, [])
+    })
 
     // React.useEffect(() => { // TEMPORARY!!!
     //     voted ? setQuestion(getNewQuestion()) : 0;
