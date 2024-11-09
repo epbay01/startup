@@ -5,11 +5,18 @@
 - In VSCode, there are various tools to make this process easier, such as a place to put the commit messages, extensions that help to visualize, and various other tools.
 - Markdown format is detailed [here](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#quoting-code) and is definitely something to be acquainted with.
 
-## AWS
+## AWS and internet
 - AWS allows you to purchase a server space, a domain, and set up all the DNS stuff. For this project, we made DNS records taht will redirect from the domain name I purchased (vote-together.click) to the public IP address (18.206.129.131). Each time the server stops and starts, it has a new IP address, so through AWS I also was able to get the more permanent public one.
 - That means it goes http://*.vote-together.click -> http://18.206.129.131 -> instance IP (website run from server)
 - To access the server shell, you can use command line code. `ssh -i [key pair file path] ubuntu@[server ip]` should do it. The key pair file is safely saved on my computer, and the server IP can be obtained from AWS.
 - Caddy is an interface for securing the server (allowing https) by getting a certificate automatically.
+- Caddy also redirects from a default port (such as 443 or 80) to a port where the server is actually running (in the startup, simon is on port 3000 and startup is on port 4000). When we ssh, we use port 22, for instance.
+- The general formula for a URL is `<scheme>://<domain name>:<port>/<path>?<parameters>#<anchor>` where only scheme and domain are not optional
+- You can make an HTTP request (request resources, etc. more detail shortly) using the `curl` command
+  - Every HTTP request can be one of 5 types: GET (get a resource), POST (create a new resource), PUT (update a resource), DELETE (delete a resource), OPTIONS (get metadata of a resource, not the resource itself)
+  - Every response starts with a code that indicates the general gist of the response (for example, 200 is success, 404 is not found, etc.)
+  - Every request and response has headers, which give information and specify metadata
+  - Cookies store sets of headers so they can be accessed or reused, since requests don't store persistent data themselves
 
 ## HTML
 - Some key elements in HTML:
