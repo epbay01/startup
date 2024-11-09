@@ -178,7 +178,11 @@ export default function App() {
                 userDatabase["key"].forEach((item) => {
                     let tempUser = localStorage.getItem(item);
                     if (tempUser !== null) {
+                        if (tempUser.votedToday === false) tempUser.currentStreak = 0;
                         tempUser.votedToday = false;
+                        if (tempUser.currentStreak > tempUser.highestStreak) {
+                            tempUser.highestStreak = tempUser.currentStreak;
+                        }
                     }
                     localStorage.setItem(item, JSON.stringify(tempUser));
                 })
