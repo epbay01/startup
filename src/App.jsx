@@ -85,21 +85,30 @@ export default function App() {
     }
 
     function handleVote(ans) {
-        console.log(ans);
-        setVoted(true);
-        let temp = currentQuestionVotes;
-        temp[ans]++;
-        setCurrentQuestionVotes(temp);
+        let tempUser = JSON.parse(localStorage.getItem(currentUser));
+        if (!tempUser.votedToday) {
+            console.log(ans);
+            setVoted(true);
+            let temp = currentQuestionVotes;
+            temp[ans]++;
+            setCurrentQuestionVotes(temp);
+
+            tempUser.votedToday = true;
+            localStorage.setItem(currentUser, JSON.stringify(tempUser));
+        } else {
+            console.log("already voted today");
+        }
     }
 
 
     function handleLogin(user, pass, logged) {
         if ((localStorage.getItem(user) !== null) && user !== "") {
             let temp = JSON.parse(localStorage.getItem(user));
-            if (pass == temp.password) {
+            if (pass === temp.password) {
                 setInvalidPass(false);
                 setCurrentUser(user);
                 setLoggedIn(logged);
+                setVoted(temp.votedToday);
             } else {
                 console.log("invalid password");
                 setInvalidPass(true);
@@ -109,12 +118,25 @@ export default function App() {
             createUser(user, pass);
             setCurrentUser(user);
             setLoggedIn(logged);
+            setVoted(false);
         }
 
         return (invalidPass ? "/" : "/vote");
     }
 
     function createUser(user, pass) {
+        let userDb = localStorage.getItem("userDatabase");
+        let parsed;
+        if (userDb === null) {
+            let temp = {"key":[]};
+            localStorage.setItem("userDatabase", JSON.stringify(temp));
+            userDb = localStorage.getItem("userDatabase");
+        }
+        parsed = JSON.parse(userDb);
+        if (user in parsed["key"]) {
+            console.log("user already exists");
+            return;
+        }
         let userStats = {
             password: pass,
             currentStreak: 0,
@@ -122,9 +144,12 @@ export default function App() {
             popVote: 0,
             unpopVote: 0,
             confirmVotes: false,
-            notifications: true
+            notifications: true,
+            votedToday: false
         }
         localStorage.setItem(user, JSON.stringify(userStats));
+        parsed["key"].push(user);
+        localStorage.setItem("userDatabase", JSON.stringify(parsed));
     }
 
 
@@ -137,6 +162,15 @@ export default function App() {
         if (now.getHours() === 0 && now.getMinutes() === 0 && now.getMilliseconds() === 0) {
             setVoted(false);
             setQuestion(getNewQuestion());
+
+            let userDatabase = JSON.parse(localStorage.getItem("userDatabase"));
+            userDatabase["key"].forEach((item) => {
+                let tempUser = localStorage.getItem(item);
+                if (tempUser !== null) {
+                    tempUser.votedToday = false;
+                }
+                localStorage.setItem(item, JSON.stringify(tempUser));
+            })
         } // at 0:00 for one milisecond (12:00am every day)
     }, [])
 
