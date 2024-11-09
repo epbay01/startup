@@ -41,7 +41,7 @@ function VoteButtons ({ answers, handleVote }) {
             <div className="no-format" id="input-buttons">
                 <div className="no-format" id="left-buttons">
                 <p>{answers[0]}</p>
-                    <button onClick={() => handleVote(answers[0])}>
+                    <button onClick={(answers) => handleVote(answers[0])}>
                         <svg height="400" width="200" xmlns="http://www.w3.org/2000/svg">
                             <path d="M200 400 A200 200 0 0 1 200 0 L200 80 A120 120 90 0 0 200 320 Z" fill="green"/>
                         </svg>
@@ -49,7 +49,7 @@ function VoteButtons ({ answers, handleVote }) {
                 </div>
                 <div className="no-format" id="right-buttons">
                     <p>{answers[1]}</p>
-                    <button onClick={() => handleVote(answers[1])}>
+                    <button onClick={(answers) => handleVote(answers[1])}>
                         <svg height="400" width="200" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0 0 A200 200 90 0 1 0 400 L0 320 A120 120 90 0 0 0 80 L0 0 Z" fill="red"/>
                         </svg>

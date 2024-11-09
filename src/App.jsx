@@ -85,6 +85,7 @@ export default function App() {
     }
 
     function handleVote(ans) {
+        console.log(ans);
         setVoted(true);
         let temp = currentQuestionVotes;
         temp[ans]++;
@@ -139,9 +140,9 @@ export default function App() {
         } // at 0:00 for one milisecond (12:00am every day)
     }, [])
 
-    React.useEffect(() => { // TEMPORARY!!!
-        voted ? setQuestion(getNewQuestion()) : 0;
-    }, [voted]);
+    // React.useEffect(() => { // TEMPORARY!!!
+    //     voted ? setQuestion(getNewQuestion()) : 0;
+    // }, [voted]);
 
 
     function Nav({path}) {
@@ -200,7 +201,7 @@ export default function App() {
                     <Route path="/" element={<Login invalidPass={invalidPass} handleLogin={(u, p, l) => handleLogin(u,p,l)} currentUser={currentUser} loggedIn={loggedIn} />} />
                     <Route path="/login" element={<Login invalidPass={invalidPass} handleLogin={(u, p, l) => handleLogin(u,p,l)} currentUser={currentUser} loggedIn={loggedIn} />} />
                     <Route path="/profile" element={<Profile handleLogin={(u, p, l) => handleLogin(u,p,l)} currentUser={currentUser} loggedIn={loggedIn} voteHistory={voteHistory} />} />
-                    <Route path="/vote" element={<Vote currentUser={currentUser} loggedIn={loggedIn} voted={voted} handleVote={() => handleVote()} question={question} currentQuestionVotes={currentQuestionVotes} />} />
+                    <Route path="/vote" element={<Vote currentUser={currentUser} loggedIn={loggedIn} voted={voted} handleVote={(ans) => handleVote(ans)} question={question} currentQuestionVotes={currentQuestionVotes} />} />
                     <Route path="*" element={<UnknownPath />} />
                 </Routes>
                 
