@@ -184,3 +184,35 @@ Another hook is `useEffect(function)`. This is called when an element is rendere
 ### Other
 
 In React, you can have the entire application be on one page using the react-router-dom package. This means instead of loading a new page every time the site simply uses javascript to change the elements of the DOM.
+
+## APIs
+
+A URL can be used to store and share data. These "service endpoints" are also called "APIs." For instance, an API can be used to deliver JSON data or files. Endpoints are made in backend code, and can be used to deliver data either to the frontend or even to other websites.
+
+The command `curl` makes HTTP requests (a GET request by default), then APIs are the URLs that know how to process and respond to those requests. For example `curl simon.vote-together.click/api/scores` returns a JSON object with the various scores recorded. `curl` can also be used for other types of requests (POST creates a new object, PUT updates an object, etc. see above)
+
+### Express
+
+Express is a library that allows you to more easily make endpoints and HTTP responses. Some basic express commands include:
+
+For setting up express, we use a constructor `express()` and then we can use the various functionality that express offers:
+```
+const express = require('express');
+const app = express();
+
+app.listen(<port>);
+```
+
+One important built-in express method is `express.static(<dir>)`, which allows you to access a directory of static files. For instance, to use this you would write `app.use(express.static("public"));` which would allow you to access and return any files in the public directory as a static file.
+
+`app.use` allows you to also create your own middleware functions, which run sequentially and should end with `next()` if you want any other matches to run.
+
+For setting up specific endpoints, we need to think about which request type we will be responding to. For the different types, we have methods such as `app.get`, `.put`, `.post`, etc. Each of these defines an endpoint and its functionality. We pass in first the path, then a function to define each endpoint.
+```
+app.get("/api/hello", (req, res, next) => {
+  res.send({msg: "hello"});
+});
+```
+This code, for example, would define an endpoint "/api/hello" that would, when requested with a GET request, return a JSON object with the key/value `msg: "hello"`. The `req` parameter of the inner function refers to the request, and the `res` refers to the response. `next` refers to the next function to be called if there are multiple matches. You also can do this with `next()`.
+
+Parameters for the function can also be passed in via URL. You do this by prefixing the parameter name with ":", for example "store/:storeName" would make it so the URL "store/provo" passes "provo" in as the storeName parameter. It is accessed in the code with `req.params.<parameter>`. Paths also can have wildcards or regex.
