@@ -1,6 +1,7 @@
 {
   "name": "startup",
   "version": "1.0.0",
+  "type": "commonjs",
   "description": "Long-term project for CS 260",
   "main": "index.jsx",
   "scripts": {
@@ -19,6 +20,6 @@
     "fetch": "^1.1.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.27.0"
+    "react-router-dom": "^6.28.0"
   }
 }

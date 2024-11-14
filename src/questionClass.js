@@ -10,3 +10,6 @@ class Question {
         }
     }
 }
+
+module.exports = Question;
+module.exports.default = Question;

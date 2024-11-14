@@ -1,4 +1,5 @@
-const Question = require("../public/questionClass");
+const Question = require("../src/questionClass.js");
+const questionsJson = require("../public/questions.json");
 
 const express = require("express");
 app = express();
@@ -10,6 +11,7 @@ app.use(express.static('public'));
 
 let userDatabase = [];
 let voteHistory = {};
+
 /*
 APIs:
 - user data
@@ -44,22 +46,12 @@ app.get("/api/test/:test", (req, res, next) => {
     res.send({ test: req.params.test });
 })
 
-app.get("api/questions", (req, res, next) => {
-    fetch("/questions.json")
-        .then((response) => res.send(response.json()));
-});
-
-app.post("/api/questions", (req, res, next) => {
+app.get("/api/question", (req, res, next) => {
     let questionArray = []
-    let questionsJson;
     let q = new Question("", []);
-    fetch("/questions.json")
-        .then((response) => {
-            questionsJson = response.json();
-            for (let i = 0; i < questionsJson.questionArray.length; i++) {
-                questionArray.push(new Question(questionsJson.questionArray[i].question, questionsJson.questionArray[i].answers))
-            }
-            q = questionArray[Math.floor(Math.random() * questionArray.length)];
-            res.send(q);
-        });
+    for (let i = 0; i < questionsJson.questionArray.length; i++) {
+        questionArray.push(new Question(questionsJson.questionArray[i].question, questionsJson.questionArray[i].answers))
+    }
+    q = questionArray[Math.floor(Math.random() * questionArray.length)];
+    res.send(q);
 });

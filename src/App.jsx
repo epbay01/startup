@@ -6,7 +6,7 @@ import Profile from "./profile/profile.jsx";
 import Vote from "./vote/vote.jsx";
 import UnknownPath from "./unknown.jsx";
 
-import { Question } from "../public/questionClass.js";
+import Question from "./questionClass.js";
 
 import "./style.css";
 import "./login/login-style.css";
@@ -61,12 +61,7 @@ export default function App() {
             setVoteHistory(temp2);
         }
 
-        fetch("startup.vote-together.click/api/question", {
-            method: "POST",
-            body: {},
-            headers: {
-                "content-type": "application/json"
-            }})
+        fetch("startup.vote-together.click/api/question")
                 .then((res) => {
                     res.json().then((data) => qRes = data);
                     qRes.answers.forEach(element => {
@@ -185,9 +180,9 @@ export default function App() {
         } // at 0:00 for one milisecond (12:00am every day)
     })
 
-    // React.useEffect(() => { // TEMPORARY!!!
-    //     voted ? setQuestion(getNewQuestion()) : 0;
-    // }, [voted]);
+    React.useEffect(() => { // TEMPORARY!!!
+        voted ? setQuestion(getNewQuestion()) : 0;
+    }, [voted]);
 
 
     function Nav({path}) {
