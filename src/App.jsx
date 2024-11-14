@@ -6,8 +6,6 @@ import Profile from "./profile/profile.jsx";
 import Vote from "./vote/vote.jsx";
 import UnknownPath from "./unknown.jsx";
 
-import Question from "./questionClass.js";
-
 import "./style.css";
 import "./login/login-style.css";
 import "./profile/profile-style.css";
@@ -21,6 +19,19 @@ TODO:
 - send data from cqv back down to <profile> and <vote>
 - possibly make it so login button doesn't send to vote page when password is refused, or add a message indicating wrong password
 */
+
+export class Question {
+    constructor(question = "", answers = []) {
+        this.question = question;
+        this.answers = answers;
+    }
+    toJSON() {
+        return {
+            question: this.question,
+            answers: this.answers
+        }
+    }
+}
 
 export default function App() {
     const [currentUser, setCurrentUser] = React.useState("");

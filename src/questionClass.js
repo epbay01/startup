@@ -1,4 +1,4 @@
-class Question {
+export class Question {
     constructor(question = "", answers = []) {
         this.question = question;
         this.answers = answers;
@@ -10,6 +10,3 @@ class Question {
         }
     }
 }
-
-module.exports = Question;
-module.exports.default = Question;

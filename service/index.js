@@ -1,8 +1,8 @@
-const Question = require("../src/questionClass.js");
-const questionsJson = require("../public/questions.json");
+import { Question } from "../src/questionClass.js";
+import * as questionsJson from "../public/questions.json" assert { type: "json" };
 
-const express = require("express");
-app = express();
+import express from "express";
+let app = express();
 
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 app.listen(port);
@@ -47,11 +47,8 @@ app.get("/api/test/:test", (req, res, next) => {
 })
 
 app.get("/api/question", (req, res, next) => {
-    let questionArray = []
+    let questionArray = questionsJson.questionArray;
     let q = new Question("", []);
-    for (let i = 0; i < questionsJson.questionArray.length; i++) {
-        questionArray.push(new Question(questionsJson.questionArray[i].question, questionsJson.questionArray[i].answers))
-    }
     q = questionArray[Math.floor(Math.random() * questionArray.length)];
     res.send(q);
 });
