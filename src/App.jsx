@@ -6,12 +6,14 @@ import Profile from "./profile/profile.jsx";
 import Vote from "./vote/vote.jsx";
 import UnknownPath from "./unknown.jsx";
 
+import { Question } from "../public/questionClass.js";
+
 import "./style.css";
 import "./login/login-style.css";
 import "./profile/profile-style.css";
 import "./vote/vote-style.css";
 
-import * as questionsJson from "./questions.json" assert { type: "json" };
+//import * as questionsJson from "./questions.json" assert { type: "json" };
 
 /*
 TODO:
@@ -19,13 +21,6 @@ TODO:
 - send data from cqv back down to <profile> and <vote>
 - possibly make it so login button doesn't send to vote page when password is refused, or add a message indicating wrong password
 */
-
-class Question {
-    constructor(question = "", answers = []) {
-        this.question = question;
-        this.answers = answers;
-    }
-}
 
 export default function App() {
     const [currentUser, setCurrentUser] = React.useState("");
@@ -36,20 +31,11 @@ export default function App() {
     const [question, setQuestion] = React.useState(new Question());
     const [currentQuestionVotes, setCurrentQuestionVotes] = React.useState(new Object());
     let qArray;
-    
 
-    function generateQuestions() { // generates array of questions from json file
-        let questionArray = []
-        for (let i = 0; i < questionsJson.questionArray.length; i++) {
-            questionArray.push(new Question(questionsJson.questionArray[i].question, questionsJson.questionArray[i].answers))
-        }
-        return questionArray;
-    }
 
     function getNewQuestion() {
-        qArray = generateQuestions();
-        let qIndex = Math.floor(Math.random() * qArray.length);
         let cqvCopy = currentQuestionVotes;
+        let qRes;
 
         if (question.question !== "") {
             let temp;
@@ -75,16 +61,25 @@ export default function App() {
             setVoteHistory(temp2);
         }
 
-        console.log("new question at index " + qIndex + ": " + qArray[qIndex].question);
-        cqvCopy = new Object();
-        qArray[qIndex].answers.forEach(element => {
-            cqvCopy[element] = 0;
-        });
-        console.log(JSON.stringify(cqvCopy));
-        setCurrentQuestionVotes(cqvCopy);
-        localStorage.setItem("questionVotes", JSON.stringify(cqvCopy));
-
-        return qArray[qIndex]; // get random question from array
+        fetch("startup.vote-together.click/api/question", {
+            method: "POST",
+            body: {},
+            headers: {
+                "content-type": "application/json"
+            }})
+                .then((res) => {
+                    res.json().then((data) => qRes = data);
+                    qRes.answers.forEach(element => {
+                        cqvCopy[element] = 0;
+                    });
+                })
+                .finally(() => {
+                    cqvCopy = new Object();
+                    console.log(JSON.stringify(cqvCopy));
+                    setCurrentQuestionVotes(cqvCopy);
+                    localStorage.setItem("questionVotes", JSON.stringify(cqvCopy));
+                    return qRes;
+                })
     }
 
     function handleVote(ans) {
