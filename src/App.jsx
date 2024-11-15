@@ -44,7 +44,7 @@ export default function App() {
     }
 
 
-    function getNewQuestion() {
+    async function getNewQuestion() {
         let cqvCopy = currentQuestionVotes;
         let qRes = new Object();
 
@@ -72,10 +72,10 @@ export default function App() {
             setVoteHistory(temp2);
         }
 
-        fetch("http://localhost:4000/api/question")
-            .then((res) => {
+        await fetch("http://localhost:4000/api/question")
+            .then(async (res) => {
                 if (res.body !== "") {
-                    res.json().then((data) => {
+                    await res.json().then((data) => {
                         qRes = data;
                         qRes.answers.forEach(element => {
                             cqvCopy[element] = 0;
@@ -87,19 +87,19 @@ export default function App() {
                 } else console.log("empty body");
             })
             .catch((err) => console.log("question fetch error: " + err))
-            .finally(() => {
-                cqvCopy = new Object();
+            .finally((res) => {
                 console.log(JSON.stringify(cqvCopy));
                 setCurrentQuestionVotes(cqvCopy);
                 localStorage.setItem("questionVotes", JSON.stringify(cqvCopy));
-                setQuestion(qRes);
-                return qRes;
-            });
+                let temp = new Question(qRes.question, qRes.answers);
+                console.log(JSON.stringify(temp.toJSON()));
+                setQuestion(temp);
+                return temp;
+            })
     }
 
-    function handleVote(ans) {
-        let tempUser = JSON.parse(localStorage.getItem(currentUser));
-        if (!tempUser.votedToday) {
+    async function handleVote(ans) {
+        if (!currentUserObject.votedToday) {
             console.log(ans);
             setVoted(true);
             let temp = currentQuestionVotes;
@@ -107,11 +107,16 @@ export default function App() {
             setCurrentQuestionVotes(temp);
             let now = new Date();
             let strDate = `${now.getMonth()}/${now.getDay()}/${now.getFullYear()}`;
-            tempUser.userHistory[strDate] = [question.question, ans];
+            currentUserObject.userHistory[strDate] = [question.question, ans];
+            currentUserObject.votedToday = true;
+            currentUserObject.currentStreak++;
 
-            tempUser.votedToday = true;
-            tempUser.currentStreak++;
-            localStorage.setItem(currentUser, JSON.stringify(tempUser));
+            await fetch(`http://localhost:4000/api/user/update/${currentUser}`, {
+                method: "PUT",
+                body: currentUserObject
+            })
+                .catch((err) => console.log(err));
+
         } else {
             console.log("already voted today");
         }
@@ -141,7 +146,7 @@ export default function App() {
             }
         } else {
             setInvalidPass(false);
-            await createUser(user, pass);
+            if (user !== "") await createUser(user, pass);
             setCurrentUser(user);
             setLoggedIn(logged);
             setVoted(false);
@@ -166,32 +171,40 @@ export default function App() {
 
 
     React.useEffect(() => {
-        if (question.question === "") {
-            setQuestion(getNewQuestion());
+        async function f() {
+            if (question.question === "") {
+                await getNewQuestion();
+            }
         }
+        f();
     }, [])
 
     React.useEffect(() => {
-        let now = new Date();
-        if (now.getHours() === 0 && now.getMinutes() === 0 && now.getMilliseconds() === 0) {
-            setVoted(false);
-            setQuestion(getNewQuestion());
-
-            if (localStorage.getItem("userDatabase") !== null) {
-                let userDatabase = JSON.parse(localStorage.getItem("userDatabase"));
-                userDatabase["key"].forEach((item) => {
-                    let tempUser = localStorage.getItem(item);
-                    if (tempUser !== null) {
-                        if (tempUser.votedToday === false) tempUser.currentStreak = 0;
-                        tempUser.votedToday = false;
-                        if (tempUser.currentStreak > tempUser.highestStreak) {
-                            tempUser.highestStreak = tempUser.currentStreak;
-                        }
-                    }
-                    localStorage.setItem(item, JSON.stringify(tempUser));
-                })
+        async function f() {
+            let now = new Date();
+            let userDB = [];
+            if (now.getHours() === 0 && now.getMinutes() === 0 && now.getMilliseconds() === 0) {
+                setVoted(false);
+                setQuestion(getNewQuestion());
+    
+                await fetch(`http://localhost:4000/api/user/all`)
+                    .then((res) => {
+                        if (res.status !== 404) {
+                            userDB = res.body;
+                        } else userDB = null;
+                    });
+                if (userDB !== null) {
+                    Object.keys(userDB).forEach(async (user) => {
+                        let temp = userDB[user];
+                        await fetch(`http://localhost:4000/api/user/update/${user}`, {
+                            method: "PUT",
+                            body: temp
+                        })
+                    })
+                }
             }
-        } // at 0:00 for one milisecond (12:00am every day)
+        }
+        f();
     })
 
     React.useEffect(() => { // TEMPORARY!!!
@@ -252,8 +265,8 @@ export default function App() {
                 </header>
                 {/* <main> router */}
                 <Routes>
-                    <Route path="/" element={<Login invalidPass={invalidPass} handleLogin={(u, p, l) => handleLogin(u,p,l)} currentUser={currentUser} loggedIn={loggedIn} />} />
-                    <Route path="/login" element={<Login invalidPass={invalidPass} handleLogin={(u, p, l) => handleLogin(u,p,l)} currentUser={currentUser} loggedIn={loggedIn} />} />
+                    <Route path="/" element={<Login invalidPass={invalidPass} handleLogin={async (u, p, l) => await handleLogin(u,p,l)} currentUser={currentUser} loggedIn={loggedIn} />} />
+                    <Route path="/login" element={<Login invalidPass={invalidPass} handleLogin={async (u, p, l) => await handleLogin(u,p,l)} currentUser={currentUser} loggedIn={loggedIn} />} />
                     <Route path="/profile" element={<Profile handleLogin={(u, p, l) => handleLogin(u,p,l)} currentUser={currentUser} loggedIn={loggedIn} voteHistory={voteHistory} />} />
                     <Route path="/vote" element={<Vote currentUser={currentUser} loggedIn={loggedIn} voted={voted} handleVote={(ans) => handleVote(ans)} question={question} currentQuestionVotes={currentQuestionVotes} />} />
                     <Route path="*" element={<UnknownPath />} />

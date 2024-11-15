@@ -16,7 +16,23 @@ export default function Profile ({ handleLogin, currentUser, loggedIn, voteHisto
         userHistory: {}
     }
 
-    if (currentUser !== "") userObj = JSON.parse(localStorage.getItem(currentUser));
+    React.useEffect(() => {
+        async function f() {
+            if (currentUser === "") {
+                userObj = null;
+            } else {
+                await fetch(`http://localhost:4000/api/user/${currentUser}`)
+                .then((res) => {
+                    if (res.status !== 404) {
+                        userObj = res.body;
+                    } else {
+                        userObj = null;
+                    }
+                });
+            }
+        }
+        f();
+    }, [currentUser]);
     
     if (!loggedIn) {
         return (
@@ -24,23 +40,23 @@ export default function Profile ({ handleLogin, currentUser, loggedIn, voteHisto
                 <h2>Please log in or make an account!</h2>
             </div>
         )
-    } else {
-        if (localStorage.getItem(currentUser) !== null) {
-            userObj = JSON.parse(localStorage.getItem(currentUser));
-        }
     }
 
-    function updateUser(confirm, notif) {
+    async function updateUser(confirm, notif) {
         setConfirmVotesState(confirm);
         setNotificationsState(notif);
         userObj.confirmVotes = confirm;
         userObj.notifications = notif;
-        localStorage.setItem(currentUser, JSON.stringify(userObj));
+        await fetch(`http://localhost:4000/api/user/update/${currentUser}`, {
+            method: "PUT",
+            body: currentUserObject
+        })
+            .catch((err) => console.log(err));
     };
 
-    function deleteUser() {
-        localStorage.removeItem(currentUser);
-        handleLogin("","",false);
+    async function deleteUser() {
+        await fetch(`http://localhost:4000/api/user/delete/${currentUser}`, {method: "DELETE"});
+        await handleLogin("","",false);
     }
 
     return (

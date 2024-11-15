@@ -9,8 +9,31 @@ TODO:
 */
 
 export default function Vote ({ currentUser, loggedIn, voted, handleVote, question, currentQuestionVotes }) {
-    let user;
-    loggedIn ? user = JSON.parse(localStorage.getItem(currentUser)) : user = { currentStreak: 0 };
+    let user = {
+        password: "",
+        currentStreak: 0,
+        highestStreak: 0,
+        popVote: 0,
+        unpopVote: 0,
+        confirmVotes: false,
+        notifications: true,
+        votedToday: false,
+        userHistory: {}
+    }
+
+    React.useEffect(() => {
+        async function f() {
+            await fetch(`http://localhost:4000/api/user/${currentUser}`)
+            .then((res) => {
+                if (res.status !== 404) {
+                    user = res.body;
+                } else {
+                    user = null;
+                }
+            })
+        }
+        f();
+    }, [currentUser]);
 
     if (!loggedIn) {
         return (
@@ -19,6 +42,7 @@ export default function Vote ({ currentUser, loggedIn, voted, handleVote, questi
             </div>
         )
     } else {
+
 
         return (
             <div className="main" id="vote-main"> 

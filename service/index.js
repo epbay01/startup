@@ -29,23 +29,24 @@ APIs:
 
 // user data apis are on path /api/user/...
 app.post("/api/user/new/:newUser", (req, res, next) => {
-    if (req.params.newUser in Object.keys(userDatabase)) {
+    if (req.params.newUser in userDatabase) {
         console.log("user already exists");
         res.status(405).send(userDatabase[req.params.newUser]);
+    } else {
+        userDatabase[req.params.newUser] = {
+            password: "",
+            currentStreak: 0,
+            highestStreak: 0,
+            popVote: 0,
+            unpopVote: 0,
+            confirmVotes: false,
+            notifications: true,
+            votedToday: false,
+            userHistory: {}
+        }
+        console.log(req.params.newUser + " has been created");
+        res.status(201).send(userDatabase[req.params.newUser]);
     }
-    userDatabase[req.params.newUser] = {
-        password: "",
-        currentStreak: 0,
-        highestStreak: 0,
-        popVote: 0,
-        unpopVote: 0,
-        confirmVotes: false,
-        notifications: true,
-        votedToday: false,
-        userHistory: {}
-    }
-    console.log(req.params.newUser + " has been created");
-    res.status(201).send(userDatabase[req.params.newUser]);
 });
 
 app.put("/api/user/update/:updatedUser", (req, res, next) => {
@@ -63,13 +64,20 @@ app.get("/api/user/all", (req, res, next) => {
     res.send(userDatabase);
 })
 
-app.get("api/user/:getUser", (req, res, next) => {
-    if (req.params.getUser in Object.keys(userDatabase)) {
+app.get("/api/user/:getUser", (req, res, next) => {
+    if (req.params.getUser in userDatabase) {
         res.status(200).send(userDatabase[req.params.getUser]);
     } else {
         console.log("user not found");
         res.status(404).send(null);
     }
+})
+
+app.delete("/api/user/delete/:deleteUser", (req, res, next) => {
+    if (req.params.deleteUser in userDatabase) {
+        delete userDatabase[req.params.deleteUser];
+    }
+    res.status(200).send(); // ok either way
 })
 
 app.get("/api/test/:test", (req, res, next) => {
