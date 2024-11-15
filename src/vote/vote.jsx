@@ -51,7 +51,7 @@ export default function Vote ({ currentUser, loggedIn, voted, handleVote, questi
                     <h3 id="streak">Your streak: {user.currentStreak} &#128293;</h3>
                 </div>
 
-                <VoteButtons answers={question.answers} handleVote={handleVote} />
+                <VoteButtons answers={Object.keys(currentQuestionVotes)} handleVote={handleVote} />
 
                 <ResultsTable currentQuestionVotes={currentQuestionVotes} voted={voted} />
             </div>

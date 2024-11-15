@@ -51,8 +51,9 @@ app.post("/api/user/new/:newUser", (req, res, next) => {
 
 app.put("/api/user/update/:updatedUser", (req, res, next) => {
     if (req.params.updatedUser in userDatabase) {
-        console.log(req.params.updatedUser + " found!");
+        console.log(req.params.updatedUser + " found!, body is " + JSON.stringify(req.body));
         userDatabase[req.params.updatedUser] = req.body;
+        console.log(`${req.params.updatedUser} is now ${JSON.stringify(userDatabase[req.params.updatedUser])}`);
         res.status(200).send();
     } else {
         console.log("user not found");

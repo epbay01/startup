@@ -30,8 +30,7 @@ export default function App() {
     const [voteHistory, setVoteHistory] = React.useState([]);
     const [question, setQuestion] = React.useState(new Question());
     const [currentQuestionVotes, setCurrentQuestionVotes] = React.useState(new Object());
-    let qArray;
-    let currentUserObject = {
+    const [currentUserObject, setCurrentUserObject] = React.useState({
         password: "",
         currentStreak: 0,
         highestStreak: 0,
@@ -41,7 +40,7 @@ export default function App() {
         notifications: true,
         votedToday: false,
         userHistory: {}
-    }
+    });
 
 
     async function getNewQuestion() {
@@ -107,13 +106,15 @@ export default function App() {
             setCurrentQuestionVotes(temp);
             let now = new Date();
             let strDate = `${now.getMonth()}/${now.getDay()}/${now.getFullYear()}`;
-            currentUserObject.userHistory[strDate] = [question.question, ans];
-            currentUserObject.votedToday = true;
-            currentUserObject.currentStreak++;
+            let cuo = currentUserObject;
+            cuo.userHistory[strDate] = [question.question, ans];
+            cuo.votedToday = true;
+            cuo.currentStreak++;
+            setCurrentUserObject(cuo);
 
             await fetch(`http://localhost:4000/api/user/update/${currentUser}`, {
                 method: "PUT",
-                body: currentUserObject
+                body: cuo
             })
                 .catch((err) => console.log(err));
 
@@ -124,17 +125,19 @@ export default function App() {
 
 
     async function handleLogin(user, pass, logged) {
+        let cuo = currentUserObject;
         await fetch(`http://localhost:4000/api/user/${user}`)
             .then((res) => {
                 if (res.status !== 404) {
-                    currentUserObject = res.body;
+                    res.json().then((r) => cuo = r);
                 } else {
-                    currentUserObject = null;
+                    cuo = null;
                 }
             })
+        console.log(`in handleLogin cuo = ${cuo}`);
+        setCurrentUserObject(cuo);
 
-
-        if ((currentUserObject !== null) && user !== "") {
+        if ((cuo !== null) && user !== "") {
             if (pass === currentUserObject.password) {
                 setInvalidPass(false);
                 setCurrentUser(user);
@@ -156,17 +159,21 @@ export default function App() {
     }
 
     async function createUser(user, pass) {
+        let cuo = currentUserObject;
         await fetch(`http://localhost:4000/api/user/new/${user}`, {method: "POST"})
             .then((res) => {
-                currentUserObject = res.body;
-                currentUserObject.password = pass;
+                res.json().then((r) => cuo = r);
             })
             .catch((err) => console.log(err));
+        cuo.password = pass;
+        console.log(`cuo = ${cuo}`);
         await fetch(`http://localhost:4000/api/user/update/${user}`, {
                 method: "PUT",
-                body: currentUserObject
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(cuo)
             })
-                .catch((err) => console.log(err));
+            .catch((err) => console.log(err))
+            .finally(() => setCurrentUserObject(cuo));
     }
 
 
@@ -190,9 +197,10 @@ export default function App() {
                 await fetch(`http://localhost:4000/api/user/all`)
                     .then((res) => {
                         if (res.status !== 404) {
-                            userDB = res.body;
+                            res.json().then((r) => userDB = r);
                         } else userDB = null;
                     });
+                console.log(`userDB = ${userDB}`);
                 if (userDB !== null) {
                     Object.keys(userDB).forEach(async (user) => {
                         let temp = userDB[user];
@@ -205,7 +213,7 @@ export default function App() {
             }
         }
         f();
-    })
+    }, [])
 
     React.useEffect(() => { // TEMPORARY!!!
         voted ? setQuestion(getNewQuestion()) : 0;
