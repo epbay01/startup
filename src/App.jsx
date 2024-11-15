@@ -119,9 +119,13 @@ export default function App() {
 
 
     async function handleLogin(user, pass, logged) {
-        await fetch("http://localhost:4000/api/user/" + user)
-            .finally((res) => {
-                currentUserObject = res.body;
+        await fetch(`http://localhost:4000/api/user/${user}`)
+            .then((res) => {
+                if (res.status !== 404) {
+                    currentUserObject = res.body;
+                } else {
+                    currentUserObject = null;
+                }
             })
 
 
@@ -147,19 +151,17 @@ export default function App() {
     }
 
     async function createUser(user, pass) {
-        fetch("http://localhost:4000/api/user/new/" + user)
+        await fetch(`http://localhost:4000/api/user/new/${user}`, {method: "POST"})
             .then((res) => {
                 currentUserObject = res.body;
                 currentUserObject.password = pass;
             })
-            .catch((err) => console.log(err))
-            .finally((res) => {
-                fetch("http://localhost:4000/api/user/update/" + user, {
-                    method: "PUT",
-                    body: currentUserObject
-                })
-                    .catch((err) => console.log(err));
-            });
+            .catch((err) => console.log(err));
+        await fetch(`http://localhost:4000/api/user/update/${user}`, {
+                method: "PUT",
+                body: currentUserObject
+            })
+                .catch((err) => console.log(err));
     }
 
 
