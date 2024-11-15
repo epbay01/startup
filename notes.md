@@ -189,7 +189,31 @@ In React, you can have the entire application be on one page using the react-rou
 
 A URL can be used to store and share data. These "service endpoints" are also called "APIs." For instance, an API can be used to deliver JSON data or files. Endpoints are made in backend code, and can be used to deliver data either to the frontend or even to other websites.
 
-The command `curl` makes HTTP requests (a GET request by default), then APIs are the URLs that know how to process and respond to those requests. For example `curl simon.vote-together.click/api/scores` returns a JSON object with the various scores recorded. `curl` can also be used for other types of requests (POST creates a new object, PUT updates an object, etc. see above)
+The command `curl` makes HTTP requests (a GET request by default), then APIs are the URLs that know how to process and respond to those requests. For example `curl simon.vote-together.click/api/scores` returns a JSON object with the various scores recorded. `curl` can also be used for other types of requests (POST creates a new object, PUT updates an object, etc. see above).
+
+### Fetch
+
+Fetch is a library that allows you to make HTTP requests from frontend code. It takes a URL (and optionally other content), and returns a promise with the response. The syntax is thus as follows:
+```
+fetch(<url>)
+  .then((response) => {})
+  .finally(() => {});
+
+// alternatively you can use try/catch/finally
+```
+
+For another type of request other than GET, you need to include more information:
+```
+fetch(<url>, {
+  method: "POST",
+  body: {<body>},
+  headers: {
+    "content-type": "application/json",
+    etc.
+  }
+})
+  .then //etc.
+```
 
 ### Express
 
