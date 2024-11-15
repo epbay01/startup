@@ -30,7 +30,8 @@ APIs:
 // user data apis are on path /api/user/...
 app.post("/api/user/new/:newUser", (req, res, next) => {
     if (req.params.newUser in Object.keys(userDatabase)) {
-        res.status(405).send(null);
+        console.log("user already exists");
+        res.status(405).send(userDatabase[req.params.newUser]);
     }
     userDatabase[req.params.newUser] = {
         password: "",
@@ -43,6 +44,7 @@ app.post("/api/user/new/:newUser", (req, res, next) => {
         votedToday: false,
         userHistory: {}
     }
+    console.log(req.params.newUser + " has been created");
     res.status(201).send(userDatabase[req.params.newUser]);
 });
 
@@ -52,12 +54,22 @@ app.put("/api/user/update/:updatedUser", (req, res, next) => {
         userDatabase[req.params.updatedUser] = req.body;
         res.status(200).send();
     } else {
+        console.log("user not found");
         res.status(404).send(null);
     }
 });
 
 app.get("/api/user/all", (req, res, next) => {
     res.send(userDatabase);
+})
+
+app.get("api/user/:getUser", (req, res, next) => {
+    if (req.params.getUser in Object.keys(userDatabase)) {
+        res.status(200).send(userDatabase[req.params.getUser]);
+    } else {
+        console.log("user not found");
+        res.status(404).send(null);
+    }
 })
 
 app.get("/api/test/:test", (req, res, next) => {

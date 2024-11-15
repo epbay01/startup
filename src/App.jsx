@@ -31,6 +31,17 @@ export default function App() {
     const [question, setQuestion] = React.useState(new Question());
     const [currentQuestionVotes, setCurrentQuestionVotes] = React.useState(new Object());
     let qArray;
+    let currentUserObject = {
+        password: "",
+        currentStreak: 0,
+        highestStreak: 0,
+        popVote: 0,
+        unpopVote: 0,
+        confirmVotes: false,
+        notifications: true,
+        votedToday: false,
+        userHistory: {}
+    }
 
 
     function getNewQuestion() {
@@ -81,6 +92,7 @@ export default function App() {
                 console.log(JSON.stringify(cqvCopy));
                 setCurrentQuestionVotes(cqvCopy);
                 localStorage.setItem("questionVotes", JSON.stringify(cqvCopy));
+                setQuestion(qRes);
                 return qRes;
             });
     }
@@ -106,21 +118,26 @@ export default function App() {
     }
 
 
-    function handleLogin(user, pass, logged) {
-        if ((localStorage.getItem(user) !== null) && user !== "") {
-            let temp = JSON.parse(localStorage.getItem(user));
-            if (pass === temp.password) {
+    async function handleLogin(user, pass, logged) {
+        await fetch("http://localhost:4000/api/user/" + user)
+            .finally((res) => {
+                currentUserObject = res.body;
+            })
+
+
+        if ((currentUserObject !== null) && user !== "") {
+            if (pass === currentUserObject.password) {
                 setInvalidPass(false);
                 setCurrentUser(user);
                 setLoggedIn(logged);
-                setVoted(temp.votedToday);
+                setVoted(currentUserObject.votedToday);
             } else {
                 console.log("invalid password");
                 setInvalidPass(true);
             }
         } else {
             setInvalidPass(false);
-            createUser(user, pass);
+            await createUser(user, pass);
             setCurrentUser(user);
             setLoggedIn(logged);
             setVoted(false);
@@ -129,33 +146,20 @@ export default function App() {
         return (invalidPass ? "/" : "/vote");
     }
 
-    function createUser(user, pass) {
-        let userDb = localStorage.getItem("userDatabase");
-        let parsed;
-        if (userDb === null) {
-            let temp = {"key":[]};
-            localStorage.setItem("userDatabase", JSON.stringify(temp));
-            userDb = localStorage.getItem("userDatabase");
-        }
-        parsed = JSON.parse(userDb);
-        if (user in parsed["key"]) {
-            console.log("user already exists");
-            return;
-        }
-        let userStats = {
-            password: pass,
-            currentStreak: 0,
-            highestStreak: 0,
-            popVote: 0,
-            unpopVote: 0,
-            confirmVotes: false,
-            notifications: true,
-            votedToday: false,
-            userHistory: {}
-        }
-        localStorage.setItem(user, JSON.stringify(userStats));
-        parsed["key"].push(user);
-        localStorage.setItem("userDatabase", JSON.stringify(parsed));
+    async function createUser(user, pass) {
+        fetch("http://localhost:4000/api/user/new/" + user)
+            .then((res) => {
+                currentUserObject = res.body;
+                currentUserObject.password = pass;
+            })
+            .catch((err) => console.log(err))
+            .finally((res) => {
+                fetch("http://localhost:4000/api/user/update/" + user, {
+                    method: "PUT",
+                    body: currentUserObject
+                })
+                    .catch((err) => console.log(err));
+            });
     }
 
 
