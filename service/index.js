@@ -9,8 +9,8 @@ app.listen(port);
 
 app.use(express.static('public'));
 
-let userDatabase = [];
-let voteHistory = {};
+let userDatabase = new Object();
+let voteHistory = new Object();
 
 /*
 APIs:
@@ -25,7 +25,7 @@ APIs:
 
 
 app.post("/api/user/new/:newUser", (req, res, next) => {
-    if (userDatabase[req.params.newUser] !== null) {
+    if (req.params.newUser in Object.keys(userDatabase)) {
         res.send(null);
     }
     userDatabase[req.params.newUser] = {
@@ -42,12 +42,16 @@ app.post("/api/user/new/:newUser", (req, res, next) => {
     res.send(userDatabase[req.params.newUser]);
 });
 
+app.get("/api/user/all", (req, res, next) => {
+    res.send(userDatabase);
+})
+
 app.get("/api/test/:test", (req, res, next) => {
     res.send({ test: req.params.test });
 })
 
 app.get("/api/question", (req, res, next) => {
-    let questionArray = questionsJson.questionArray;
+    let questionArray = JSON.parse(questionsJson).questionArray;
     let q = new Question("", []);
     q = questionArray[Math.floor(Math.random() * questionArray.length)];
     res.send(q);
