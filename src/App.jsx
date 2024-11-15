@@ -35,7 +35,7 @@ export default function App() {
 
     function getNewQuestion() {
         let cqvCopy = currentQuestionVotes;
-        let qRes;
+        let qRes = new Object();
 
         if (question.question !== "") {
             let temp;
@@ -61,7 +61,7 @@ export default function App() {
             setVoteHistory(temp2);
         }
 
-        fetch("startup.vote-together.click/api/question")
+        fetch("http://localhost:4000/api/question")
             .then((res) => {
                 if (res.body !== "") {
                     res.json().then((data) => {
@@ -75,7 +75,7 @@ export default function App() {
                     });
                 } else console.log("empty body");
             })
-            .catch((err) => console.log("question api error: " + err))
+            .catch((err) => console.log("question fetch error: " + err))
             .finally(() => {
                 cqvCopy = new Object();
                 console.log(JSON.stringify(cqvCopy));

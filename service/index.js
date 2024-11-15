@@ -2,12 +2,16 @@ import { Question } from "../src/questionClass.js";
 import * as questionsJson from "../public/questions.json" assert { type: "json" };
 
 import express from "express";
+import cors from "cors";
+
 let app = express();
 
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 app.listen(port);
 
 app.use(express.static('public'));
+app.use(express.json());
+app.use(cors());
 
 let userDatabase = new Object();
 let voteHistory = new Object();
@@ -23,10 +27,10 @@ APIs:
     - access
 */
 
-
+// user data apis are on path /api/user/...
 app.post("/api/user/new/:newUser", (req, res, next) => {
     if (req.params.newUser in Object.keys(userDatabase)) {
-        res.send(null);
+        res.status(405).send(null);
     }
     userDatabase[req.params.newUser] = {
         password: "",
@@ -39,7 +43,17 @@ app.post("/api/user/new/:newUser", (req, res, next) => {
         votedToday: false,
         userHistory: {}
     }
-    res.send(userDatabase[req.params.newUser]);
+    res.status(201).send(userDatabase[req.params.newUser]);
+});
+
+app.put("/api/user/update/:updatedUser", (req, res, next) => {
+    if (req.params.updatedUser in userDatabase) {
+        console.log(req.params.updatedUser + " found!");
+        userDatabase[req.params.updatedUser] = req.body;
+        res.status(200).send();
+    } else {
+        res.status(404).send(null);
+    }
 });
 
 app.get("/api/user/all", (req, res, next) => {
@@ -50,9 +64,12 @@ app.get("/api/test/:test", (req, res, next) => {
     res.send({ test: req.params.test });
 })
 
+// api that gets a random question from questions.json
 app.get("/api/question", (req, res, next) => {
-    let questionArray = JSON.parse(questionsJson).questionArray;
+    let questionArray = [...questionsJson.default.questionArray];
     let q = new Question("", []);
+    console.log(questionArray.length);
     q = questionArray[Math.floor(Math.random() * questionArray.length)];
-    res.send(q);
+    console.log(q);
+    res.status(200).set("ContentType", "application/json").send(q);
 });
