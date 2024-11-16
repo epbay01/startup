@@ -31,7 +31,7 @@ APIs:
 app.post("/api/user/new/:newUser", (req, res, next) => {
     if (req.params.newUser in userDatabase) {
         console.log("user already exists");
-        res.status(405).send(userDatabase[req.params.newUser]);
+        res.status(405).set("ContentType", "application/json").send(userDatabase[req.params.newUser]);
     } else {
         userDatabase[req.params.newUser] = {
             password: "",
@@ -45,7 +45,7 @@ app.post("/api/user/new/:newUser", (req, res, next) => {
             userHistory: {}
         }
         console.log(req.params.newUser + " has been created");
-        res.status(201).send(userDatabase[req.params.newUser]);
+        res.status(201).set("ContentType", "application/json").send(userDatabase[req.params.newUser]);
     }
 });
 
@@ -62,12 +62,12 @@ app.put("/api/user/update/:updatedUser", (req, res, next) => {
 });
 
 app.get("/api/user/all", (req, res, next) => {
-    res.send(userDatabase);
+    res.set("ContentType", "application/json").send(userDatabase);
 })
 
 app.get("/api/user/:getUser", (req, res, next) => {
     if (req.params.getUser in userDatabase) {
-        res.status(200).send(userDatabase[req.params.getUser]);
+        res.status(200).set("ContentType", "application/json").send(userDatabase[req.params.getUser]);
     } else {
         console.log("user not found");
         res.status(404).send(null);
@@ -110,5 +110,5 @@ app.put("/api/vote/:dateString", (req, res, next) => {
 });
 
 app.get("/api/vote/all", (req, res, next) => {
-    res.status(200).send(voteHistory);
+    res.status(200).set("ContentType", "application/json").send(voteHistory);
 })

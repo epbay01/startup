@@ -1,38 +1,33 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-export default function Profile ({ handleLogin, currentUser, loggedIn, voteHistory }) {    
+export default function Profile ({ handleLogin, currentUser, loggedIn }) {    
     const [confirmVotesState, setConfirmVotesState] = React.useState(false);
     const [notificationsState, setNotificationsState] = React.useState(true);
-    
-    let userObj = { // default
-        currentStreak : 0,
-        highestStreak : 0,
-        popVote : 0,
-        unpopVote : 0,
+    const [currentUserObject, setCurrentUserObject] = React.useState({
+        password: "",
+        currentStreak: 0,
+        highestStreak: 0,
+        popVote: 0,
+        unpopVote: 0,
         confirmVotes: false,
         notifications: true,
         votedToday: false,
         userHistory: {}
-    }
+    });
 
     React.useEffect(() => {
         async function f() {
             if (currentUser === "") {
-                userObj = null;
+                setCurrentUserObject(null);
             } else {
-                await fetch(`http://localhost:4000/api/user/${currentUser}`)
-                .then((res) => {
-                    if (res.status !== 404) {
-                        userObj = res.body;
-                    } else {
-                        userObj = null;
-                    }
-                });
+                let res = await fetch(`http://localhost:4000/api/user/${currentUser}`);
+                setCurrentUserObject(await res.json());
             }
         }
         f();
-    }, [currentUser]);
+        console.log(JSON.stringify(currentUserObject) + "is current user object in profile");
+    }, [currentUser, loggedIn]);
     
     if (!loggedIn) {
         return (
@@ -45,11 +40,11 @@ export default function Profile ({ handleLogin, currentUser, loggedIn, voteHisto
     async function updateUser(confirm, notif) {
         setConfirmVotesState(confirm);
         setNotificationsState(notif);
-        userObj.confirmVotes = confirm;
-        userObj.notifications = notif;
+        currentUserObject.confirmVotes = confirm;
+        currentUserObject.notifications = notif;
         await fetch(`http://localhost:4000/api/user/update/${currentUser}`, {
             method: "PUT",
-            body: currentUserObject
+            body: JSON.stringify(currentUserObject)
         })
             .catch((err) => console.log(err));
     };
@@ -66,11 +61,11 @@ export default function Profile ({ handleLogin, currentUser, loggedIn, voteHisto
                 <h3>Settings and account info</h3>
                 <h4>Account info</h4>
                 <p>
-                    Current streak: {userObj.currentStreak} &#128293;<br/>
-                    Highest streak: {userObj.highestStreak} &#128293;<br/>
+                    Current streak: {currentUserObject.currentStreak} &#128293;<br/>
+                    Highest streak: {currentUserObject.highestStreak} &#128293;<br/>
                     Friend invites: 1<br/>
-                    Most popular vote: {userObj.popVote}%<br/>
-                    Least popular vote: {userObj.unpopVote}%
+                    Most popular vote: {currentUserObject.popVote}%<br/>
+                    Least popular vote: {currentUserObject.unpopVote}%
                 </p>
                 <h4>Settings</h4>
                 <div className="no-format" id="settings">
@@ -79,13 +74,23 @@ export default function Profile ({ handleLogin, currentUser, loggedIn, voteHisto
                     <input id="delete-button" type="button" value="Delete account" onClick={() => deleteUser()} />
                 </div>
             </div>
-            <VoteTable userObj={userObj} voteHistory={voteHistory} />
+            <VoteTable currentUserObject={currentUserObject} />
         </div>
     )
 }
 
-function VoteTable ({ userObj, voteHistory }) {
+function VoteTable ({ currentUserObject }) {
     let tableElements = [];
+    let voteHistory = new Object();
+
+    React.useEffect(() => {
+        async function f() {
+            let res = await fetch("http://localhost:4000/api/vote/all");
+            voteHistory = await res.json();
+            console.log("vote history = " + JSON.stringify(voteHistory));
+        }
+        f();
+    }, []);
 
     function getVoteCount(q) {
         if (voteHistory[q] === undefined) return { "": 0 }
@@ -93,7 +98,7 @@ function VoteTable ({ userObj, voteHistory }) {
     }
 
     let userHistory = new Object();
-    userHistory = userObj.userHistory;
+    userHistory = currentUserObject.userHistory;
     for (let i = 0; i < Object.keys(userHistory).length; i++) {
         let q = userHistory[Object.keys(userHistory)[i]];
 

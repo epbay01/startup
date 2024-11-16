@@ -27,7 +27,6 @@ export default function App() {
     const [loggedIn, setLoggedIn] = React.useState(false);
     const [voted, setVoted] = React.useState(false);
     const [invalidPass, setInvalidPass] = React.useState(false);
-    const [voteHistory, setVoteHistory] = React.useState([]);
     const [question, setQuestion] = React.useState(new Question());
     const [currentQuestionVotes, setCurrentQuestionVotes] = React.useState(new Object());
     const [currentUserObject, setCurrentUserObject] = React.useState({
@@ -46,30 +45,6 @@ export default function App() {
     async function getNewQuestion() {
         let cqvCopy = currentQuestionVotes;
         let qRes = new Object();
-
-        if (question.question !== "") {
-            let temp;
-            try {
-                temp = JSON.parse(localStorage.getItem("questionVotes"));
-            } catch {
-                localStorage.removeItem("questionVotes");
-                localStorage.setItem("questionVotes", JSON.stringify(new Object()));
-                temp = new Object();
-            } finally {
-                if (temp === null)  {
-                    localStorage.removeItem("questionVotes");
-                    localStorage.setItem("questionVotes", JSON.stringify(new Object()));
-                    temp = new Object();
-                }
-            }
-            temp[question.question] = cqvCopy;
-            let temp2 = voteHistory;
-            let temp3 = question.question;
-            temp2.push({
-                temp3: cqvCopy
-            });
-            setVoteHistory(temp2);
-        }
 
         fetch("http://localhost:4000/api/question")
             .then(async (res) => {
@@ -267,8 +242,8 @@ export default function App() {
                 <Routes>
                     <Route path="/" element={<Login invalidPass={invalidPass} handleLogin={async (u, p, l) => await handleLogin(u,p,l)} currentUser={currentUser} loggedIn={loggedIn} />} />
                     <Route path="/login" element={<Login invalidPass={invalidPass} handleLogin={async (u, p, l) => await handleLogin(u,p,l)} currentUser={currentUser} loggedIn={loggedIn} />} />
-                    <Route path="/profile" element={<Profile handleLogin={(u, p, l) => handleLogin(u,p,l)} currentUser={currentUser} loggedIn={loggedIn} voteHistory={voteHistory} />} />
-                    <Route path="/vote" element={<Vote currentUser={currentUser} loggedIn={loggedIn} voted={voted} handleVote={(ans) => handleVote(ans)} question={question} currentQuestionVotes={currentQuestionVotes} />} />
+                    <Route path="/profile" element={<Profile handleLogin={(u, p, l) => handleLogin(u,p,l)} currentUser={currentUser} loggedIn={loggedIn} />} />
+                    <Route path="/vote" element={<Vote currentUser={currentUser} loggedIn={loggedIn} voted={voted} handleVote={(ans) => handleVote(ans)} question={question} currentQuestionVotes={currentQuestionVotes} currentUserObject={currentUserObject} />} />
                     <Route path="*" element={<UnknownPath />} />
                 </Routes>
                 
