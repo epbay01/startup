@@ -26,7 +26,7 @@ export default function Vote ({ currentUser, loggedIn, voted, handleVote, questi
             await fetch(`http://localhost:4000/api/user/${currentUser}`)
             .then((res) => {
                 if (res.status !== 404) {
-                    user = res.body;
+                    user = res.json();
                 } else {
                     user = null;
                 }

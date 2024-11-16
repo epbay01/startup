@@ -74,20 +74,15 @@ export default function App() {
         fetch("http://localhost:4000/api/question")
             .then(async (res) => {
                 if (res.body !== "") {
-                    res.json().then((data) => {
-                        qRes = data;
-                        qRes.answers.forEach(element => {
-                            cqvCopy[element] = 0;
-                        });
-                    })
-                    .catch((err) => {
-                        console.log("JSON parse error: " + err);
+                    qRes = await res.json();
+                    qRes.answers.forEach(element => {
+                        cqvCopy[element] = 0;
                     });
                 } else console.log("empty body");
             })
             .catch((err) => console.log("question fetch error: " + err))
             .finally((res) => {
-                console.log(JSON.stringify(cqvCopy));
+                console.log("cqvCopy: " + JSON.stringify(cqvCopy));
                 setCurrentQuestionVotes(cqvCopy);
                 localStorage.setItem("questionVotes", JSON.stringify(cqvCopy));
                 let temp = new Question(qRes.question, qRes.answers);
@@ -105,17 +100,21 @@ export default function App() {
             let temp = currentQuestionVotes;
             temp[ans]++;
             setCurrentQuestionVotes(temp);
+            console.log("current question votes: " + JSON.stringify(temp));
             let now = new Date();
-            let strDate = `${now.getMonth()}/${now.getDay()}/${now.getFullYear()}`;
+            let strDate = `${now.getMonth()}.${now.getDay()}.${now.getFullYear()}`;
+
             let cuo = currentUserObject;
             cuo.userHistory[strDate] = [question.question, ans];
             cuo.votedToday = true;
             cuo.currentStreak++;
             setCurrentUserObject(cuo);
+            console.log("cuo in handleVote: " + JSON.stringify(cuo));
 
             // update user on server
             fetch(`http://localhost:4000/api/user/update/${currentUser}`, {
                 method: "PUT",
+                headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(cuo)
             })
                 .catch((err) => console.log(err));
@@ -123,7 +122,8 @@ export default function App() {
             // push to vote api, will update current/history
             fetch(`http://localhost:4000/api/vote/${strDate}`, {
                 method: "PUT",
-                body: temp
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(temp)
             })
         } else {
             console.log("already voted today");
@@ -163,35 +163,31 @@ export default function App() {
 
     async function createUser(user, pass) {
         let cuo = currentUserObject;
-        fetch(`http://localhost:4000/api/user/new/${user}`, {method: "POST"})
-            .then((res) => {
-                cuo = res.body;
-            })
-            .catch((err) => console.log(err));
+        let res = await fetch(`http://localhost:4000/api/user/new/${user}`, {method: "POST"});
+        cuo = await res.json();
         cuo.password = pass;
-        console.log(`cuo = ${cuo}`);
-        fetch(`http://localhost:4000/api/user/update/${user}`, {
+        console.log(`new cuo = ${JSON.stringify(cuo)}`);
+        await fetch(`http://localhost:4000/api/user/update/${user}`, {
                 method: "PUT",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(cuo)
-            })
-            .catch((err) => console.log(err))
-            .finally(() => setCurrentUserObject(cuo));
+            });
+        setCurrentUserObject(cuo);
     }
 
     React.useEffect(() => {
         async function f() {
-            setQuestion(await getNewQuestion());
+            await getNewQuestion();
             let now = new Date();
             let userDB = [];
             if (now.getHours() === 0 && now.getMinutes() === 0 && now.getMilliseconds() === 0) {
                 setVoted(false);
-                setQuestion(await getNewQuestion());
+                await getNewQuestion();
     
                 fetch(`http://localhost:4000/api/user/all`)
-                    .then((res) => {
+                    .then(async (res) => {
                         if (res.status !== 404) {
-                            res.json().then((r) => userDB = r);
+                            userDB = await res.json();
                         } else userDB = null;
                     });
                 console.log(`userDB = ${userDB}`);
@@ -200,7 +196,8 @@ export default function App() {
                         let temp = userDB[user];
                         fetch(`http://localhost:4000/api/user/update/${user}`, {
                             method: "PUT",
-                            body: temp
+                            headers: {"Content-Type": "application/json"},
+                            body: JSON.stringify(temp)
                         })
                     })
                 }
@@ -210,7 +207,8 @@ export default function App() {
     }, [])
 
     React.useEffect(() => { // TEMPORARY!!!
-        voted ? setQuestion(getNewQuestion()) : 0;
+        let f = async () => {return await getNewQuestion()}
+        voted ? setQuestion(f()) : 0;
     }, [voted]);
 
 
