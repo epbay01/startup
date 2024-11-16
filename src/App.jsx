@@ -97,6 +97,7 @@ export default function App() {
             })
     }
 
+    
     async function handleVote(ans) {
         if (!currentUserObject.votedToday) {
             console.log(ans);
@@ -112,12 +113,18 @@ export default function App() {
             cuo.currentStreak++;
             setCurrentUserObject(cuo);
 
+            // update user on server
             fetch(`http://localhost:4000/api/user/update/${currentUser}`, {
                 method: "PUT",
                 body: JSON.stringify(cuo)
             })
                 .catch((err) => console.log(err));
 
+            // push to vote api, will update current/history
+            fetch(`http://localhost:4000/api/vote/${strDate}`, {
+                method: "PUT",
+                body: temp
+            })
         } else {
             console.log("already voted today");
         }
@@ -172,23 +179,14 @@ export default function App() {
             .finally(() => setCurrentUserObject(cuo));
     }
 
-
     React.useEffect(() => {
         async function f() {
-            if (question.question === "") {
-                await getNewQuestion();
-            }
-        }
-        f();
-    }, [])
-
-    React.useEffect(() => {
-        async function f() {
+            setQuestion(await getNewQuestion());
             let now = new Date();
             let userDB = [];
             if (now.getHours() === 0 && now.getMinutes() === 0 && now.getMilliseconds() === 0) {
                 setVoted(false);
-                setQuestion(getNewQuestion());
+                setQuestion(await getNewQuestion());
     
                 fetch(`http://localhost:4000/api/user/all`)
                     .then((res) => {

@@ -27,7 +27,7 @@ APIs:
     - access
 */
 
-// user data apis are on path /api/user/...
+// user data apis are on path /api/user/..., includes post, put, delete, get, and get for all
 app.post("/api/user/new/:newUser", (req, res, next) => {
     if (req.params.newUser in userDatabase) {
         console.log("user already exists");
@@ -81,9 +81,11 @@ app.delete("/api/user/delete/:deleteUser", (req, res, next) => {
     res.status(200).send(); // ok either way
 })
 
+
 app.get("/api/test/:test", (req, res, next) => {
     res.send({ test: req.params.test });
 })
+
 
 // api that gets a random question from questions.json
 app.get("/api/question", (req, res, next) => {
@@ -94,3 +96,19 @@ app.get("/api/question", (req, res, next) => {
     console.log(q);
     res.status(200).set("ContentType", "application/json").send(q);
 });
+
+
+// vote history apis
+app.put("/api/vote/:dateString", (req, res, next) => {
+    if (req.params.dateString in voteHistory) {
+        voteHistory[req.params.dateString] = req.body;
+        res.status(200).send();
+    } else {
+        voteHistory[req.params.dateString] = req.body;
+        res.status(201).send();
+    }
+});
+
+app.get("/api/vote/all", (req, res, next) => {
+    res.status(200).send(voteHistory);
+})
