@@ -71,10 +71,10 @@ export default function App() {
             setVoteHistory(temp2);
         }
 
-        await fetch("http://localhost:4000/api/question")
+        fetch("http://localhost:4000/api/question")
             .then(async (res) => {
                 if (res.body !== "") {
-                    await res.json().then((data) => {
+                    res.json().then((data) => {
                         qRes = data;
                         qRes.answers.forEach(element => {
                             cqvCopy[element] = 0;
@@ -112,9 +112,9 @@ export default function App() {
             cuo.currentStreak++;
             setCurrentUserObject(cuo);
 
-            await fetch(`http://localhost:4000/api/user/update/${currentUser}`, {
+            fetch(`http://localhost:4000/api/user/update/${currentUser}`, {
                 method: "PUT",
-                body: cuo
+                body: JSON.stringify(cuo)
             })
                 .catch((err) => console.log(err));
 
@@ -126,23 +126,19 @@ export default function App() {
 
     async function handleLogin(user, pass, logged) {
         let cuo = currentUserObject;
-        await fetch(`http://localhost:4000/api/user/${user}`)
-            .then((res) => {
-                if (res.status !== 404) {
-                    res.json().then((r) => cuo = r);
-                } else {
-                    cuo = null;
-                }
-            })
-        console.log(`in handleLogin cuo = ${cuo}`);
+        // see if the user already exists, set cuo to null if not
+        let res = await fetch(`http://localhost:4000/api/user/${user}`);
+        res.status === 404 ? cuo = null : cuo = await res.json();
+
+        console.log(`in handleLogin cuo = ${JSON.stringify(cuo)}`);
         setCurrentUserObject(cuo);
 
-        if ((cuo !== null) && user !== "") {
-            if (pass === currentUserObject.password) {
+        if (cuo !== null) {
+            if (pass === cuo.password) {
                 setInvalidPass(false);
                 setCurrentUser(user);
                 setLoggedIn(logged);
-                setVoted(currentUserObject.votedToday);
+                setVoted(cuo.votedToday);
             } else {
                 console.log("invalid password");
                 setInvalidPass(true);
@@ -160,14 +156,14 @@ export default function App() {
 
     async function createUser(user, pass) {
         let cuo = currentUserObject;
-        await fetch(`http://localhost:4000/api/user/new/${user}`, {method: "POST"})
+        fetch(`http://localhost:4000/api/user/new/${user}`, {method: "POST"})
             .then((res) => {
-                res.json().then((r) => cuo = r);
+                cuo = res.body;
             })
             .catch((err) => console.log(err));
         cuo.password = pass;
         console.log(`cuo = ${cuo}`);
-        await fetch(`http://localhost:4000/api/user/update/${user}`, {
+        fetch(`http://localhost:4000/api/user/update/${user}`, {
                 method: "PUT",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(cuo)
@@ -194,7 +190,7 @@ export default function App() {
                 setVoted(false);
                 setQuestion(getNewQuestion());
     
-                await fetch(`http://localhost:4000/api/user/all`)
+                fetch(`http://localhost:4000/api/user/all`)
                     .then((res) => {
                         if (res.status !== 404) {
                             res.json().then((r) => userDB = r);
@@ -204,7 +200,7 @@ export default function App() {
                 if (userDB !== null) {
                     Object.keys(userDB).forEach(async (user) => {
                         let temp = userDB[user];
-                        await fetch(`http://localhost:4000/api/user/update/${user}`, {
+                        fetch(`http://localhost:4000/api/user/update/${user}`, {
                             method: "PUT",
                             body: temp
                         })
