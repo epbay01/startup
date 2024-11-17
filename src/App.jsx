@@ -40,6 +40,7 @@ export default function App() {
         votedToday: false,
         userHistory: {}
     });
+    const [techyPhrase, setTechyPhrase] = React.useState("Programming is pretty neat.");
 
 
     async function getNewQuestion() {
@@ -153,6 +154,10 @@ export default function App() {
     React.useEffect(() => {
         async function f() {
             await getNewQuestion();
+            let techRes = await fetch("https://techy-api.vercel.app/api/json");
+            let techy = await techRes.json();
+            setTechyPhrase(`"${techy.message}."`);
+
             let now = new Date();
             let userDB = [];
             if (now.getHours() === 0 && now.getMinutes() === 0 && now.getMilliseconds() === 0) {
@@ -249,6 +254,7 @@ export default function App() {
                 
                 <footer>
                     <div className="no-format">
+                        <p id="techy-phrase">{techyPhrase}</p>
                         <p><a className="link" href="https://github.com/epbay01/startup">github repository</a></p>
                         <p>website by: <a className="link" href="mailto:epbay01@byu.edu">elijah bay</a></p>
                         <img width="200px" src="/Images/IMG_8451.png" alt="Picture of the creator, Elijah Bay"/>

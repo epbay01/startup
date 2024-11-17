@@ -195,6 +195,9 @@ footer .link:visited {
     color: white;
 }
 
+#techy-phrase {
+    font-style: italic;
+}
 
 @media (orientation: portrait) {
     header {
