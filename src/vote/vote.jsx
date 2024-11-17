@@ -2,12 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { redirect } from "react-router-dom";
 
-/*
-TODO:
-- make 2 response buttons
-- add button functionality (they call handleVote in app, app updates the voted state, adds vote to cqv data which is passed back down)
-*/
-
 export default function Vote ({ currentUser, loggedIn, voted, handleVote, question, currentQuestionVotes }) {
     let user = {
         password: "",

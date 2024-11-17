@@ -13,15 +13,6 @@ import "./login/login-style.css";
 import "./profile/profile-style.css";
 import "./vote/vote-style.css";
 
-//import * as questionsJson from "./questions.json" assert { type: "json" };
-
-/*
-TODO:
-- implement handleVote()
-- send data from cqv back down to <profile> and <vote>
-- possibly make it so login button doesn't send to vote page when password is refused, or add a message indicating wrong password
-*/
-
 export default function App() {
     const [currentUser, setCurrentUser] = React.useState("");
     const [loggedIn, setLoggedIn] = React.useState(false);
