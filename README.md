@@ -82,3 +82,18 @@ Obviously, these are rough sketches and the specific design of the website would
 **Router:** I used the router for the various pages. I also used it to redirect when you login.
 
 **Hooks:** I used the `useEffect` hook in several places to adapt the site to respond to what's happening. For example, when you log in, put in a wrong password, or vote.
+
+## Express service
+
+**HTTP Service:** I made a backend in (service/index.js)[service/index.js] using the Express package.
+
+**Static Middleware:** I used Express as well as `express cors` and `express json` middleware.
+
+**3rd Party API/endpoints:** I used a 3rd party API to give me a techy phrase to put in the footer.
+
+**Backend Endpoints:** I have several endpoints that I implemented:
+  - `/api/user/...` endpoints including a GET, POST, PUT, and DELETE endpoint to manage logins and user data
+  - `/api/vote/...` endpoints to save the current and past votes for each question. Includes a GET and PUT
+  - `/api/question` endpoint, which GETs a new question
+
+**Frontend Calls:** Each page has to call these endpoints, the `/api/user/` endpoints in particular, to get the data it needs to display. The question endpoint is called when you first open the page to get a question of the day, vote is called when you vote or look at the history on the profile page, and user is called all over the place.
