@@ -1,10 +1,24 @@
-import { Question } from "../src/questionClass.js";
-import * as questionsJson from "../public/questions.json" assert { type: "json" };
+//import { Question } from "../src/questionClass.js";
+import * as questionsJson from "./public/Misc/questions.json" assert { type: "json" };
+
+// possibly import was causing a problem
+class Question {
+    constructor(question = "", answers = []) {
+        this.question = question;
+        this.answers = answers;
+    }
+    toJSON() {
+        return {
+            question: this.question,
+            answers: this.answers
+        }
+    }
+}
 
 import express from "express";
 import cors from "cors";
 
-let app = express();
+const app = express();
 
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 app.listen(port);
@@ -12,6 +26,14 @@ app.listen(port);
 app.use(express.static('public'));
 app.use(express.json());
 app.use(cors());
+
+// Return the application's default page if the path is unknown (from simon code)
+app.use((_req, res) => {
+    res.sendFile('index.html', { root: 'public' });
+});
+
+var apiRouter = express.Router();
+app.use(`/api`, apiRouter);
 
 let userDatabase = new Object();
 let voteHistory = new Object();
@@ -29,7 +51,7 @@ APIs:
 */
 
 // user data apis are on path /api/user/..., includes post, put, delete, get, and get for all
-app.post("/api/user/new/:newUser", (req, res, next) => {
+apiRouter.post("/user/new/:newUser", (req, res, next) => {
     if (req.params.newUser in userDatabase) {
         console.log("user already exists");
         res.status(405).set("ContentType", "application/json").send(userDatabase[req.params.newUser]);
@@ -50,7 +72,7 @@ app.post("/api/user/new/:newUser", (req, res, next) => {
     }
 });
 
-app.put("/api/user/update/:updatedUser", (req, res, next) => {
+apiRouter.put("/user/update/:updatedUser", (req, res, next) => {
     if (req.params.updatedUser in userDatabase) {
         console.log(req.params.updatedUser + " found!, body is " + JSON.stringify(req.body));
         userDatabase[req.params.updatedUser] = req.body;
@@ -62,11 +84,11 @@ app.put("/api/user/update/:updatedUser", (req, res, next) => {
     }
 });
 
-app.get("/api/user/all", (req, res, next) => {
+apiRouter.get("/user/all", (req, res, next) => {
     res.set("ContentType", "application/json").send(userDatabase);
 })
 
-app.get("/api/user/:getUser", (req, res, next) => {
+apiRouter.get("/user/:getUser", (req, res, next) => {
     if (req.params.getUser in userDatabase) {
         res.status(200).set("ContentType", "application/json").send(userDatabase[req.params.getUser]);
     } else {
@@ -75,7 +97,7 @@ app.get("/api/user/:getUser", (req, res, next) => {
     }
 })
 
-app.delete("/api/user/delete/:deleteUser", (req, res, next) => {
+apiRouter.delete("/user/delete/:deleteUser", (req, res, next) => {
     if (req.params.deleteUser in userDatabase) {
         delete userDatabase[req.params.deleteUser];
     }
@@ -83,13 +105,13 @@ app.delete("/api/user/delete/:deleteUser", (req, res, next) => {
 })
 
 
-app.get("/api/test/:test", (req, res, next) => {
+apiRouter.get("/test/:test", (req, res, next) => {
     res.send({ test: req.params.test });
 })
 
 
 // api that gets a random question from questions.json
-app.get("/api/question", (req, res, next) => {
+apiRouter.get("/question", (req, res, next) => {
     let questionArray = [...questionsJson.default.questionArray];
     let q = new Question("", []);
     console.log(questionArray.length);
@@ -100,7 +122,7 @@ app.get("/api/question", (req, res, next) => {
 
 
 // vote history apis
-app.put("/api/vote/:dateString", (req, res, next) => {
+apiRouter.put("/vote/:dateString", (req, res, next) => {
     if (req.params.dateString in voteHistory) {
         voteHistory[req.params.dateString] = req.body;
         res.status(200).send();
@@ -110,6 +132,6 @@ app.put("/api/vote/:dateString", (req, res, next) => {
     }
 });
 
-app.get("/api/vote/all", (req, res, next) => {
+apiRouter.get("/vote/all", (req, res, next) => {
     res.status(200).set("ContentType", "application/json").send(voteHistory);
 })
