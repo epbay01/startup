@@ -1,7 +1,7 @@
 //import { Question } from "../src/questionClass.js";
-import * as questionsJson from "./public/Misc/questions.json" assert { type: "json" };
-import * as dbConfig from "./dbConfig.json" assert { type: "json" };
+import * as questionsJson from "../public/Misc/questions.json" assert { type: "json" };
 import * as db from "./database.js";
+import path from "path";
 
 // import was causing a problem
 class Question {
@@ -35,19 +35,11 @@ app.set("trust proxy", true);
 
 // Return the application's default page if the path is unknown (from simon code)
 app.use((_req, res) => {
-    res.sendFile('index.html', { root: 'public' });
+    res.sendFile(path.resolve("../index.html"));
 });
 
 var apiRouter = express.Router();
 app.use(`/api`, apiRouter);
-
-(async function testConnection() {
-    await client.connect();
-    await db.command({ ping: 1 });
-  })().catch((ex) => {
-    console.log(`Unable to connect to database with ${url} because ${ex.message}`);
-    process.exit(1);
-  });
 
 let voteHistory = new Object();
 

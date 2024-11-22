@@ -1,6 +1,7 @@
-const MongoClient = require("mongodb");
-const bcrypt = require("bcrypt");
-const uuid = require("uuid");
+import { MongoClient } from 'mongodb';
+import bcrypt from 'bcrypt';
+import * as uuid from 'uuid';
+import dbConfig from "./dbConfig.json" assert { type: "json" };
 
 const url = `mongodb+srv://${dbConfig.username}:${dbConfig.password}@${dbConfig.hostname}`
 const client = new MongoClient(url);
@@ -12,7 +13,15 @@ const collection = db.collection('user data');
 // getUser(username) returns the user with the username
 // deleteUser(user) deletes the user
 
-async function makeUser(username, password) {
+(async function testConnection() {
+    await client.connect();
+    await db.command({ ping: 1 });
+})().catch((ex) => {
+    console.log(`Unable to connect to database with ${url} because ${ex.message}`);
+    process.exit(1);
+});
+
+export async function makeUser(username, password) {
     const passHash = await bcrypt.hash(password, 10);
     const user = {
         username: username,
@@ -31,22 +40,18 @@ async function makeUser(username, password) {
     return user;
 }
 
-async function updateUser(user) {
+export async function updateUser(user) {
     collection.updateOne({username: user.username}, user);
 }
 
-async function getUser(username) {
+export async function getUser(username) {
     return await collection.findOne({username: username});
 }
 
-async function getUserByToken(token) {
+export async function getUserByToken(token) {
     return await collection.findOne({token: token});
 }
 
-async function deleteUser(user) {
+export async function deleteUser(user) {
     collection.delete({username: user.username});
-}
-
-module.exports = {
-    makeUser, updateUser, getUser, deleteUser, getUserByToken
 }
