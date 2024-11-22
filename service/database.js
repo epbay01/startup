@@ -39,10 +39,14 @@ async function getUser(username) {
     return await collection.findOne({username: username});
 }
 
+async function getUserByToken(token) {
+    return await collection.findOne({token: token});
+}
+
 async function deleteUser(user) {
     collection.delete({username: user.username});
 }
 
 module.exports = {
-    makeUser, updateUser, getUser, deleteUser
+    makeUser, updateUser, getUser, deleteUser, getUserByToken
 }

@@ -67,23 +67,28 @@ APIs:
 
 // user data apis are on path /api/user/..., includes post, put, delete, get, and get for all
 apiRouter.post("/user/new", async (req, res, next) => {
-    if (db.getUser(req.body.newUser)) {
+    if (db.getUser(req.body.username)) {
         console.log("user already exists");
-        res.status(405).set("ContentType", "application/json").send(await db.getUser(req.body.newUser));
+        res.status(405).set("Content-Type", "application/json").send(await db.getUser(req.body.newUser));
     } else {
-        let user = await db.makeUser(req.body.newUser, req.body.password);
+        let user = await db.makeUser(req.body.username, req.body.password);
         console.log(req.body.newUser + " has been created");
         setCookie(res, user.token);
-        res.status(201).set("ContentType", "application/json").send(user);
+        res.status(201).set("Content-Type", "application/json").send(user);
     }
 });
 
 apiRouter.put("/user/update", async (req, res, next) => {
-    if (await db.getUser(req.body.username)) {
-        console.log(req.body.username + " found!, body is " + JSON.stringify(req.body));
-        await db.updateUser(req.body);
-        console.log(`${req.body.user} is now updated`);
-        res.status(200).send();
+    let user = await db.getUserByToken(req.body.token);
+    if (user) {
+        console.log(req.body.username + " found!");
+        if (req.cookies.token == user.token) {
+            await db.updateUser(req.body);
+            console.log(`${req.body.user} is now updated`);
+            res.status(200).send();
+        } else {
+            res.status(401).send(); // unauthorized to update user
+        }
     } else {
         console.log("user not found");
         res.status(404).send(null);
@@ -96,9 +101,13 @@ apiRouter.put("/user/update", async (req, res, next) => {
 // })
 
 apiRouter.get("/user/get", async (req, res, next) => {
-    let user = await db.getUser(req.body.username);
-    if (user != null || user != undefined) {
-        res.status(200).set("ContentType", "application/json").send(user);
+    let user = await db.getUserByToken(req.body.token);
+    if (user) {
+        if (user.token == req.cookies.token) {
+            res.status(200).set("Content-Type", "application/json").send(user);
+        } else {
+            res.status(401).send();
+        }
     } else {
         console.log("user not found");
         res.status(404).send(null);
@@ -107,7 +116,29 @@ apiRouter.get("/user/get", async (req, res, next) => {
 
 apiRouter.delete("/user/delete", async (req, res, next) => {
     await db.deleteUser(req.body);
-    res.status(200).send(); // ok either way
+    res.status(200).send();
+})
+
+
+// auth apis that will replace the react auth
+apiRouter.post("/auth/login", async (req, res, next) => {
+    let user = await db.getUser(req.body.username);
+    if (user) {
+        if (await bcrypt.compare(req.body.password, user.password)) {
+            setCookie(res, user.token);
+            res.status(200).send(user);
+        } else {
+            res.status(401).send();
+        }
+    } else {
+        res.status(404).send();
+    }
+});
+
+
+apiRouter.post("/auth/logout", (req, res, next) => {
+    res.clearCookie("token");
+    res.status(200).send();
 })
 
 
@@ -123,7 +154,7 @@ apiRouter.get("/question", (req, res, next) => {
     console.log(questionArray.length);
     q = questionArray[Math.floor(Math.random() * questionArray.length)];
     console.log(q);
-    res.status(200).set("ContentType", "application/json").send(q);
+    res.status(200).set("Content-Type", "application/json").send(q);
 });
 
 
@@ -139,7 +170,7 @@ apiRouter.put("/vote/:dateString", (req, res, next) => {
 });
 
 apiRouter.get("/vote/all", (req, res, next) => {
-    res.status(200).set("ContentType", "application/json").send(voteHistory);
+    res.status(200).set("Content-Type", "application/json").send(voteHistory);
 })
 
 
