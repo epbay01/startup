@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { redirect } from "react-router-dom";
 
-export default function Vote ({ currentUser, loggedIn, voted, handleVote, question, currentQuestionVotes }) {
+export default function Vote ({ currentUser, currentUserObject, loggedIn, voted, handleVote, question, currentQuestionVotes }) {
     let user = {
         password: "",
         currentStreak: 0,
@@ -17,14 +17,22 @@ export default function Vote ({ currentUser, loggedIn, voted, handleVote, questi
 
     React.useEffect(() => {
         async function f() {
-            await fetch(`http://localhost:4000/api/user/${currentUser}`)
-            .then((res) => {
-                if (res.status !== 404) {
-                    user = res.json();
-                } else {
-                    user = null;
+            if (!loggedIn) {
+                user = null;
+            } else {
+                let res = await fetch(`http://localhost:4000/api/user/get`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ token: currentUserObject.token })
+                });
+                if (res.status === 200) {
+                    user = await res.json();
+                } else if (res.status === 401) {
+                    console.log("Unauthorized");
                 }
-            })
+            }
         }
         f();
     }, [currentUser]);

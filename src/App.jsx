@@ -100,7 +100,7 @@ export default function App() {
 
 
     async function handleLogin(user, pass, logged) {
-        if (!logged) {
+        if (!logged) { // logout
             let res = await fetch(`http://localhost:4000/api/auth/logout`, {method: "POST"});
             setCurrentUser("");
             setLoggedIn(false);
@@ -139,17 +139,13 @@ export default function App() {
     }
 
     async function createUser(user, pass) {
-        let cuo = currentUserObject;
-        let res = await fetch(`http://localhost:4000/api/user/new/${user}`, {method: "POST"});
-        cuo = await res.json();
-        cuo.password = pass;
-        console.log(`new cuo = ${JSON.stringify(cuo)}`);
-        await fetch(`http://localhost:4000/api/user/update/${user}`, {
-                method: "PUT",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(cuo)
-            });
-        setCurrentUserObject(cuo);
+        let res = await fetch(`http://localhost:4000/api/user/new`, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({username: user, password: pass})
+        });
+        setCurrentUserObject(await res.json());
+        setCurrentUser(user.username);
     }
 
     React.useEffect(() => {
@@ -249,7 +245,7 @@ export default function App() {
                     <Route path="/" element={<Login invalidPass={invalidPass} handleLogin={async (u, p, l) => await handleLogin(u,p,l)} currentUser={currentUser} loggedIn={loggedIn} />} />
                     <Route path="/login" element={<Login invalidPass={invalidPass} handleLogin={async (u, p, l) => await handleLogin(u,p,l)} currentUser={currentUser} loggedIn={loggedIn} />} />
                     <Route path="/profile" element={<Profile handleLogin={(u, p, l) => handleLogin(u,p,l)} currentUser={currentUser} loggedIn={loggedIn} />} />
-                    <Route path="/vote" element={<Vote currentUser={currentUser} loggedIn={loggedIn} voted={voted} handleVote={(ans) => handleVote(ans)} question={question} currentQuestionVotes={currentQuestionVotes} currentUserObject={currentUserObject} />} />
+                    <Route path="/vote" element={<Vote currentUser={currentUser} setCurrentUserObject={currentUserObject} loggedIn={loggedIn} voted={voted} handleVote={(ans) => handleVote(ans)} question={question} currentQuestionVotes={currentQuestionVotes} currentUserObject={currentUserObject} />} />
                     <Route path="*" element={<UnknownPath />} />
                 </Routes>
                 

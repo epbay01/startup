@@ -68,9 +68,9 @@ get /api/vote/all
 
 // user data apis are on path /api/user/..., includes post, put, delete, get, and get for all
 apiRouter.post("/user/new", async (req, res, next) => {
-    if (db.getUser(req.body.username)) {
+    if (await db.getUser(req.body.username)) {
         console.log("user already exists");
-        res.status(405).set("Content-Type", "application/json").send(await db.getUser(req.body.newUser));
+        res.status(405).set("Content-Type", "application/json").send(await db.getUser(req.body.username));
     } else {
         let user = await db.makeUser(req.body.username, req.body.password);
         console.log(req.body.newUser + " has been created");
