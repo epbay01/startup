@@ -49,20 +49,21 @@ app.use(`/api`, apiRouter);
     process.exit(1);
   });
 
-// will be obselete
-let userDatabase = new Object();
 let voteHistory = new Object();
 
 /*
 APIs:
-- user data
-    - make user
-    - store data
-    - access data on login
-- vote history
-    - store
-    - access
-- question
+post /api/user/new
+put /api/user/update
+get /api/user/get
+delete /api/user/delete
+post /api/auth/login
+post /api/auth/logout
+
+get /api/question
+
+put /api/vote/:dateString
+get /api/vote/all
 */
 
 // user data apis are on path /api/user/..., includes post, put, delete, get, and get for all

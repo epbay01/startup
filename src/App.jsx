@@ -29,7 +29,8 @@ export default function App() {
         confirmVotes: false,
         notifications: true,
         votedToday: false,
-        userHistory: {}
+        userHistory: {},
+        token: ""
     });
     const [techyPhrase, setTechyPhrase] = React.useState("Programming is pretty neat.");
 
@@ -99,30 +100,39 @@ export default function App() {
 
 
     async function handleLogin(user, pass, logged) {
+        if (!logged) {
+            let res = await fetch(`http://localhost:4000/api/auth/logout`, {method: "POST"});
+            setCurrentUser("");
+            setLoggedIn(false);
+            setVoted(false);
+            setCurrentUserObject(null);
+            return "/";
+        }
+
         let cuo = currentUserObject;
-        // see if the user already exists, set cuo to null if not
-        let res = await fetch(`http://localhost:4000/api/user/${user}`);
-        res.status === 404 ? cuo = null : cuo = await res.json();
-
-        console.log(`in handleLogin cuo = ${JSON.stringify(cuo)}`);
-        setCurrentUserObject(cuo);
-
-        if (cuo !== null) {
-            if (pass === cuo.password) {
+        let res = await fetch(`http://localhost:4000/api/user/get`, {
+            method: "GET",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(cuo)
+        });
+        switch (res.status) {
+            case 404: // user not found
+                setCurrentUserObject(null); // set in createUser
                 setInvalidPass(false);
                 setCurrentUser(user);
-                setLoggedIn(logged);
+                setVoted(false);
+                if (user !== "") await createUser(user, pass);
+            case 200: // logged in
+                cuo = await res.json();
+                setInvalidPass(false);
+                setCurrentUser(user);
+                setLoggedIn(true);
                 setVoted(cuo.votedToday);
-            } else {
-                console.log("invalid password");
+            case 401: // unauthorized
                 setInvalidPass(true);
-            }
-        } else {
-            setInvalidPass(false);
-            if (user !== "") await createUser(user, pass);
-            setCurrentUser(user);
-            setLoggedIn(logged);
-            setVoted(false);
+                setCurrentUser("");
+                setLoggedIn(false);
+                setVoted(false);
         }
 
         return (invalidPass ? "/" : "/vote");
