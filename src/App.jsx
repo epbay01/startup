@@ -108,47 +108,55 @@ export default function App() {
             setVoted(false);
             setCurrentUserObject(null);
             return "/";
-        }
-
-        let cuo = currentUserObject;
-        cuo.username = user;
-        cuo.password = pass;
-        let res = await fetch(`http://localhost:4000/api/auth/login?token=${cuo.token}`, {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(cuo)
-        });
-        console.log(`login response: ${res.status}`);
-        switch (res.status) {
-            case 404: // user not found
-                setCurrentUserObject(null); // set in createUser
-                setInvalidPass(false);
-                setCurrentUser(user);
-                setVoted(false);
-                if (user !== "") await createUser(user, pass);
-                break;
-            case 200: // logged in
-                try {
-                    cuo = await res.json();
-                } catch (err) {
-                    console.log(err);
-                }
-                setInvalidPass(false);
-                setCurrentUser(user);
-                setCurrentUserObject(cuo);
-                setLoggedIn(true);
-                setVoted(cuo.votedToday);
-                break;
-            case 401: // unauthorized
-                setCurrentUserObject(null);
-                setInvalidPass(true);
-                setCurrentUser("");
-                setLoggedIn(false);
-                setVoted(false);
-                break;
-            default:
-                console.log("default case");
-                break;
+        } else {
+            let cuo = currentUserObject;
+            if (cuo !== null) {
+                cuo.username = user;
+                cuo.password = pass;
+            } else {
+                cuo = {
+                    username: user,
+                    password: pass,
+                    token: ""
+                };
+            }
+            let res = await fetch(`http://localhost:4000/api/auth/login?token=${cuo.token}`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(cuo)
+            });
+            console.log(`login response: ${res.status}`);
+            switch (res.status) {
+                case 404: // user not found
+                    setCurrentUserObject(null); // set in createUser
+                    setInvalidPass(false);
+                    setCurrentUser(user);
+                    setVoted(false);
+                    if (user !== "") await createUser(user, pass);
+                    break;
+                case 200: // logged in
+                    try {
+                        cuo = await res.json();
+                    } catch (err) {
+                        console.log(err);
+                    }
+                    setInvalidPass(false);
+                    setCurrentUser(user);
+                    setCurrentUserObject(cuo);
+                    setLoggedIn(true);
+                    setVoted(cuo.votedToday);
+                    break;
+                case 401: // unauthorized
+                    setCurrentUserObject(null);
+                    setInvalidPass(true);
+                    setCurrentUser("");
+                    setLoggedIn(false);
+                    setVoted(false);
+                    break;
+                default:
+                    console.log("default case");
+                    break;
+            }
         }
 
         return (invalidPass ? "/" : "/vote");
