@@ -4,6 +4,7 @@ import { redirect } from "react-router-dom";
 
 export default function Vote ({ currentUser, currentUserObject, loggedIn, voted, handleVote, question, currentQuestionVotes }) {
     let user = {
+        username: "",
         password: "",
         currentStreak: 0,
         highestStreak: 0,
@@ -12,7 +13,8 @@ export default function Vote ({ currentUser, currentUserObject, loggedIn, voted,
         confirmVotes: false,
         notifications: true,
         votedToday: false,
-        userHistory: {}
+        userHistory: {},
+        token: ""
     }
 
     React.useEffect(() => {
@@ -20,12 +22,11 @@ export default function Vote ({ currentUser, currentUserObject, loggedIn, voted,
             if (!loggedIn) {
                 user = null;
             } else {
-                let res = await fetch(`http://localhost:4000/api/user/get`, {
+                let res = await fetch(`http://localhost:4000/api/user/get?token=${currentUserObject.token}`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ token: currentUserObject.token })
+                    }
                 });
                 if (res.status === 200) {
                     user = await res.json();

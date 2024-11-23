@@ -4,7 +4,7 @@ import * as uuid from 'uuid';
 import dbConfig from "./dbConfig.json" assert { type: "json" };
 
 const url = `mongodb+srv://${dbConfig.username}:${dbConfig.password}@${dbConfig.hostname}`
-const client = new MongoClient(url);
+const client = new MongoClient(url, { tls: true, serverSelectionTimeoutMS: 3000, autoSelectFamily: false, });
 const db = client.db('startup');
 const collection = db.collection('user data');
 
@@ -50,6 +50,10 @@ export async function getUser(username) {
 
 export async function getUserByToken(token) {
     return await collection.findOne({token: token});
+}
+
+export async function getAllUsers() {
+    return await collection.find().toArray();
 }
 
 export async function deleteUser(user) {

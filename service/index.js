@@ -33,11 +33,6 @@ app.use(cors());
 app.use(cookieParser());
 app.set("trust proxy", true);
 
-// Return the application's default page if the path is unknown (from simon code)
-app.use((_req, res) => {
-    res.sendFile(path.resolve("../index.html"));
-});
-
 var apiRouter = express.Router();
 app.use(`/api`, apiRouter);
 
@@ -49,6 +44,7 @@ post /api/user/new
 put /api/user/update
 get /api/user/get
 delete /api/user/delete
+get /api/user/all
 post /api/auth/login
 post /api/auth/logout
 
@@ -88,13 +84,17 @@ apiRouter.put("/user/update", async (req, res, next) => {
     }
 });
 
-// for this, look at mongodb online
-// apiRouter.get("/user/all", (req, res, next) => {
-//     res.set("ContentType", "application/json").send(userDatabase);
-// })
+apiRouter.get("/user/all", (req, res, next) => {
+    let user = db.getUserByToken(req.query.token);
+    if (user.token == req.cookies.token) {
+        res.status(200).set("ContentType", "application/json").send(JSON.stringify({ data: db.getAllUsers() }));
+    } else {
+        res.status(401).send();
+    }
+})
 
 apiRouter.get("/user/get", async (req, res, next) => {
-    let user = await db.getUserByToken(req.body.token);
+    let user = await db.getUserByToken(req.query.token);
     if (user) {
         if (user.token == req.cookies.token) {
             res.status(200).set("Content-Type", "application/json").send(user);
@@ -167,7 +167,13 @@ apiRouter.get("/vote/all", (req, res, next) => {
 })
 
 
+// Return the application's default page if the path is unknown (from simon code)
+app.use((_req, res) => {
+    res.sendFile(path.resolve("../index.html"));
+});
 
+
+// setCookie sets the cookie with the token
 function setCookie(res, token) {
     res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "strict" });
 }

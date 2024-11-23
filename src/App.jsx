@@ -21,6 +21,7 @@ export default function App() {
     const [question, setQuestion] = React.useState(new Question());
     const [currentQuestionVotes, setCurrentQuestionVotes] = React.useState(new Object());
     const [currentUserObject, setCurrentUserObject] = React.useState({
+        username: "",
         password: "",
         currentStreak: 0,
         highestStreak: 0,
@@ -39,7 +40,7 @@ export default function App() {
         let cqvCopy = currentQuestionVotes;
         let qRes = new Object();
 
-        fetch("http://localhost:4000/api/question")
+        fetch("/api/question")
             .then(async (res) => {
                 if (res.body !== "") {
                     qRes = await res.json();
@@ -80,7 +81,7 @@ export default function App() {
             console.log("cuo in handleVote: " + JSON.stringify(cuo));
 
             // update user on server
-            fetch(`http://localhost:4000/api/user/update/${currentUser}`, {
+            fetch(`http://localhost:4000/api/user/update`, {
                 method: "PUT",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(cuo)
@@ -110,11 +111,14 @@ export default function App() {
         }
 
         let cuo = currentUserObject;
-        let res = await fetch(`http://localhost:4000/api/user/get`, {
-            method: "GET",
+        cuo.username = user;
+        cuo.password = pass;
+        let res = await fetch(`http://localhost:4000/api/auth/login?token=${cuo.token}`, {
+            method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(cuo)
         });
+        console.log(`login response: ${res.status}`);
         switch (res.status) {
             case 404: // user not found
                 setCurrentUserObject(null); // set in createUser
@@ -122,17 +126,29 @@ export default function App() {
                 setCurrentUser(user);
                 setVoted(false);
                 if (user !== "") await createUser(user, pass);
+                break;
             case 200: // logged in
-                cuo = await res.json();
+                try {
+                    cuo = await res.json();
+                } catch (err) {
+                    console.log(err);
+                }
                 setInvalidPass(false);
                 setCurrentUser(user);
+                setCurrentUserObject(cuo);
                 setLoggedIn(true);
                 setVoted(cuo.votedToday);
+                break;
             case 401: // unauthorized
+                setCurrentUserObject(null);
                 setInvalidPass(true);
                 setCurrentUser("");
                 setLoggedIn(false);
                 setVoted(false);
+                break;
+            default:
+                console.log("default case");
+                break;
         }
 
         return (invalidPass ? "/" : "/vote");
@@ -163,15 +179,15 @@ export default function App() {
     
                 fetch(`http://localhost:4000/api/user/all`)
                     .then(async (res) => {
-                        if (res.status !== 404) {
+                        if (res.status !== 404 || res.status !== 401) {
                             userDB = await res.json();
                         } else userDB = null;
                     });
                 console.log(`userDB = ${userDB}`);
                 if (userDB !== null) {
-                    Object.keys(userDB).forEach(async (user) => {
+                    userDB.data.forEach(async (user) => {
                         let temp = userDB[user];
-                        fetch(`http://localhost:4000/api/user/update/${user}`, {
+                        fetch(`http://localhost:4000/api/user/update`, {
                             method: "PUT",
                             headers: {"Content-Type": "application/json"},
                             body: JSON.stringify(temp)
