@@ -1,5 +1,5 @@
 //import { Question } from "../src/questionClass.js";
-import * as questionsJson from "../public/Misc/questions.json" assert { type: "json" };
+import * as questionsJson from "./public/Misc/questions.json" assert { type: "json" }; // change later
 import * as db from "./database.js";
 import path from "path";
 
@@ -169,7 +169,7 @@ apiRouter.get("/vote/all", (req, res, next) => {
 
 // Return the application's default page if the path is unknown (from simon code)
 app.use((_req, res) => {
-    res.sendFile(path.resolve("../index.html"));
+    res.sendFile(path.resolve("ndex.html", { root: "public" }));
 });
 
 
