@@ -17,27 +17,6 @@ export default function Vote ({ currentUser, currentUserObject, loggedIn, voted,
         token: ""
     }
 
-    React.useEffect(() => {
-        async function f() {
-            if (!loggedIn) {
-                user = null;
-            } else {
-                let res = await fetch(`http://localhost:4000/api/user/get?token=${currentUserObject.token}`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                    }
-                });
-                if (res.status === 200) {
-                    user = await res.json();
-                } else if (res.status === 401) {
-                    console.log("Unauthorized");
-                }
-            }
-        }
-        f();
-    }, [currentUser]);
-
     if (!loggedIn) {
         return (
             <div className="main" id="vote-main">
@@ -51,7 +30,7 @@ export default function Vote ({ currentUser, currentUserObject, loggedIn, voted,
             <div className="main" id="vote-main"> 
                 <div className="no-format" id="question-and-streak">
                     <h2 id="question">Question: {question.question}</h2>
-                    <h3 id="streak">Your streak: {user.currentStreak} &#128293;</h3>
+                    <h3 id="streak">Your streak: {currentUserObject.currentStreak} &#128293;</h3>
                 </div>
 
                 <VoteButtons answers={Object.keys(currentQuestionVotes)} handleVote={handleVote} />

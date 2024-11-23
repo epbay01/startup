@@ -130,7 +130,7 @@ apiRouter.post("/auth/login", async (req, res, next) => {
 
 
 apiRouter.post("/auth/logout", (req, res, next) => {
-    res.clearCookie("token");
+    res.clearCookie("token", { path: "/" });
     res.status(200).send();
 })
 
@@ -175,5 +175,5 @@ app.use((_req, res) => {
 
 // setCookie sets the cookie with the token
 function setCookie(res, token) {
-    res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "strict" });
+    res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "strict", path: "/" });
 }

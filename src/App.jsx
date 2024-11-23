@@ -45,7 +45,7 @@ export default function App() {
                 if (res.body !== "") {
                     qRes = await res.json();
                     qRes.answers.forEach(element => {
-                        cqvCopy[element] = 0;
+                        delete cqvCopy[element];
                     });
                 } else console.log("empty body");
             })
@@ -81,7 +81,7 @@ export default function App() {
             console.log("cuo in handleVote: " + JSON.stringify(cuo));
 
             // update user on server
-            fetch(`http://localhost:4000/api/user/update`, {
+            fetch(`/api/user/update`, {
                 method: "PUT",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(cuo)
@@ -89,7 +89,7 @@ export default function App() {
                 .catch((err) => console.log(err));
 
             // push to vote api, will update current/history
-            fetch(`http://localhost:4000/api/vote/${strDate}`, {
+            fetch(`/api/vote/${strDate}`, {
                 method: "PUT",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(temp)
@@ -120,7 +120,7 @@ export default function App() {
                     token: ""
                 };
             }
-            let res = await fetch(`http://localhost:4000/api/auth/login?token=${cuo.token}`, {
+            let res = await fetch(`/api/auth/login?token=${cuo.token}`, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(cuo)
@@ -163,7 +163,7 @@ export default function App() {
     }
 
     async function createUser(user, pass) {
-        let res = await fetch(`http://localhost:4000/api/user/new`, {
+        let res = await fetch(`/api/user/new`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({username: user, password: pass})
@@ -207,10 +207,10 @@ export default function App() {
         f();
     }, [])
 
-    React.useEffect(() => { // TEMPORARY!!!
-        let f = async () => {return await getNewQuestion()}
-        voted ? setQuestion(f()) : 0;
-    }, [voted]);
+    // React.useEffect(() => { // TEMPORARY!!!
+    //     let f = async () => {return await getNewQuestion()}
+    //     voted ? setQuestion(f()) : 0;
+    // }, [voted]);
 
 
     function Nav({path}) {
@@ -268,7 +268,7 @@ export default function App() {
                 <Routes>
                     <Route path="/" element={<Login invalidPass={invalidPass} handleLogin={async (u, p, l) => await handleLogin(u,p,l)} currentUser={currentUser} loggedIn={loggedIn} />} />
                     <Route path="/login" element={<Login invalidPass={invalidPass} handleLogin={async (u, p, l) => await handleLogin(u,p,l)} currentUser={currentUser} loggedIn={loggedIn} />} />
-                    <Route path="/profile" element={<Profile handleLogin={(u, p, l) => handleLogin(u,p,l)} currentUser={currentUser} loggedIn={loggedIn} />} />
+                    <Route path="/profile" element={<Profile handleLogin={(u, p, l) => handleLogin(u,p,l)} currentUser={currentUser} currentUserObject={currentUserObject} loggedIn={loggedIn} setCurrentUserObject={(obj) => setCurrentUserObject(obj)} />} />
                     <Route path="/vote" element={<Vote currentUser={currentUser} setCurrentUserObject={currentUserObject} loggedIn={loggedIn} voted={voted} handleVote={(ans) => handleVote(ans)} question={question} currentQuestionVotes={currentQuestionVotes} currentUserObject={currentUserObject} />} />
                     <Route path="*" element={<UnknownPath />} />
                 </Routes>

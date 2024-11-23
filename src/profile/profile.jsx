@@ -1,33 +1,22 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-export default function Profile ({ handleLogin, currentUser, loggedIn }) {    
+export default function Profile ({ handleLogin, currentUser, currentUserObject, loggedIn, setCurrentUserObject }) {    
     const [confirmVotesState, setConfirmVotesState] = React.useState(false);
     const [notificationsState, setNotificationsState] = React.useState(true);
-    const [currentUserObject, setCurrentUserObject] = React.useState({
-        password: "",
-        currentStreak: 0,
-        highestStreak: 0,
-        popVote: 0,
-        unpopVote: 0,
-        confirmVotes: false,
-        notifications: true,
-        votedToday: false,
-        userHistory: {}
-    });
 
-    React.useEffect(() => {
-        async function f() {
-            if (currentUser === "") {
-                setCurrentUserObject(null);
-            } else {
-                let res = await fetch(`http://localhost:4000/api/user/${currentUser}`);
-                setCurrentUserObject(await res.json());
-            }
-        }
-        f();
-        console.log(JSON.stringify(currentUserObject) + "is current user object in profile");
-    }, [currentUser, loggedIn]);
+    // React.useEffect(() => {
+    //     async function f() {
+    //         if (currentUser === "") {
+    //             setCurrentUserObject(null);
+    //         } else {
+    //             let res = await fetch(`http://localhost:4000/api/user/${currentUser}`);
+    //             setCurrentUserObject(await res.json());
+    //         }
+    //     }
+    //     f();
+    //     console.log(JSON.stringify(currentUserObject) + "is current user object in profile");
+    // }, [currentUser, loggedIn]);
     
     if (!loggedIn) {
         return (
@@ -40,17 +29,29 @@ export default function Profile ({ handleLogin, currentUser, loggedIn }) {
     async function updateUser(confirm, notif) {
         setConfirmVotesState(confirm);
         setNotificationsState(notif);
-        currentUserObject.confirmVotes = confirm;
-        currentUserObject.notifications = notif;
-        await fetch(`http://localhost:4000/api/user/update/${currentUser}`, {
+        let cuo = currentUserObject;
+        cuo.confirmVotes = confirm;
+        cuo.notifications = notif;
+        await fetch(`/api/user/update`, {
             method: "PUT",
-            body: JSON.stringify(currentUserObject)
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(cuo)
         })
             .catch((err) => console.log(err));
+        
+        setCurrentUserObject(cuo);
     };
 
     async function deleteUser() {
-        await fetch(`http://localhost:4000/api/user/delete/${currentUser}`, {method: "DELETE"});
+        await fetch(`/api/user/delete`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(currentUserObject)
+        });
         await handleLogin("","",false);
     }
 
@@ -85,7 +86,7 @@ function VoteTable ({ currentUserObject }) {
 
     React.useEffect(() => {
         async function f() {
-            let res = await fetch("http://localhost:4000/api/vote/all");
+            let res = await fetch("/api/vote/all");
             voteHistory = await res.json();
             console.log("vote history = " + JSON.stringify(voteHistory));
         }
