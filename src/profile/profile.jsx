@@ -32,7 +32,7 @@ export default function Profile ({ handleLogin, currentUser, currentUserObject, 
         let cuo = currentUserObject;
         cuo.confirmVotes = confirm;
         cuo.notifications = notif;
-        await fetch(`/api/user/update`, {
+        await fetch(`https://18.206.129.131/api/user/update`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -45,7 +45,7 @@ export default function Profile ({ handleLogin, currentUser, currentUserObject, 
     };
 
     async function deleteUser() {
-        await fetch(`/api/user/delete`, {
+        await fetch(`https://18.206.129.131/api/user/delete`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json"
@@ -86,7 +86,7 @@ function VoteTable ({ currentUserObject }) {
 
     React.useEffect(() => {
         async function f() {
-            let res = await fetch("/api/vote/all");
+            let res = await fetch("https://18.206.129.131/api/vote/all");
             voteHistory = await res.json();
             console.log("vote history = " + JSON.stringify(voteHistory));
         }

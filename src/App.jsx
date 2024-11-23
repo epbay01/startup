@@ -41,7 +41,7 @@ export default function App() {
         let qRes = new Object();
         cqvCopy = new Object();
 
-        fetch("/api/question")
+        fetch("https://18.206.129.131/api/question")
             .then(async (res) => {
                 if (res.body !== "") {
                     qRes = await res.json();
@@ -82,7 +82,7 @@ export default function App() {
             console.log("cuo in handleVote: " + JSON.stringify(cuo));
 
             // update user on server
-            fetch(`/api/user/update`, {
+            fetch(`https://18.206.129.131/api/user/update`, {
                 method: "PUT",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(cuo)
@@ -90,7 +90,7 @@ export default function App() {
                 .catch((err) => console.log(err));
 
             // push to vote api, will update current/history
-            fetch(`/api/vote/${strDate}`, {
+            fetch(`https://18.206.129.131/api/vote/${strDate}`, {
                 method: "PUT",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(temp)
@@ -103,7 +103,7 @@ export default function App() {
 
     async function handleLogin(user, pass, logged) {
         if (!logged) { // logout
-            let res = await fetch(`http://localhost:4000/api/auth/logout`, {method: "POST"});
+            let res = await fetch(`https://18.206.129.131/api/auth/logout`, {method: "POST"});
             setCurrentUser("");
             setLoggedIn(false);
             setVoted(false);
@@ -121,7 +121,7 @@ export default function App() {
                     token: ""
                 };
             }
-            let res = await fetch(`/api/auth/login?token=${cuo.token}`, {
+            let res = await fetch(`https://18.206.129.131/api/auth/login?token=${cuo.token}`, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(cuo)
@@ -164,7 +164,7 @@ export default function App() {
     }
 
     async function createUser(user, pass) {
-        let res = await fetch(`/api/user/new`, {
+        let res = await fetch(`https://18.206.129.131/api/user/new`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({username: user, password: pass})
@@ -186,7 +186,7 @@ export default function App() {
                 setVoted(false);
                 await getNewQuestion();
     
-                fetch(`http://localhost:4000/api/user/all`)
+                fetch(`https://18.206.129.131/api/user/all`)
                     .then(async (res) => {
                         if (res.status !== 404 || res.status !== 401) {
                             userDB = await res.json();
@@ -196,7 +196,7 @@ export default function App() {
                 if (userDB !== null) {
                     userDB.data.forEach(async (user) => {
                         let temp = userDB[user];
-                        fetch(`http://localhost:4000/api/user/update`, {
+                        fetch(`https://18.206.129.131/api/user/update`, {
                             method: "PUT",
                             headers: {"Content-Type": "application/json"},
                             body: JSON.stringify(temp)
