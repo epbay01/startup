@@ -4,7 +4,7 @@ import * as uuid from 'uuid';
 import dbConfig from "./dbConfig.json" assert { type: "json" };
 
 const url = `mongodb+srv://${dbConfig.username}:${dbConfig.password}@${dbConfig.hostname}`
-const client = new MongoClient(url, { tls: true, serverSelectionTimeoutMS: 3000, autoSelectFamily: false, });
+const client = new MongoClient(url, { tls: true, serverSelectionTimeoutMS: 3000 });
 const db = client.db('startup');
 const collection = db.collection('user data');
 
@@ -41,7 +41,18 @@ export async function makeUser(username, password) {
 }
 
 export async function updateUser(user) {
-    collection.updateOne({username: user.username}, user);
+    collection.updateOne({ username: user.username }, { $set: {
+        password: user.password,
+        currentStreak: user.currentStreak,
+        highestStreak: user.highestStreak,
+        popVote: user.popVote,
+        unpopVote: user.unpopVote,
+        confirmVotes: user.confirmVotes,
+        notifications: user.notifications,
+        votedToday: user.votedToday,
+        userHistory: user.userHistory,
+        token: user.token
+    } });
 }
 
 export async function getUser(username) {

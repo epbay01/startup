@@ -39,13 +39,14 @@ export default function App() {
     async function getNewQuestion() {
         let cqvCopy = currentQuestionVotes;
         let qRes = new Object();
+        cqvCopy = new Object();
 
         fetch("/api/question")
             .then(async (res) => {
                 if (res.body !== "") {
                     qRes = await res.json();
                     qRes.answers.forEach(element => {
-                        delete cqvCopy[element];
+                        cqvCopy[element] = 0;
                     });
                 } else console.log("empty body");
             })
