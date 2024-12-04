@@ -14,6 +14,7 @@ export class WebSocketHandler {
 
     sendVote(vote) {
         let msg = JSON.stringify({ type: "vote", vote: vote });
+        console.log("sending vote: %s", msg);
         this.socket.send(msg);
     }
 }

@@ -201,13 +201,14 @@ wsServer.on("connection", (ws, req) => {
     console.log("new connection");
 
     ws.on("message", async (msg) => {
-        let parsedMsg = JSON.parse(msg);
+        let parsedMsg = JSON.parse(msg); // !!! TODO: make sure msg is valid JSON, check each step of the way (app, handler, here, db) !!!
+        console.log("received message: %s", msg);
         if (parsedMsg.type === "vote") {
-            console.log("received vote: %s", parsedVote.vote);
-            await db.handleVote(parsedVote.vote);
+            console.log("received vote: %s", parsedMsg.vote);
+            await db.handleVote(parsedMsg.vote);
             connections.forEach((c) => {
                 if (c.id != connection.id) {
-                    c.send(msg); // send vote to others
+                    c.ws.send(msg); // send vote to others
                 }
             });
         } else {

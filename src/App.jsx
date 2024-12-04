@@ -35,6 +35,7 @@ export default function App() {
         token: ""
     });
     const [techyPhrase, setTechyPhrase] = React.useState("Programming is pretty neat.");
+    const [wsHandler, setWsHandler] = React.useState();
 
 
     async function getNewQuestion() {
@@ -66,6 +67,9 @@ export default function App() {
     
     async function handleVote(ans) {
         if (!currentUserObject.votedToday) {
+            wsHandler.sendVote(ans); // replaces vote api
+
+            // the rest of this is for the user vote history
             console.log(ans);
             setVoted(true);
             let temp = currentQuestionVotes;
@@ -90,12 +94,12 @@ export default function App() {
             })
                 .catch((err) => console.log(err));
 
-            // push to vote api, will update current/history
-            fetch(`/api/vote/${strDate}`, {
-                method: "PUT",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(temp)
-            })
+        //     // push to vote api, will update current/history
+        //     fetch(`/api/vote/${strDate}`, {
+        //         method: "PUT",
+        //         headers: {"Content-Type": "application/json"},
+        //         body: JSON.stringify(temp)
+        //     })
         } else {
             console.log("already voted today");
         }
@@ -176,8 +180,8 @@ export default function App() {
 
     React.useEffect(() => {
         async function f() {
-            let wsHandler = new WebSocketHandler(); // to test
             await getNewQuestion();
+            setWsHandler(new WebSocketHandler());
             let techRes = await fetch("https://techy-api.vercel.app/api/json");
             let techy = await techRes.json();
             setTechyPhrase(`"${techy.message}."`);

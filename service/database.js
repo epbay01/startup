@@ -78,7 +78,9 @@ export async function deleteUser(user) {
 }
 
 export async function handleVote(vote) {
-    let voteObj = await db.collection('today votes').findOne({_id: voteDataID});
+    //let voteObj = await db.collection('today votes').findOne({_id: voteDataID});
+    let voteObj = await db.collection('today votes').findOne({});
+    console.log(JSON.stringify(voteObj));
     if (voteObj[vote] == undefined || voteObj[vote] == null) {
         voteObj[vote] = 0;
     }
