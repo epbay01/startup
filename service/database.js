@@ -7,7 +7,7 @@ const url = `mongodb+srv://${dbConfig.username}:${dbConfig.password}@${dbConfig.
 const client = new MongoClient(url, { tls: true, serverSelectionTimeoutMS: 3000 });
 const db = client.db('startup');
 const collection = db.collection('user data');
-const voteDataID= "";
+let voteDataID = "";
 
 // makeUser(username, password) creates a new user with the given username and password
 // updateUser(user) updates the user in the database
@@ -21,6 +21,10 @@ const voteDataID= "";
 })().catch((ex) => {
     console.log(`Unable to connect to database with ${url} because ${ex.message}`);
     process.exit(1);
+}).then(async () => {
+    let temp = await db.collection('today votes').findOne({});
+    voteDataID = temp._id.toString();
+    console.log("Connected to database, voteDataID is " + voteDataID);
 });
 
 export async function makeUser(username, password) {
@@ -74,7 +78,24 @@ export async function deleteUser(user) {
 }
 
 export async function handleVote(vote) {
-    let voteObj = db.collection('today votes').findOne({_id: voteDataID});
-    // not implemented
+    let voteObj = await db.collection('today votes').findOne({_id: voteDataID});
+    if (voteObj[vote] == undefined || voteObj[vote] == null) {
+        voteObj[vote] = 0;
+    }
+    voteObj[vote]++;
+    return voteObj;
+}
+
+export async function clearVotes() {
+    let voteObj = await db.collection('today votes').findOne({_id: voteDataID});
+    Object.keys(voteObj).forEach(key => {
+        if (key != "_id") {
+            delete voteObj[key];
+        }
+    });
+    await db.collection('today votes').updateOne(
+        { _id: voteDataID },
+        { $set: voteObj }
+    );
     return voteObj;
 }

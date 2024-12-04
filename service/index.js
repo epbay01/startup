@@ -2,13 +2,13 @@ import express from "express";
 import cors from "cors";
 import bcrypt from "bcrypt";
 import cookieParser from "cookie-parser";
-import * as questionsJson from "./public/Misc/questions.json" assert { type: "json" }; // change later
+import * as questionsJson from "../public/Misc/questions.json" assert { type: "json" }; // change later
 import * as db from "./database.js";
 import path from "path";
 import { WebSocketServer } from "ws";
 
 //import { Question } from "../src/questionClass.js";
-// import was causing a problem
+// import was causing a problem so i copied the class here
 class Question {
     constructor(question = "", answers = []) {
         this.question = question;
