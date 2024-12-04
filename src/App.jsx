@@ -7,6 +7,7 @@ import Vote from "./vote/vote.jsx";
 import UnknownPath from "./unknown.jsx";
 
 import { Question } from "./questionClass.js";
+import { WebSocketHandler } from "./websocketHandling.js";
 
 import "./style.css";
 import "./login/login-style.css";
@@ -175,6 +176,7 @@ export default function App() {
 
     React.useEffect(() => {
         async function f() {
+            let wsHandler = new WebSocketHandler(); // to test
             await getNewQuestion();
             let techRes = await fetch("https://techy-api.vercel.app/api/json");
             let techy = await techRes.json();

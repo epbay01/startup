@@ -6,6 +6,7 @@ import * as questionsJson from "../public/Misc/questions.json" assert { type: "j
 import * as db from "./database.js";
 import path from "path";
 import { WebSocketServer } from "ws";
+import * as uuid from "uuid";
 
 //import { Question } from "../src/questionClass.js";
 // import was causing a problem so i copied the class here
@@ -25,7 +26,7 @@ class Question {
 const app = express();
 
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
-app.listen(port);
+let http = app.listen(port);
 
 app.use(express.static('public'));
 app.use(express.json());
@@ -169,7 +170,8 @@ apiRouter.get("/vote/all", (req, res, next) => {
 
 // Return the application's default page if the path is unknown (from simon code)
 app.use((_req, res) => {
-    res.sendFile(path.resolve("ndex.html", { root: "public" }));
+    //res.sendFile(path.resolve("index.html", { root: "public" }));
+    res.sendFile(path.resolve("../index.html")); // change later
 });
 
 
@@ -185,8 +187,8 @@ function setCookie(res, token) {
 const wsServer = new WebSocketServer({ noServer: true });
 
 // upgrade event listener
-wsServer.on("upgrade", (request, socket, head) => {
-    wsServer.handleUpgrade(request, socket, head, (ws) => {
+http.on("upgrade", (request, socket, head) => {
+    wsServer.handleUpgrade(request, socket, head, function done(ws) {
         wsServer.emit("connection", ws, request);
     });
 });
@@ -194,22 +196,45 @@ wsServer.on("upgrade", (request, socket, head) => {
 let connections = [];
 
 wsServer.on("connection", (ws, req) => {
-    connections.push(ws);
+    const connection = { ws: ws, alive: true, id: uuid.v4() };
+    connections.push(connection);
     console.log("new connection");
 
-    ws.on("vote", async (vote) => {
-        let parsedVote = JSON.parse(vote);
-        console.log("received vote: %s", parsedVote.vote);
-        await db.handleVote(parsedVote.vote);
-        connections.forEach((c) => {
-            if (c != ws) {
-                c.send(vote); // send vote to others
-            }
-        });
+    ws.on("message", async (msg) => {
+        let parsedMsg = JSON.parse(msg);
+        if (parsedMsg.type === "vote") {
+            console.log("received vote: %s", parsedVote.vote);
+            await db.handleVote(parsedVote.vote);
+            connections.forEach((c) => {
+                if (c.id != connection.id) {
+                    c.send(msg); // send vote to others
+                }
+            });
+        } else {
+            console.log("unknown message type");
+        }
     });
 
     ws.on("close", () => {
         console.log("connection closed");
         connections = connections.filter((conn) => conn != ws); // gets rid of connection
     });
+
+    // Respond to pong messages by marking the connection alive
+    ws.on('pong', () => {
+        connection.alive = true;
+      });
 });
+
+// Keep active connections alive
+setInterval(() => {
+    connections.forEach((c) => {
+      // Kill any connection that didn't respond to the ping last time
+      if (!c.alive) {
+        c.ws.terminate();
+      } else {
+        c.alive = false;
+        c.ws.ping();
+      }
+    });
+  }, 10000);

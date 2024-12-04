@@ -1,6 +1,7 @@
-class WebSocketHandler {
+export class WebSocketHandler {
     constructor() {
         const port = window.location.port;
+        //const port = 4000;
         const protocol = window.location.protocol == "https:" ? "wss" : "ws";
         this.socket = new WebSocket(`${protocol}://${window.location.hostname}:${port}/ws`);
         this.socket.onopen = () => {
@@ -12,7 +13,7 @@ class WebSocketHandler {
     }
 
     sendVote(vote) {
-        let msg = { type: "vote", vote: vote };
+        let msg = JSON.stringify({ type: "vote", vote: vote });
         this.socket.send(msg);
     }
 }
