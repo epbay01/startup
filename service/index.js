@@ -198,17 +198,18 @@ wsServer.on("connection", (ws, req) => {
     console.log("new connection");
 
     ws.on("vote", async (vote) => {
-        console.log("received vote: %s", vote);
-        await db.handleVote(vote);
+        let parsedVote = JSON.parse(vote);
+        console.log("received vote: %s", parsedVote.vote);
+        await db.handleVote(parsedVote.vote);
         connections.forEach((c) => {
             if (c != ws) {
-                c.send(vote); // send vote and front end will modify local state
+                c.send(vote); // send vote to others
             }
         });
     });
 
     ws.on("close", () => {
         console.log("connection closed");
-        connections = connections.filter((conn) => conn != ws);
+        connections = connections.filter((conn) => conn != ws); // gets rid of connection
     });
 });
