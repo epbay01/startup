@@ -7,11 +7,13 @@ const url = `mongodb+srv://${dbConfig.username}:${dbConfig.password}@${dbConfig.
 const client = new MongoClient(url, { tls: true, serverSelectionTimeoutMS: 3000 });
 const db = client.db('startup');
 const collection = db.collection('user data');
+const voteDataID= "";
 
 // makeUser(username, password) creates a new user with the given username and password
 // updateUser(user) updates the user in the database
 // getUser(username) returns the user with the username
 // deleteUser(user) deletes the user
+// getVotes() returns today's vote object
 
 (async function testConnection() {
     await client.connect();
@@ -69,4 +71,10 @@ export async function getAllUsers() {
 
 export async function deleteUser(user) {
     collection.delete({username: user.username});
+}
+
+export async function handleVote(vote) {
+    let voteObj = db.collection('today votes').findOne({_id: voteDataID});
+    // not implemented
+    return voteObj;
 }

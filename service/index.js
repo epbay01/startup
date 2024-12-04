@@ -1,8 +1,13 @@
-//import { Question } from "../src/questionClass.js";
+import express from "express";
+import cors from "cors";
+import bcrypt from "bcrypt";
+import cookieParser from "cookie-parser";
 import * as questionsJson from "./public/Misc/questions.json" assert { type: "json" }; // change later
 import * as db from "./database.js";
 import path from "path";
+import { WebSocketServer } from "ws";
 
+//import { Question } from "../src/questionClass.js";
 // import was causing a problem
 class Question {
     constructor(question = "", answers = []) {
@@ -16,11 +21,6 @@ class Question {
         }
     }
 }
-
-import express from "express";
-import cors from "cors";
-import bcrypt from "bcrypt";
-import cookieParser from "cookie-parser";
 
 const app = express();
 
@@ -177,3 +177,38 @@ app.use((_req, res) => {
 function setCookie(res, token) {
     res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "strict", path: "/" });
 }
+
+
+// WEBSOCKET
+
+// Websocket server
+const wsServer = new WebSocketServer({ noServer: true });
+
+// upgrade event listener
+wsServer.on("upgrade", (request, socket, head) => {
+    wsServer.handleUpgrade(request, socket, head, (ws) => {
+        wsServer.emit("connection", ws, request);
+    });
+});
+
+let connections = [];
+
+wsServer.on("connection", (ws, req) => {
+    connections.push(ws);
+    console.log("new connection");
+
+    ws.on("vote", async (vote) => {
+        console.log("received vote: %s", vote);
+        await db.handleVote(vote);
+        connections.forEach((c) => {
+            if (c != ws) {
+                c.send(vote); // send vote and front end will modify local state
+            }
+        });
+    });
+
+    ws.on("close", () => {
+        console.log("connection closed");
+        connections = connections.filter((conn) => conn != ws);
+    });
+});
