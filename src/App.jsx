@@ -67,14 +67,14 @@ export default function App() {
     
     async function handleVote(ans) {
         if (!currentUserObject.votedToday) {
-            wsHandler.sendVote(ans); // replaces vote api, sends to all users
+            await wsHandler.sendVote(ans); // replaces vote api, sends to all users
             
 
             // the rest of this is for the user vote history and local vars
             console.log(ans);
             setVoted(true);
             let temp = currentQuestionVotes;
-            temp[ans]++;
+            await fetch(`/api/vote/current`).then(async (res) => temp = await res.json());
             setCurrentQuestionVotes(temp);
             console.log("current question votes: " + JSON.stringify(temp));
             let now = new Date();
@@ -182,7 +182,7 @@ export default function App() {
     React.useEffect(() => {
         async function f() {
             await getNewQuestion();
-            setWsHandler(new WebSocketHandler(currentQuestionVotes, setCurrentQuestionVotes));
+            setWsHandler(new WebSocketHandler(setCurrentQuestionVotes));
             let techRes = await fetch("https://techy-api.vercel.app/api/json");
             let techy = await techRes.json();
             setTechyPhrase(`"${techy.message}."`);

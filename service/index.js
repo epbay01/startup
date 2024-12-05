@@ -52,8 +52,9 @@ post /api/auth/logout
 
 get /api/question
 
-put /api/vote/:dateString
+// put /api/vote/:dateString
 get /api/vote/all
+get /api/vote/current
 */
 
 // user data apis are on path /api/user/..., includes post, put, delete, get, and get for all
@@ -163,7 +164,13 @@ apiRouter.get("/question", (req, res, next) => {
 apiRouter.get("/vote/all", (req, res, next) => {
     voteHistory = db.getVoteHistory();
     res.status(200).set("Content-Type", "application/json").send(voteHistory);
-})
+});
+
+apiRouter.get("/vote/current", async (req, res, next) => {
+    let votes = await db.getVotes(currentQuestion);
+    delete votes["_id"];
+    res.status(200).set("Content-Type", "application/json").send(votes);
+});
 
 
 // Return the application's default page if the path is unknown (from simon code)

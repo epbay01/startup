@@ -110,6 +110,10 @@ export async function handleVote(vote) {
     return voteObj;
 }
 
+export async function getVotes() {
+    return await db.collection('today votes').findOne({"_id": ObjectId(voteDataID)});
+}
+
 export async function clearVotes(question) {
     let voteObj = await db.collection('today votes').findOne({"_id": ObjectId(voteDataID)});
     let dateString = new Date().getMonth() + "." + new Date().getDate() + "." + new Date().getFullYear();

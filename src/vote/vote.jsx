@@ -104,7 +104,7 @@ function ResultsTable ({ currentQuestionVotes, voted }) {
     const [row2, setRow2] = React.useState([]);
     const [row3, setRow3] = React.useState([]);
 
-    React.useEffect(() => {
+    function getResultsRows() {
         let tempRow1 = [];
         let tempRow2 = [];
         let tempRow3 = [];
@@ -123,7 +123,15 @@ function ResultsTable ({ currentQuestionVotes, voted }) {
         setRow2(tempRow2);
         setRow3(tempRow3);
         return;
-    }, [voted])
+    }
+
+    React.useEffect(() => { // get results rows when voted
+        getResultsRows();
+    }, [voted]);
+
+    React.useEffect(() => { // update with cqv
+        getResultsRows();
+    }, [currentQuestionVotes]);
 
     if (!voted) {
         return;

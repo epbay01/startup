@@ -8,7 +8,7 @@ export class WebSocketHandler {
     - double check ws is working (websocketHandling.js)
     */
 
-    constructor(currentVotes, setCurrentVotes) {
+    constructor(setCurrentVotes) {
         const port = window.location.port;
         //const port = 4000;
         const protocol = window.location.protocol == "https:" ? "wss" : "ws";
@@ -17,7 +17,7 @@ export class WebSocketHandler {
             console.log("Connected to websocket");
         };
 
-        this.socket.onmessage = (msg) => {
+        this.socket.onmessage = async (msg) => {
             const msgObj = JSON.parse(msg.data);
             console.log("Received message: %s", JSON.stringify(msgObj));
             switch (msgObj.type) {
@@ -25,11 +25,8 @@ export class WebSocketHandler {
                     this.socket.send("pong");
                     break;
                 case "vote": // get a vote from another user
-                    let newVotes = currentVotes;
-                    if (newVotes[msgObj.vote] === undefined || newVotes[msgObj.vote] === null) {
-                        newVotes[msgObj.vote] = 0;
-                    }
-                    newVotes[msgObj.vote]++;
+                    let newVotes = {};
+                    await fetch("/api/vote/current").then(async (res) => newVotes = await res.json());
                     setCurrentVotes(newVotes);
             }
         };
@@ -39,7 +36,7 @@ export class WebSocketHandler {
         };
     }
 
-    sendVote(vote) {
+    async sendVote(vote) {
         let msg = JSON.stringify({ type: "vote", vote: vote });
         console.log("sending vote: %s", msg);
         this.socket.send(msg);
