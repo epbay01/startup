@@ -1,8 +1,8 @@
 export class WebSocketHandler {
     /*
     TODO:
-    - make the frontend reset daily (index.js)
-    - make the question universally the same (index.js and mostly app.jsx)
+    - make the frontend reset daily (index.js) DONE!
+    - make the question universally the same (index.js and mostly app.jsx) back DONE! front not
     - i drastically changed the vote history apis, so adjust accordingly on frontend (app.jsx)
     - fix the reload bug (app.jsx??)
     - double check ws is working (websocketHandling.js)
@@ -18,17 +18,18 @@ export class WebSocketHandler {
         };
 
         this.socket.onmessage = (msg) => {
-            console.log("Received message: %s", msg.data);
-            switch (msg.data) {
+            const msgObj = JSON.parse(msg.data);
+            console.log("Received message: %s", JSON.stringify(msgObj));
+            switch (msgObj.type) {
                 case "ping":
                     this.socket.send("pong");
                     break;
                 case "vote": // get a vote from another user
                     let newVotes = currentVotes;
-                    if (currentVotes[msg.data.vote] === undefined || currentVotes[msg.data.vote] === null) {
-                        newVotes[msg.data.vote] = 0;
+                    if (newVotes[msgObj.vote] === undefined || newVotes[msgObj.vote] === null) {
+                        newVotes[msgObj.vote] = 0;
                     }
-                    newVotes[msg.data.vote]++;
+                    newVotes[msgObj.vote]++;
                     setCurrentVotes(newVotes);
             }
         };

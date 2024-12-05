@@ -183,9 +183,9 @@ export async function dailyReset() {
 function getQuestion() {
     let questionArray = [...questionsJson.default.questionArray];
     let q = new Question("", []);
-    console.log(questionArray.length);
+    //console.log(questionArray.length);
     q = questionArray[Math.floor(Math.random() * questionArray.length)];
-    console.log(q);
+    console.log("new question:\n" + JSON.stringify(q));
     return q;
 }
 
@@ -223,7 +223,7 @@ wsServer.on("connection", (ws, req) => {
             //await db.getVotes(parsedMsg.question); // add question to msg so we can get the votes for it
             connections.forEach((c) => {
                 if (c.id != connection.id) {
-                    c.ws.send(msg); // send vote to others
+                    c.ws.send(JSON.stringify({ type: "vote", vote: parsedMsg.vote })); // send vote to others
                 }
             });
         } else {

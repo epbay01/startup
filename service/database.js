@@ -75,6 +75,25 @@ export async function getAllUsers() {
     return await collection.find().toArray();
 }
 
+export async function dailyResetUsers() {
+    let users = await getAllUsers();
+    users.forEach(async (user) => {
+        user.votedToday = false;
+        if (user.currentStreak > user.highestStreak) {
+            user.highestStreak = user.currentStreak;
+        }
+        let userVote = user.voteHistory[new Date().getMonth() + "." + new Date().getDate() + "." + new Date().getFullYear()];
+        let voteNum = getVotesForQuestion(userVote[0])[userVote[1]];
+        if (voteNum > user.popVote) {
+            user.popVote = voteNum;
+        }
+        if (voteNum < user.unpopVote || user.unpopVote == 0) {
+            user.unpopVote = voteNum;
+        }
+        await updateUser(user);
+    });
+}
+
 export async function deleteUser(user) {
     collection.delete({username: user.username});
 }
@@ -82,11 +101,11 @@ export async function deleteUser(user) {
 export async function handleVote(vote) {
     let voteObj = await db.collection('today votes').findOne({"_id": ObjectId(voteDataID)});
     //let voteObj = await db.collection('today votes').findOne({});
-    console.log("voteObj in db:" + JSON.stringify(voteObj));
     if (voteObj[vote] == undefined || voteObj[vote] == null) {
         voteObj[vote] = 0;
     }
     voteObj[vote]++;
+    console.log("voteObj:" + JSON.stringify(voteObj));
     await db.collection('today votes').updateOne({"_id": ObjectId(voteDataID)}, { $set: voteObj });
     return voteObj;
 }
@@ -110,16 +129,13 @@ export async function clearVotes(question) {
 }
 
 export async function getVotesForQuestion(question) {
-    let voteObj = await db.collection('today votes').findOne({});
-    let voteReturnObj = new Object();
-    question.answers.forEach(answer => {
-        if (voteObj[answer] == undefined || voteObj[answer] == null) {
-            voteReturnObj[answer] = 0;
-        } else {
-            voteReturnObj[answer] = voteObj[answer];
+    let voteHistory = getVoteHistory();
+    for (i in voteHistory) {
+        if (Object.keys(voteHistory[i]) == question.answers) {
+            return voteHistory[i];
         }
-    });
-    return voteReturnObj;
+    }
+    return null;
 }
 
 export async function getVoteHistory(date = "all") {
