@@ -38,6 +38,7 @@ var apiRouter = express.Router();
 app.use(`/api`, apiRouter);
 
 let voteHistory = new Object();
+let currentQuestion = new Question();
 
 /*
 APIs:
@@ -143,27 +144,24 @@ apiRouter.get("/test/:test", (req, res, next) => {
 
 // api that gets a random question from questions.json
 apiRouter.get("/question", (req, res, next) => {
-    let questionArray = [...questionsJson.default.questionArray];
-    let q = new Question("", []);
-    console.log(questionArray.length);
-    q = questionArray[Math.floor(Math.random() * questionArray.length)];
-    console.log(q);
-    res.status(200).set("Content-Type", "application/json").send(q);
+    res.status(200).set("Content-Type", "application/json").send(currentQuestion);
 });
 
 
 // vote history apis
-apiRouter.put("/vote/:dateString", (req, res, next) => {
-    if (req.params.dateString in voteHistory) {
-        voteHistory[req.params.dateString] = req.body;
-        res.status(200).send();
-    } else {
-        voteHistory[req.params.dateString] = req.body;
-        res.status(201).send();
-    }
-});
+// will do in backend
+// apiRouter.put("/vote/:dateString", (req, res, next) => {
+//     if (req.params.dateString in voteHistory) {
+//         voteHistory[req.params.dateString] = req.body;
+//         res.status(200).send();
+//     } else {
+//         voteHistory[req.params.dateString] = req.body;
+//         res.status(201).send();
+//     }
+// });
 
 apiRouter.get("/vote/all", (req, res, next) => {
+    voteHistory = db.getVoteHistory();
     res.status(200).set("Content-Type", "application/json").send(voteHistory);
 })
 
@@ -174,6 +172,22 @@ app.use((_req, res) => {
     res.sendFile(path.resolve("../index.html")); // change later
 });
 
+
+export async function dailyReset() {
+    currentQuestion = getQuestion();
+    await db.clearVotes(currentQuestion);
+}
+
+
+// getQuestion returns a random question from questions.json
+function getQuestion() {
+    let questionArray = [...questionsJson.default.questionArray];
+    let q = new Question("", []);
+    console.log(questionArray.length);
+    q = questionArray[Math.floor(Math.random() * questionArray.length)];
+    console.log(q);
+    return q;
+}
 
 // setCookie sets the cookie with the token
 function setCookie(res, token) {
@@ -243,6 +257,6 @@ setInterval(() => {
 
 
 // every day do the things
-// setInterval(async () => {
-//     await db.resetVotes();
-// }, 86400000); // 24 hours in milliseconds
+setInterval(async () => {
+    await dailyReset();
+}, 86400000); // 24 hours in milliseconds

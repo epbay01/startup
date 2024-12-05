@@ -2,6 +2,7 @@ import { MongoClient, ObjectId } from 'mongodb';
 import bcrypt from 'bcrypt';
 import * as uuid from 'uuid';
 import dbConfig from "./dbConfig.json" assert { type: "json" };
+import { dailyReset } from './index.js';
 
 const url = `mongodb+srv://${dbConfig.username}:${dbConfig.password}@${dbConfig.hostname}`
 const client = new MongoClient(url, { tls: true, serverSelectionTimeoutMS: 3000 });
@@ -25,6 +26,7 @@ let voteDataID = "";
     let temp = await db.collection('today votes').findOne({});
     voteDataID = temp._id.toString();
     console.log("Connected to database, voteDataID is " + voteDataID);
+    await dailyReset();
 });
 
 export async function makeUser(username, password) {
@@ -89,21 +91,25 @@ export async function handleVote(vote) {
     return voteObj;
 }
 
-export async function clearVotes() {
+export async function clearVotes(question) {
     let voteObj = await db.collection('today votes').findOne({"_id": ObjectId(voteDataID)});
-    Object.keys(voteObj).forEach(key => {
+    let dateString = new Date().getMonth() + "." + new Date().getDate() + "." + new Date().getFullYear();
+    let temp = { [dateString]: voteObj };
+    delete temp[dateString]._id;
+    db.collection("vote history").insertOne(temp);
+    Object.keys(voteObj).forEach(async (key) => { // clear all votes
         if (key != "_id") {
-            delete voteObj[key];
+            await db.collection('today votes').updateOne({"_id": ObjectId(voteDataID)}, { $unset: { [key]: "" } });
         }
     });
-    await db.collection('today votes').updateOne(
-        { "_id": voteDataID },
-        { $set: voteObj }
-    );
+    question.answers.forEach(async (key) => { // set keys to answer: 0
+        await db.collection('today votes').updateOne({"_id": ObjectId(voteDataID)}, { $set: { [key]: 0 } });
+        voteObj[key] = 0;
+    });
     return voteObj;
 }
 
-export async function getVotes(question) {
+export async function getVotesForQuestion(question) {
     let voteObj = await db.collection('today votes').findOne({});
     let voteReturnObj = new Object();
     question.answers.forEach(answer => {
@@ -114,4 +120,12 @@ export async function getVotes(question) {
         }
     });
     return voteReturnObj;
+}
+
+export async function getVoteHistory(date = "all") {
+    if (date == "all") {
+        return await db.collection("vote history").find().toArray();
+    } else {
+        return await db.collection("vote history").findOne({ [date]: { $exists: true } });
+    }
 }
