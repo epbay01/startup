@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient, ObjectId } from 'mongodb';
 import bcrypt from 'bcrypt';
 import * as uuid from 'uuid';
 import dbConfig from "./dbConfig.json" assert { type: "json" };
@@ -78,26 +78,40 @@ export async function deleteUser(user) {
 }
 
 export async function handleVote(vote) {
-    //let voteObj = await db.collection('today votes').findOne({_id: voteDataID});
-    let voteObj = await db.collection('today votes').findOne({});
-    console.log(JSON.stringify(voteObj));
+    let voteObj = await db.collection('today votes').findOne({"_id": ObjectId(voteDataID)});
+    //let voteObj = await db.collection('today votes').findOne({});
+    console.log("voteObj in db:" + JSON.stringify(voteObj));
     if (voteObj[vote] == undefined || voteObj[vote] == null) {
         voteObj[vote] = 0;
     }
     voteObj[vote]++;
+    await db.collection('today votes').updateOne({"_id": ObjectId(voteDataID)}, { $set: voteObj });
     return voteObj;
 }
 
 export async function clearVotes() {
-    let voteObj = await db.collection('today votes').findOne({_id: voteDataID});
+    let voteObj = await db.collection('today votes').findOne({"_id": ObjectId(voteDataID)});
     Object.keys(voteObj).forEach(key => {
         if (key != "_id") {
             delete voteObj[key];
         }
     });
     await db.collection('today votes').updateOne(
-        { _id: voteDataID },
+        { "_id": voteDataID },
         { $set: voteObj }
     );
     return voteObj;
+}
+
+export async function getVotes(question) {
+    let voteObj = await db.collection('today votes').findOne({});
+    let voteReturnObj = new Object();
+    question.answers.forEach(answer => {
+        if (voteObj[answer] == undefined || voteObj[answer] == null) {
+            voteReturnObj[answer] = 0;
+        } else {
+            voteReturnObj[answer] = voteObj[answer];
+        }
+    });
+    return voteReturnObj;
 }
