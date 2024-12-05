@@ -1,5 +1,5 @@
 export class WebSocketHandler {
-    constructor() {
+    constructor(currentVotes, setCurrentVotes) {
         const port = window.location.port;
         //const port = 4000;
         const protocol = window.location.protocol == "https:" ? "wss" : "ws";
@@ -8,8 +8,20 @@ export class WebSocketHandler {
             console.log("Connected to websocket");
         };
 
-        this.socket.onmessage = (event) => {
-            console.log("Received message: %s", event.data);
+        this.socket.onmessage = (msg) => {
+            console.log("Received message: %s", msg.data);
+            switch (msg.data) {
+                case "ping":
+                    this.socket.send("pong");
+                    break;
+                case "vote": // get a vote from another user
+                    let newVotes = currentVotes;
+                    if (currentVotes[msg.data.vote] === undefined || currentVotes[msg.data.vote] === null) {
+                        newVotes[msg.data.vote] = 0;
+                    }
+                    newVotes[msg.data.vote]++;
+                    setCurrentVotes(newVotes);
+            }
         };
 
         this.socket.onclose = () => {

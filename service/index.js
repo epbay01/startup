@@ -211,7 +211,6 @@ wsServer.on("connection", (ws, req) => {
                 if (c.id != connection.id) {
                     c.ws.send(msg); // send vote to others
                 }
-                // send current vote count to all
             });
         } else {
             console.log("unknown message type");
@@ -241,3 +240,9 @@ setInterval(() => {
       }
     });
   }, 10000);
+
+
+// every day do the things
+// setInterval(async () => {
+//     await db.resetVotes();
+// }, 86400000); // 24 hours in milliseconds
