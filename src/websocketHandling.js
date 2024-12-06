@@ -1,13 +1,4 @@
 export class WebSocketHandler {
-    /*
-    TODO:
-    - make the frontend reset daily (index.js) DONE!
-    - make the question universally the same (index.js and mostly app.jsx) DONE!
-    - i drastically changed the vote history apis, so adjust accordingly on frontend (app.jsx)
-    - fix the reload bug (app.jsx??)
-    - double check ws is working (websocketHandling.js)
-    */
-
     constructor(setCurrentVotes) {
         this.setCurrentVotes = setCurrentVotes;
 
