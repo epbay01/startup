@@ -78,17 +78,30 @@ export async function getAllUsers() {
 export async function dailyResetUsers() {
     let users = await getAllUsers();
     users.forEach(async (user) => {
-        user.votedToday = false;
+        // streak logic
         if (user.currentStreak > user.highestStreak) {
             user.highestStreak = user.currentStreak;
         }
-        let userVote = user.voteHistory[new Date().getMonth() + "." + new Date().getDate() + "." + new Date().getFullYear()];
-        let voteNum = getVotesForQuestion(userVote[0])[userVote[1]];
-        if (voteNum > user.popVote) {
-            user.popVote = voteNum;
+        if (!user.votedToday) {
+            user.currentStreak = 0;
         }
-        if (voteNum < user.unpopVote || user.unpopVote == 0) {
-            user.unpopVote = voteNum;
+
+        // vote logic (popVote, unpopVote)
+        user.votedToday = false;
+        let userVote = null;
+        try {
+            userVote = user.userHistory[new Date().getMonth() + "." + new Date().getDate() + "." + new Date().getFullYear()].toArray();
+        } catch {
+            userVote = null;
+        }
+        if (userVote !== null) {
+            let voteNum = getVotesForQuestion(userVote[0])[userVote[1]];
+            if (voteNum > user.popVote) {
+                user.popVote = voteNum;
+            }
+            if (voteNum < user.unpopVote || user.unpopVote == 0) {
+                user.unpopVote = voteNum;
+            }
         }
         await updateUser(user);
     });

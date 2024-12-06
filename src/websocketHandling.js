@@ -9,6 +9,8 @@ export class WebSocketHandler {
     */
 
     constructor(setCurrentVotes) {
+        this.setCurrentVotes = setCurrentVotes;
+
         const port = window.location.port;
         //const port = 4000;
         const protocol = window.location.protocol == "https:" ? "wss" : "ws";
@@ -27,7 +29,9 @@ export class WebSocketHandler {
                 case "vote": // get a vote from another user
                     let newVotes = {};
                     await fetch("/api/vote/current").then(async (res) => newVotes = await res.json());
-                    setCurrentVotes(newVotes);
+                    console.log("recieved: %s", JSON.stringify(newVotes));
+                    this.setCurrentVotes((s) => newVotes);
+                    break;
             }
         };
 
@@ -40,5 +44,10 @@ export class WebSocketHandler {
         let msg = JSON.stringify({ type: "vote", vote: vote });
         console.log("sending vote: %s", msg);
         this.socket.send(msg);
+
+        let newVotes = {};
+        await fetch("/api/vote/current").then(async (res) => newVotes = await res.json());
+        console.log("recieved: %s", JSON.stringify(newVotes));
+        setCurrentVotes(newVotes);
     }
 }

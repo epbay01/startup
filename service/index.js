@@ -76,7 +76,7 @@ apiRouter.put("/user/update", async (req, res, next) => {
         console.log(req.body.username + " found!");
         if (req.cookies.token == user.token) {
             await db.updateUser(req.body);
-            console.log(`${req.body.user} is now updated`);
+            console.log(`${req.body.username} data is now updated`);
             res.status(200).send();
         } else {
             res.status(401).send(); // unauthorized to update user
@@ -169,6 +169,7 @@ apiRouter.get("/vote/all", (req, res, next) => {
 apiRouter.get("/vote/current", async (req, res, next) => {
     let votes = await db.getVotes(currentQuestion);
     delete votes["_id"];
+    console.log("sending votes: " + JSON.stringify(votes));
     res.status(200).set("Content-Type", "application/json").send(votes);
 });
 
@@ -183,6 +184,7 @@ app.use((_req, res) => {
 export async function dailyReset() {
     currentQuestion = getQuestion();
     await db.clearVotes(currentQuestion);
+    await db.dailyResetUsers();
 }
 
 

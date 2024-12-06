@@ -213,12 +213,7 @@ export default function App() {
             }
         }
         f();
-    }, [])
-
-    // React.useEffect(() => { // TEMPORARY!!!
-    //     let f = async () => {return await getNewQuestion()}
-    //     voted ? setQuestion(f()) : 0;
-    // }, [voted]);
+    }, []);
 
 
     function Nav({path}) {
