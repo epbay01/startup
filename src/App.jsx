@@ -78,7 +78,7 @@ export default function App() {
             setCurrentQuestionVotes(temp);
             console.log("current question votes: " + JSON.stringify(temp));
             let now = new Date();
-            let strDate = `${now.getMonth()}.${now.getDay()}.${now.getFullYear()}`;
+            let strDate = `${now.getMonth() + 1}.${now.getDate()}.${now.getFullYear()}`;
 
             let cuo = currentUserObject;
             cuo.userHistory[strDate] = [question.question, ans];
@@ -182,35 +182,12 @@ export default function App() {
     React.useEffect(() => {
         async function f() {
             await getNewQuestion();
+            let cqv = await (await fetch("/api/vote/current")).json();
+            setCurrentQuestionVotes(cqv);
             setWsHandler(new WebSocketHandler(setCurrentQuestionVotes));
             let techRes = await fetch("https://techy-api.vercel.app/api/json");
             let techy = await techRes.json();
             setTechyPhrase(`"${techy.message}."`);
-
-            let now = new Date();
-            let userDB = [];
-            if (now.getHours() === 0 && now.getMinutes() === 0 && now.getMilliseconds() === 0) {
-                setVoted(false);
-                await getNewQuestion();
-    
-                fetch(`/api/user/all`)
-                    .then(async (res) => {
-                        if (res.status !== 404 || res.status !== 401) {
-                            userDB = await res.json();
-                        } else userDB = null;
-                    });
-                console.log(`userDB = ${userDB}`);
-                if (userDB !== null) {
-                    userDB.data.forEach(async (user) => {
-                        let temp = userDB[user];
-                        fetch(`/api/user/update`, {
-                            method: "PUT",
-                            headers: {"Content-Type": "application/json"},
-                            body: JSON.stringify(temp)
-                        })
-                    })
-                }
-            }
         }
         f();
     }, []);

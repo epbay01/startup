@@ -52,9 +52,11 @@ post /api/auth/logout
 
 get /api/question
 
-// put /api/vote/:dateString
+get /api/vote/:dateString
 get /api/vote/all
 get /api/vote/current
+
+get /api/forereset
 */
 
 // user data apis are on path /api/user/..., includes post, put, delete, get, and get for all

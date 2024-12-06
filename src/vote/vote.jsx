@@ -125,6 +125,10 @@ function ResultsTable ({ currentQuestionVotes, voted }) {
         return;
     }
 
+    React.useEffect(() => { // get results rows when component mounts
+        getResultsRows();
+    }, []);
+
     React.useEffect(() => { // get results rows when voted
         getResultsRows();
     }, [voted]);

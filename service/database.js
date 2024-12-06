@@ -90,7 +90,7 @@ export async function dailyResetUsers() {
         user.votedToday = false;
         let userVote = null;
         try {
-            userVote = user.userHistory[new Date().getMonth() + "." + new Date().getDate() + "." + new Date().getFullYear()].toArray();
+            userVote = user.userHistory[(new Date().getMonth() + 1).toString() + "." + new Date().getDate() + "." + new Date().getFullYear()].toArray();
         } catch {
             userVote = null;
         }
@@ -129,7 +129,7 @@ export async function getVotes() {
 
 export async function clearVotes(question) {
     let voteObj = await db.collection('today votes').findOne({"_id": ObjectId(voteDataID)});
-    let dateString = `${new Date().getMonth()}.${new Date().getDate()}.${new Date().getFullYear()}`;
+    let dateString = `${new Date().getMonth() + 1}.${new Date().getDate()}.${new Date().getFullYear()}`;
     console.log(dateString);
     let temp = { date: dateString, answers: voteObj };
     delete temp.answers._id;

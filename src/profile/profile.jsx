@@ -103,6 +103,9 @@ function VoteTable ({ currentUserObject }) {
                     answerArray.push(<p>{j}: {globalVotes[j]}<br/></p>);
                     //answerP.body += <p>{j}: {globalVotes[j]}<br/></p>;
                 }
+                if (answerArray.length === 0) {
+                    answerArray.push(<p>No data</p>);
+                }
 
                 tableElements.push(
                     <tr key={"vrt-row-" + i} className="vrt-data-row">
