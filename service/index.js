@@ -151,18 +151,19 @@ apiRouter.get("/question", (req, res, next) => {
 
 // vote history apis
 // will do in backend
-// apiRouter.put("/vote/:dateString", (req, res, next) => {
-//     if (req.params.dateString in voteHistory) {
-//         voteHistory[req.params.dateString] = req.body;
-//         res.status(200).send();
-//     } else {
-//         voteHistory[req.params.dateString] = req.body;
-//         res.status(201).send();
-//     }
-// });
+apiRouter.get("/vote/date/:dateString", async (req, res, next) => {
+    let dateString = req.params.dateString;
+    let votes = await db.getVoteHistory(dateString);
+    console.log(`votes at ${dateString}: ${JSON.stringify(votes)}`);
+    if (votes !== null && votes !== undefined) {
+        res.status(200).set("Content-Type", "application/json").send(votes.answers);
+    } else {
+        res.status(404).send();
+    }
+});
 
-apiRouter.get("/vote/all", (req, res, next) => {
-    voteHistory = db.getVoteHistory();
+apiRouter.get("/vote/all", async (req, res, next) => {
+    voteHistory = await db.getVoteHistory();
     res.status(200).set("Content-Type", "application/json").send(voteHistory);
 });
 
@@ -171,6 +172,12 @@ apiRouter.get("/vote/current", async (req, res, next) => {
     delete votes["_id"];
     console.log("sending votes: " + JSON.stringify(votes));
     res.status(200).set("Content-Type", "application/json").send(votes);
+});
+
+
+apiRouter.get("/forcereset", async (req, res, next) => {
+    await dailyReset();
+    res.status(200).send();
 });
 
 

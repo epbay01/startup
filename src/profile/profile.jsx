@@ -64,9 +64,8 @@ export default function Profile ({ handleLogin, currentUser, currentUserObject, 
                 <p>
                     Current streak: {currentUserObject.currentStreak} &#128293;<br/>
                     Highest streak: {currentUserObject.highestStreak} &#128293;<br/>
-                    Friend invites: 1<br/>
-                    Most popular vote: {currentUserObject.popVote}%<br/>
-                    Least popular vote: {currentUserObject.unpopVote}%
+                    Most popular vote: {currentUserObject.popVote}<br/>
+                    Least popular vote: {currentUserObject.unpopVote}
                 </p>
                 <h4>Settings</h4>
                 <div className="no-format" id="settings">
@@ -81,44 +80,51 @@ export default function Profile ({ handleLogin, currentUser, currentUserObject, 
 }
 
 function VoteTable ({ currentUserObject }) {
-    let tableElements = [];
-    let voteHistory = new Object();
+    const [voteHistory, setVoteHistory] = React.useState({});
+    const [tableElementsState, setTableElementsState] = React.useState([]);
 
     React.useEffect(() => {
         async function f() {
+            let tableElements = [];
             let res = await fetch("/api/vote/all");
-            voteHistory = await res.json();
+            setVoteHistory(await res.json());
             console.log("vote history = " + JSON.stringify(voteHistory));
+
+            let userHistory = new Object();
+            userHistory = currentUserObject.userHistory;
+            for (let i = 0; i < Object.keys(userHistory).length; i++) {
+                let q = userHistory[Object.keys(userHistory)[i]];
+
+                let globalVotes = {};
+                globalVotes = await getVoteCount(Object.keys(userHistory)[i]);
+                console.log("globalVotes: " + JSON.stringify(globalVotes));
+                let answerArray = [];
+                for (const j in globalVotes) {
+                    answerArray.push(<p>{j}: {globalVotes[j]}<br/></p>);
+                    //answerP.body += <p>{j}: {globalVotes[j]}<br/></p>;
+                }
+
+                tableElements.push(
+                    <tr key={"vrt-row-" + i} className="vrt-data-row">
+                        <td key={"vrt-date-" + i}>{Object.keys(userHistory)[i]}</td>
+                        <td key={"vrt-q-" + i}>{q[0]}</td>
+                        <td key={"vrt-res-" + i}>{q[1]}</td>
+                        <td key={"vrt-global-" + i}>{answerArray}</td>
+                    </tr>
+                )
+            }
+            setTableElementsState(tableElements);
         }
         f();
     }, []);
 
-    function getVoteCount(q) {
-        if (voteHistory[q] === undefined) return { "": 0 }
-        return voteHistory[q]; // returns subobject with answers and votes
-    }
-
-    let userHistory = new Object();
-    userHistory = currentUserObject.userHistory;
-    for (let i = 0; i < Object.keys(userHistory).length; i++) {
-        let q = userHistory[Object.keys(userHistory)[i]];
-
-        let answerStr = "";
-        for (let j = 0; j < Object.keys(getVoteCount(q)).length; j++) {
-            answerStr.concat(Object.keys(getVoteCount(q))[j]);
-            answerStr.concat(" ");
-            answerStr.concat(Object.values(getVoteCount(q))[j].toString());
-            answerStr.concat("\n");
+    async function getVoteCount(date) {
+        try {
+            let res = await fetch(`/api/vote/date/${date}`);
+            return await res.json();
+        } catch {
+            return {};
         }
-
-        tableElements.push(
-            <tr key={"vrt-row-" + i} className="vrt-data-row">
-                <td key={"vrt-date-" + i}>{Object.keys(userHistory)[i]}</td>
-                <td key={"vrt-q-" + i}>{q[0]}</td>
-                <td key={"vrt-res-" + i}>{q[1]}</td>
-                <td key={"vrt-global-" + i}>{answerStr}</td>
-            </tr>
-        )
     }
 
     return (
@@ -132,7 +138,7 @@ function VoteTable ({ currentUserObject }) {
                         <th>Your response</th>
                         <th>Total response</th>
                     </tr>
-                    {tableElements}
+                    {tableElementsState}
                 </tbody>
             </table>
         </div>

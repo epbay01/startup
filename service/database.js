@@ -129,9 +129,10 @@ export async function getVotes() {
 
 export async function clearVotes(question) {
     let voteObj = await db.collection('today votes').findOne({"_id": ObjectId(voteDataID)});
-    let dateString = new Date().getMonth() + "." + new Date().getDate() + "." + new Date().getFullYear();
-    let temp = { [dateString]: voteObj };
-    delete temp[dateString]._id;
+    let dateString = `${new Date().getMonth()}.${new Date().getDate()}.${new Date().getFullYear()}`;
+    console.log(dateString);
+    let temp = { date: dateString, answers: voteObj };
+    delete temp.answers._id;
     db.collection("vote history").insertOne(temp);
     Object.keys(voteObj).forEach(async (key) => { // clear all votes
         if (key != "_id") {
@@ -147,8 +148,9 @@ export async function clearVotes(question) {
 
 export async function getVotesForQuestion(question) {
     let voteHistory = getVoteHistory();
+    voteHistory.sort();
     for (i in voteHistory) {
-        if (Object.keys(voteHistory[i]) == question.answers) {
+        if (Object.values(voteHistory[i]) in question.answers) {
             return voteHistory[i];
         }
     }
@@ -159,6 +161,6 @@ export async function getVoteHistory(date = "all") {
     if (date == "all") {
         return await db.collection("vote history").find().toArray();
     } else {
-        return await db.collection("vote history").findOne({ [date]: { $exists: true } });
+        return await db.collection("vote history").findOne({date: date});
     }
 }
