@@ -107,3 +107,15 @@ Obviously, these are rough sketches and the specific design of the website would
 **Stores data and credentials in MongoDB:** All user data is stored in a Mongo database, including voter history, if you have voted already, etc. The user "user" HAS ALREADY VOTED! Currently the website does not reset daily, so you should use a different user
 
 **Restricts application based on auth:** This is done with both the frontend *and* the backend (no reason to change functional code). You can check this by noticing the cookies get set when logging in
+
+## Websocket
+
+**Backend listens for websocket connection**: This works!
+
+**Frontend listens for websocket connection**: When it connects, it says something in the console
+
+**Data sent over websocket**: All votes are sent over websocket, so they should update other pages
+
+**Websocket data displayed**: The votes in the table on the "Vote" page are all displayed in real time
+
+**All visible elements function**: This required some changes, but lots of old bugs are fixed and everything should work! Logging in does not take you to the vote page automatically anymore (it was causing problems), FYI. The biggest thing is the website should reset every 24 hours, and the user history table is all working!
