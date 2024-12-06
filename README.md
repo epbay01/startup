@@ -97,3 +97,13 @@ Obviously, these are rough sketches and the specific design of the website would
   - `/api/question` endpoint, which GETs a new question
 
 **Frontend Calls:** Each page has to call these endpoints, the `/api/user/` endpoints in particular, to get the data it needs to display. The question endpoint is called when you first open the page to get a question of the day, vote is called when you vote or look at the history on the profile page, and user is called all over the place.
+
+## Login service
+
+**User Registration**: Supports this through API /user/new
+
+**User Auth and Logout:** Acheived through APIs /auth/login and /auth/logout
+
+**Stores data and credentials in MongoDB:** All user data is stored in a Mongo database, including voter history, if you have voted already, etc. The user "user" HAS ALREADY VOTED! Currently the website does not reset daily, so you should use a different user
+
+**Restricts application based on auth:** This is done with both the frontend *and* the backend (no reason to change functional code). You can check this by noticing the cookies get set when logging in
