@@ -67,7 +67,7 @@ export default function App() {
     
     async function handleVote(ans) {
         if (!currentUserObject.votedToday) {
-            await wsHandler.sendVote(ans); // replaces vote api, sends to all users
+            await wsHandler.sendVote(ans, setCurrentQuestionVotes); // replaces vote api, sends to all users
             
 
             // the rest of this is for the user vote history and local vars

@@ -2,7 +2,7 @@ export class WebSocketHandler {
     /*
     TODO:
     - make the frontend reset daily (index.js) DONE!
-    - make the question universally the same (index.js and mostly app.jsx) back DONE! front not
+    - make the question universally the same (index.js and mostly app.jsx) DONE!
     - i drastically changed the vote history apis, so adjust accordingly on frontend (app.jsx)
     - fix the reload bug (app.jsx??)
     - double check ws is working (websocketHandling.js)
@@ -40,7 +40,7 @@ export class WebSocketHandler {
         };
     }
 
-    async sendVote(vote) {
+    async sendVote(vote, setCurrentVotes) {
         let msg = JSON.stringify({ type: "vote", vote: vote });
         console.log("sending vote: %s", msg);
         this.socket.send(msg);
@@ -48,6 +48,6 @@ export class WebSocketHandler {
         let newVotes = {};
         await fetch("/api/vote/current").then(async (res) => newVotes = await res.json());
         console.log("recieved: %s", JSON.stringify(newVotes));
-        setCurrentVotes(newVotes);
+        setCurrentVotes((s) => newVotes);
     }
 }
