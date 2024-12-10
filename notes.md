@@ -240,3 +240,91 @@ app.get("/api/hello", (req, res, next) => {
 This code, for example, would define an endpoint "/api/hello" that would, when requested with a GET request, return a JSON object with the key/value `msg: "hello"`. The `req` parameter of the inner function refers to the request, and the `res` refers to the response. `next` refers to the next function to be called if there are multiple matches. You also can do this with `next()`.
 
 Parameters for the function can also be passed in via URL. You do this by prefixing the parameter name with ":", for example "store/:storeName" would make it so the URL "store/provo" passes "provo" in as the storeName parameter. It is accessed in the code with `req.params.<parameter>`. Paths also can have wildcards or regex.
+
+## WebSocket, Auth, and MongoDB
+
+### MongoDB
+
+MongoDB is an online database. Databases are generally interfaced with through the backend. In Mongo, there are clusters and collections. You access them through object-like queries and something like the following:
+```
+const db = new MongoClient(`mongodb+srv://${userName}:${password}@${hostname}`);
+const collection = db.db("cluster").collection("collection");
+
+let answer = await collection.findOne({name: nameVar}); // there are many more query options
+```
+
+### Authentication
+
+With authentication, generally you set cookies to have a token (a random string of letters and numbers) that you check before yielding any sensitive data to verify the requester's identity.
+
+Passwords should always be hashed before sending over HTTP to prevent hackers from seeing the password in the request body.
+
+### WebSocket
+
+WebSocket essentially opens up a two-way stream that allows clients to send messages to each other through the server. When each app connects to the server, a hidden endpoint (sort of) is accessed/upgraded from http:// or https:// to ws:// or wss://, and then the connection is kept alive through regular pings (and a pong response). Then, when one client sends a message to the server, the server has access to the connections to all others and can redirect the message to everyone else.
+
+WebSocket has a few fixed events, the main ones being "connection" and "message." Here is an example of using these once a connection is established:
+
+```
+const { WebSocketServer } = require('ws');
+
+const wss = new WebSocketServer({ port: 9900 });
+
+wss.on('connection', (ws) => {
+  ws.on('message', (data) => {
+    const msg = String.fromCharCode(...data);
+    console.log('received: %s', msg);
+
+    ws.send(`I heard you say "${msg}"`);
+  });
+
+  ws.send('Hello webSocket');
+});
+```
+
+In this example, the connections are not collated into a list or redirected, the server simply responds with a message, however this would be totally possible.
+
+## Misc Topics
+
+### Service daemons
+
+A service daemon (such as PM2 for aws) runs constantly in the background, keeping the backend functional. It allows you to run commands such as `pm2 restart <service>` (which restarts a specific subdomain/service), or `pm2 ls` (which lists all running services).
+
+### Testing
+
+There are a number of testing services for both frontend (UI) and backend (APIs). One used for UI is called Playwright, one for endpoints is called Jest. In JS, you create a .test.js file with code such as `.expect().toBe()` or `.expect().toHaveText()`.
+
+### Typescript
+
+This is an addition to JS that adds static typing. The syntax is `variable: type`. You also can define types with interfaces or in an enumerator-type way. For example:
+```
+// interface, which acts similar to a type/class without a constructor
+interface Book {
+  title: string;
+  id: number;
+}
+// type enumerator
+type AuthState = "authenticated" | "unauthenticate" | "unknown";
+```
+
+### Optimization
+
+*Browser latency*: Impacted by complexity of application functions
+
+*Network latency*: Happens when making too many HTTP requests or ones with large amounts of data
+
+*Endpoint latency*: The amount of time it takes to process requests on the backend
+
+### Security
+
+Good practice techniques from the GitHub:
+
+- Sanitize input data - Always assume that any data you receive from outside your system will be used to exploit your system. Consider if the input data can be turned into an executable expression, or can overload computing, bandwidth, or storage resources.
+- Logging - It is not possible to think of every way that your system can be exploited, but you can create an immutable log of requests that will expose when a system is being exploited. You can then trigger alerts, and periodically review the logs for unexpected activity.
+- Traps - Create what appears to be valuable information and then trigger alarms when the data is accessed.
+- Educate - Teach yourself, your users, and everyone you work with, to be security minded. Anyone who has access to your system should understand how to prevent physical, social, and software attacks.
+- Reduce attack surfaces - Do not open access anymore than is necessary to properly provide your application. This includes what network ports are open, what account privileges are allowed, where you can access the system from, and what endpoints are available.
+- Layered security - Do not assume that one safeguard is enough. Create multiple layers of security that each take different approaches. For example, secure your physical environment, secure your network, secure your server, secure your public network traffic, secure your private network traffic, encrypt your storage, separate your production systems from your development systems, put your payment information in a separate environment from your application environment. Do not allow data from one layer to move to other layers. For example, do not allow an employee to take data out of the production system.
+- Least required access policy - Do not give any one user all the credentials necessary to control the entire system. Only give a user what access they need to do the work they are required to do.
+- Safeguard credentials - Do not store credentials in accessible locations such as a public GitHub repository or a sticky note taped to a monitor. Automatically rotate credentials in order to limit the impact of an exposure. Only award credentials that are necessary to do a specific task.
+- Public review - Do not rely on obscurity to keep your system safe. Assume instead that an attacker knows everything about your system and then make it difficult for anyone to exploit the system. If you can attack your system, then a hacker will be able to also. By soliciting public review and the work of external penetration testers, you will be able to discover and remove potential exploits.
