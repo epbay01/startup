@@ -286,6 +286,28 @@ In this example, the connections are not collated into a list or redirected, the
 
 ## Misc Topics
 
+### More on HTTP and ports
+
+Every connection made is through both the IP address and a port. The standard port for an HTTPS request is 443, for HTTP is 80, for file transfer is 20, for SSH is 22, and so on. Services such as Caddy redirect requests from these ports to where the server/site is actually running on (for example the startup is running on 4000, simon is on 3000, but if you try to connect to 443 it will show the startup still and redirect based on subdomain).
+
+Status codes:
+- 100: informational
+- 200: success
+  - 201: created
+  - 204: no content
+- 300: redirect
+- 400: client errors
+  - 401 unauthorized
+  - 404 is commonly not found
+- 500: server errors
+
+Headers:
+- Authorization: has an auth token
+- Accept: content accepted by client
+- Content-Type: type of data sent
+- Cookie: sends a cookie, or key-value pairs stored by the client
+- Access-Control-Allow-Origin: CORS requirements, for example allowing access from potentially unauthorized third parties
+
 ### Service daemons
 
 A service daemon (such as PM2 for aws) runs constantly in the background, keeping the backend functional. It allows you to run commands such as `pm2 restart <service>` (which restarts a specific subdomain/service), or `pm2 ls` (which lists all running services).
